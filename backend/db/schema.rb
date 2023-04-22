@@ -10,9 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_21_191933) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_22_000318) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "pages", force: :cascade do |t|
+    t.string "page_icon", null: false
+    t.string "page_name", null: false
+    t.bigint "journal_id"
+    t.string "html_content"
+    t.boolean "favorite", null: false
+    t.bigint "team_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["journal_id"], name: "index_pages_on_journal_id"
+    t.index ["team_id"], name: "index_pages_on_team_id"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string "team_name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "username", null: false
@@ -26,4 +45,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_21_191933) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "pages", "teams"
+  add_foreign_key "pages", "users", column: "journal_id"
 end
