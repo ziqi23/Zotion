@@ -1,18 +1,21 @@
 import { Link } from "react-router-dom"
-
+import { useNavigate } from "react-router-dom"
 
 const DesktopActions = (props) => {
+
+    const navigate = useNavigate();
+
     function handleButtonClick(e) {
         e.preventDefault()
         switch (e.target.id) {
             case "login-button":
-                <Link to="/login"></Link>
+                navigate('/login')
                 break
             case "demo-login-button":
-                <Link to="/login"></Link>
+                navigate('/login')
                 break
             case "signup-button":
-                <Link to="/signup"></Link>
+                navigate('/signup')
                 break
         }
     }

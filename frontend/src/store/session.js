@@ -39,7 +39,6 @@ export const login = ({credential, password}) => async (dispatch) => {
         })
     })
     const data = await res.json();
-    console.log(data)
     dispatch(setSession(data.user));
     storeCurrentUser(data.user)
 }
@@ -52,8 +51,15 @@ export const logout = () => async(dispatch) => {
     storeCurrentUser(null)
 }
 
-const initialState = {
-    user: JSON.parse(sessionStorage.getItem('currentUser'))
+let initialState;
+if (sessionStorage.getItem('currentUser') === "undefined") {
+    initialState = {
+        user: {}
+    }
+} else {
+    initialState = {
+        user: JSON.parse(sessionStorage.getItem('currentUser'))
+    }
 }
 
 const sessionReducer = (state=initialState, action) => {
