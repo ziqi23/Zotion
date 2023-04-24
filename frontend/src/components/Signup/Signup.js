@@ -10,6 +10,7 @@ const Signup = (props) => {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [signUpErrors, setSignUpErrors] = useState([''])
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -24,10 +25,24 @@ const Signup = (props) => {
             method: 'POST',
             body: JSON.stringify({username, email, password}),
             'Content-Type': 'application/json'
+        }).catch(async (res) => {
+            let data;
+            try {
+                data = await res.clone().json()
+            } catch {
+                data = await res.text()
+            }
+            if (data?.errors) setSignUpErrors(data.errors)
+            else if (data) setSignUpErrors([data])
+            else setSignUpErrors([res.statusText])
         })
+        if (signUpErrors.length === 0) {
+            dispatch(login({credential: username, password}))
+            navigate('/home')
+        }
 
-        dispatch(login({credential: username, password}))
-        navigate('/home')
+            
+
         // let username, email
         // if (isEmail(credential)) {
         //     email = credential
@@ -72,6 +87,9 @@ const Signup = (props) => {
                         <br></br>
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
                         <br></br>
+                        <ul>
+                            {signUpErrors.map((error, idx) => <div key={idx} className="error-message">{error}</div>)}
+                        </ul>
                         <input type="submit" id="login-submit" value="Continue with password"></input>
                     </form>
                 </div>

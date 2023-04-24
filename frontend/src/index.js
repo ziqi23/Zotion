@@ -16,8 +16,10 @@ if (process.env.NODE_ENV !== 'production') {
   window.pageActions = pageActions;
 }
 
+
 const renderApp = () => {
   const domNode = document.getElementById('root')
+  // domNode.addEventListener('contextmenu', (e) => e.preventDefault())
   const root = createRoot(domNode)
   
   root.render(

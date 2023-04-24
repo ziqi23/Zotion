@@ -211,6 +211,12 @@ table {
     width: 320px;
 }
 
+.error-message {
+    font-size: 14px;
+    color: red;
+    font-style: italic;
+    font-family: sans-serif;
+}
 /* User homepage related */
 
 .user-homepage {
@@ -297,6 +303,11 @@ table {
     transition-duration: 200ms;
 }
 
+i {
+    width: 20px;
+    height: 20px;
+}
+
 .clickable {
     display: flex;
     align-items: center;
@@ -318,7 +329,7 @@ table {
     background-color: white;
     position: absolute;
     top: 50px;
-    left: 10px;
+    left: 200px;
     border-radius: 5px;
     transition-duration: 500ms;
 }

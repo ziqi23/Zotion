@@ -6,6 +6,7 @@ import { addPage } from "../../store/page";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as pageActions from '../../store/page'
+import SidebarItem from "./SidebarItem";
 
 const Sidebar = ({active}) => {
     const navigate = useNavigate()
@@ -19,7 +20,6 @@ const Sidebar = ({active}) => {
     }, [])
     
     const [profileOpen, setProfileOpen] = useState(false)
-    const [clickableOpen, setClickableOpen] = useState(false)
 
     function handleClick(e) {
         console.log(e)
@@ -33,8 +33,6 @@ const Sidebar = ({active}) => {
                 break
             case ("addPage"):
                 dispatch(addPage());
-            case ('clickable'):
-                setClickableOpen(!clickableOpen)
             default:
                 break
         }
@@ -45,46 +43,24 @@ const Sidebar = ({active}) => {
                 {username}'s Notion
             </div>
             <div className="sidebar-default">
-                <div className="clickable" onClick={handleClick}>
-                    Search
-                </div>
-                <div className="clickable" onClick={handleClick}>
-                    Updates
-                </div>
-                <div className="clickable" onClick={handleClick}>
-                    All teamspaces
-                </div>
-                <div className="clickable" onClick={handleClick}>
-                    Settings & members
-                </div>
+                <SidebarItem props={{"text": "Search"}}></SidebarItem>
+                <SidebarItem props={{"text": "Updates"}}></SidebarItem>
+                <SidebarItem props={{"text": "All Teamspaces"}}></SidebarItem>
+                <SidebarItem props={{"text": "Settings & Members"}}></SidebarItem>
             </div>
             <div className="sidebar-personal">
                 <div className="favorites">
                     <h1>Favorites</h1>
-                    <div className="clickable" onClick={handleClick}>
-                        Journal
-                    </div>
-                    <div className="clickable" onClick={handleClick}>
-                        Getting Started
-                    </div>
-                    <div className="clickable" onClick={handleClick}>
-                        Personal Home
-                    </div>
+                    <SidebarItem props={{"text": "Journal"}}></SidebarItem>
+                    <SidebarItem props={{"text": "Getting Started"}}></SidebarItem>
+                    <SidebarItem props={{"text": "Personal Home"}}></SidebarItem>
                 </div>
                 <div className="teamspaces">
                     <h1>Teamspaces</h1>
-                    <div className="clickable" onClick={handleClick}>
-                        Home
-                    </div>
-                    <div className="clickable" onClick={handleClick}>
-                        Wiki
-                    </div>
-                    <div className="clickable" onClick={handleClick}>
-                        Tasks
-                    </div>
-                    <div className="clickable" onClick={handleClick}>
-                        Projects
-                    </div>
+                    <SidebarItem props={{"text": "Home"}}></SidebarItem>
+                    <SidebarItem props={{"text": "Wiki"}}></SidebarItem>
+                    <SidebarItem props={{"text": "Tasks"}}></SidebarItem>
+                    <SidebarItem props={{"text": "Projects"}}></SidebarItem>
                 </div>
                 <div className="private">
                     <h1>
@@ -92,9 +68,7 @@ const Sidebar = ({active}) => {
                         {active === 'true' ? <span className="addPage" onClick={handleClick}>+</span> : null}
                     </h1>
                     {Object.values(pages).map((page) => {
-                        return <div key={`${page.id}`} className="clickable" onClick={handleClick}>
-                            {page.pageName}
-                        </div>
+                        return <SidebarItem props={{"text": page.pageName, "pageId": page.id}}></SidebarItem>
                     })}
                 </div>
             </div>
@@ -112,11 +86,6 @@ const Sidebar = ({active}) => {
                     </div>
                 </div>
                 )}
-            {clickableOpen && (
-                <div className="clickable-dropdown">
-                    <div className="clickable-delete">Delete Page</div>
-                </div>
-            )}
         </>
     )
 }

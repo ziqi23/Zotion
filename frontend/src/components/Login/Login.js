@@ -7,12 +7,27 @@ import { useNavigate } from "react-router-dom"
 const Login = (props) => {
     const [credential, setCredential] = useState('')
     const [password, setPassword] = useState('')
+    const [errors, setErrors] = useState([''])
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
         dispatch(login({credential, password}))
-        navigate('/home')
+            .catch(async (res) => {
+                let data;
+                try {
+                    data = await res.clone().json()
+                } catch {
+                    data = await res.text()
+                }
+
+                if (data?.errors) setErrors(data.errors)
+                else if (data) setErrors([data])
+                else setErrors([res.statusText])
+            })
+        if (errors.length === 0) {
+            navigate('/home')
+        }
     }
 
     return (
@@ -38,6 +53,9 @@ const Login = (props) => {
                         <br></br>
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
                         <br></br>
+                        <ul>
+                            {errors.map((error, idx) => <div key={idx} className="error-message">{error}</div>)}
+                        </ul>
                         <input type="submit" id="login-submit" value="Continue with password"></input>
                     </form>
                 </div>
