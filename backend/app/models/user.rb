@@ -1,4 +1,9 @@
 class User < ApplicationRecord
+    has_many :pages,
+        foreign_key: :user_id,
+        class_name: "Page",
+        dependent: :destroy
+
     has_secure_password
     before_validation :ensure_session_token
 

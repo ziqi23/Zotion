@@ -6,12 +6,14 @@ import './index.css';
 import App from './App';
 import configureStore from './store'
 import * as sessionActions from './store/session';
+import * as pageActions from './store/page';
 
 const store = configureStore();
 
 if (process.env.NODE_ENV !== 'production') {
   window.store = store;
   window.sessionActions = sessionActions;
+  window.pageActions = pageActions;
 }
 
 const renderApp = () => {

@@ -39,6 +39,7 @@ export const login = ({credential, password}) => async (dispatch) => {
         })
     })
     const data = await res.json();
+    console.log(data)
     dispatch(setSession(data.user));
     storeCurrentUser(data.user)
 }

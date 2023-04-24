@@ -1,24 +1,35 @@
 import { useSelector } from 'react-redux'
+import { useState } from 'react'
 import { redirect, useNavigate } from 'react-router-dom'
 import Headers from './Headers'
 import Sidebar from './Sidebar'
 import Main from './Main'
 
 const UserHomepage = (props) => {
-    const user = useSelector((state) => state.session.user)
+    const user = useSelector((state) => state.session.user);
     const navigate = useNavigate();
-    if (user.id) {
+    const [activeElement, setActiveElement] = useState('');
+    const sidebarWidth = 220;
+    function handleMouseMove(e) {
+        if (e.clientX > 0 && e.clientX < sidebarWidth) {
+            setActiveElement('sidebar')
+        } else {
+            setActiveElement('main')
+        }
+    }
+
+    if (user) {
         return (
-            <div className='user-homepage'>
+            <div className='user-homepage' onMouseMove={handleMouseMove}>
                 <div className='user-homepage-sidebar'>
-                    <Sidebar />
+                    <Sidebar active={activeElement === 'sidebar' ? 'true' : 'false'}/>
                 </div>
                 <div className='user-homepage-right'>
                     <div className='user-homepage-headers'>
                         <Headers />
                     </div>
                     <div className='user-homepage-main'>
-                        <Main />
+                        <Main active={activeElement === 'main' ? 'true' : 'false'}/>
                     </div>
                 </div>
             </div>

@@ -17,16 +17,16 @@ const Signup = (props) => {
     //     return credential.match(/^\S+@\S+\.\S+$/)
     // }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
 
-        csrfFetch('/api/users', {
+        await csrfFetch('/api/users', {
             method: 'POST',
             body: JSON.stringify({username, email, password}),
             'Content-Type': 'application/json'
         })
 
-        dispatch(login({username, password}))
+        dispatch(login({credential: username, password}))
         navigate('/home')
         // let username, email
         // if (isEmail(credential)) {

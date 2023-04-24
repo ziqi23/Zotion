@@ -1,18 +1,21 @@
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
-
+import { useDispatch } from "react-redux";
+import { login } from "../../store/session";
 const DesktopActions = (props) => {
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    function handleButtonClick(e) {
+    async function handleButtonClick(e) {
         e.preventDefault()
         switch (e.target.id) {
             case "login-button":
                 navigate('/login')
                 break
             case "demo-login-button":
-                navigate('/login')
+                await dispatch(login({credential: "Ziqi", password: "123456"}))
+                navigate('home')
                 break
             case "signup-button":
                 navigate('/signup')

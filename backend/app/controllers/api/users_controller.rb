@@ -4,6 +4,10 @@ class Api::UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if (@user.save)
+      page = Page.create({user_id: @user.id, page_name: "Reading List"})
+      page = Page.create({user_id: @user.id, page_name: "Tasks"})
+      page = Page.create({user_id: @user.id, page_name: "Getting Started"})
+      page = Page.create({user_id: @user.id, page_name: "Personal Home"})
       login!(@user)
       render :show
     else

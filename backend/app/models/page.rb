@@ -1,9 +1,13 @@
 class Page < ApplicationRecord
+  belongs_to :user,
+    foreign_key: :user_id,
+    class_name: "User"
 
   before_validation :set_default_icon, :set_default_name, :set_default_status
   validates :page_icon, length: { in: 1..30 }, allow_nil: true
   validates :page_name, length: { in: 1..30 }, allow_nil: true
   validates :favorite, inclusion: [true, false], allow_nil: true
+  validates :user_id, presence: true
 
   def set_default_icon
     if (!self.page_icon)
