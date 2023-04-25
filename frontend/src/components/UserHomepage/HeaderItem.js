@@ -28,7 +28,7 @@ const HeaderItem = ({props}) => {
         <div className={`header-icon-${identifier}`} onMouseEnter={() => setTooltipVisible(true)} onMouseLeave={() => setTooltipVisible(false)}>
             <button>{identifier}</button>
             {tooltipVisible && (
-                <Tooltip props={{"text": text, "relativePosition": [0, 50]}}></Tooltip>
+                <Tooltip props={{"text": text, "relativePosition": [0, 30]}}></Tooltip>
             )}
         </div>
     )

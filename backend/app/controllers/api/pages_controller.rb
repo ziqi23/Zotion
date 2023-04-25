@@ -1,21 +1,27 @@
 class Api::PagesController < ApplicationController
     def index
-        @pages = current_user.pages
+        if (params[:page]) 
+            @pages = current_user.pages.where("journal_id = #{params[:page]}")
+        else
+            @pages = current_user.pages
+        end
         render :index
     end
 
     def create
-        @page = Page.create(user_id: current_user.id)
+        if (page_params[:journal_id])
+            @page = Page.create(user_id: current_user.id, journal_id: page_params[:journal_id])
+        else
+            @page = Page.create(user_id: current_user.id)
+        end
         render :show
     end
 
     def update
         @page = Page.find_by(id: params[:id])
-
         page_params.keys.each do |key|
             @page[key] = page_params[key]
         end
-
         if (@page.save)
             render :show
         else
@@ -40,6 +46,6 @@ class Api::PagesController < ApplicationController
     
     private
     def page_params
-        params.require('page').permit('page_icon', 'page_name', 'favorite', 'html_content', 'team_id')
+        params.require('page').permit('page_icon', 'page_name', 'favorite', 'html_content', 'team_id', 'journal_id')
     end
 end

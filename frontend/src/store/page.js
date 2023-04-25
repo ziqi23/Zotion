@@ -40,9 +40,12 @@ export const showAll = () => async (dispatch) => {
     dispatch(showAllPages(data))
 }
 
-export const addPage = () => async (dispatch) => {
+export const addPage = (page) => async (dispatch) => {
     const res = await csrfFetch("/api/pages", {
         method: "POST",
+        body: JSON.stringify({
+            page
+        })
     })
     const data = await res.json();
     dispatch(createPage(data));
@@ -63,6 +66,12 @@ export const deletePage = ({pageId}) => async(dispatch) => {
         method: "DELETE",
     })
     dispatch(removePage(pageId))
+}
+
+export const showAssociatedPages = (pageId) => async(dispatch) => {
+    const res = await csrfFetch(`api/pages?page=${pageId}`)
+    const data = await res.json()
+    return data
 }
 
 let initialState = {};

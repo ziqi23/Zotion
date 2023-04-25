@@ -355,6 +355,33 @@ table {
     transition-duration: 500ms;
 }
 
+.current-user-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(55, 53, 47, 0.09);
+    color: rgba(55, 53, 47, 0.65);
+    width: 32px;
+    height: 32px;
+    font-size: 22px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.current-user-details {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgba(55, 53, 47);
+}
+
+.current-user-plan {
+    color: rgba(55, 53, 47, 0.5);
+}
+
 .user-email {
     display: flex;
     align-items: center;
@@ -369,6 +396,10 @@ table {
     display: flex;
     align-items: center;
     height: 35%;
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-top: 4px;
+    padding-bottom: 4px;
     border-bottom: 1px solid rgba(0,0,0,.2);
 }
 .profile-popup-default {
@@ -394,6 +425,7 @@ i {
 
 .clickable {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     position: relative;
     height: 21px;
@@ -439,12 +471,12 @@ i {
     padding-top: 15px;
 }
 
-.addPage {
+.add-page {
     padding:3px;
     font-weight: bold;
 }
 
-.addPage:hover {
+.add-page:hover {
     background-color: rgb(143, 142, 137, 0.3);
     transition-duration: 200ms;
 }

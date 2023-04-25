@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom"
+import { Navigate, Route, Routes } from "react-router-dom"
 import Homepage from "./components/Homepage/Homepage";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
@@ -12,6 +12,7 @@ function App() {
       <Route exact path="/login" element={<Login />} />
       <Route exact path="/signup" element={<Signup />} />
       <Route path="/home" element={<UserHomepage />} />
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 }

@@ -31,7 +31,7 @@ const Sidebar = ({active}) => {
                 dispatch(logout());
                 navigate('/')
                 break
-            case ("addPage"):
+            case ("add-page"):
                 dispatch(addPage());
             default:
                 break
@@ -53,7 +53,7 @@ const Sidebar = ({active}) => {
                     <h1>Favorites</h1>
                     {Object.values(pages).map((page) => {
                         if (page.favorite) {
-                            return <SidebarItem props={{"text": page.pageName}}></SidebarItem>
+                            return <SidebarItem props={{"text": page.pageName, "pageId": page.id, "type": "personal"}}></SidebarItem>
                         }
                     })}
                 </div>
@@ -67,10 +67,12 @@ const Sidebar = ({active}) => {
                 <div className="private">
                     <h1>
                         <span>Private</span>
-                        {active === 'true' ? <span className="addPage" onClick={handleClick}>+</span> : null}
+                        {active === 'true' ? <span className="add-page" onClick={handleClick}>+</span> : null}
                     </h1>
                     {Object.values(pages).map((page) => {
-                        return <SidebarItem props={{"text": page.pageName, "pageId": page.id}}></SidebarItem>
+                        if (!page.journalId) {
+                            return <SidebarItem props={{"text": page.pageName, "pageId": page.id, "type": "personal"}}></SidebarItem>
+                        } else return null;
                     })}
                 </div>
             </div>
@@ -80,7 +82,13 @@ const Sidebar = ({active}) => {
                         {email}
                     </div>
                     <div className="current-user">
-
+                        <div className="current-user-icon">
+                            <p>{username[0]}</p>
+                        </div>
+                        <div className="current-user-details">
+                            <p>{username}'s Notion</p>
+                            <p className="current-user-plan">Free Plan · 1 member</p>
+                        </div>
                     </div>
                     <div className="profile-popup-default">
                         <div>Add another account</div>
