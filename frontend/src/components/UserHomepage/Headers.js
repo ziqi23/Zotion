@@ -1,5 +1,82 @@
+import { useParams, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { modifyPage } from "../../store/page";
+
 const Headers = (props) => {
-    return null;
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const query = location.search;
+    const pageId = query.slice(query.search("=") + 1, query.length)
+    const pages = useSelector((state) => state.page)
+    const [updateNameFieldVisible, setUpdateNameFieldVisible] = useState(false)
+    let hoursSinceLastUpdate
+
+    if (pages[pageId]) {
+        const formattedLastModified = pages[pageId].updatedAt
+        const modifiedDate = new Date(formattedLastModified)
+        const currentDate = new Date()
+        hoursSinceLastUpdate = Math.floor((currentDate - modifiedDate) / 3600000)
+    }
+
+    function handleClick(e) {
+        e.preventDefault();
+        switch (e.target.className){
+            case ("add-to-favorite"):
+                dispatch(modifyPage({...pages[pageId], favorite: !pages[pageId].favorite}))
+                break
+            case ("header-page-name"):
+                setUpdateNameFieldVisible(!updateNameFieldVisible)
+                break
+            default:
+                break
+        }
+    }
+
+    function handleChange(e) {
+        e.preventDefault()
+        dispatch(modifyPage({...pages[pageId], pageName: e.target.value}))
+    }
+
+    if (pages[pageId]) {
+        return (
+            <>
+                <div className="header-left">
+                    <div className="header-page-name" onClick={handleClick}>
+                        {pages[pageId].pageName}
+                        {updateNameFieldVisible && (
+                            <div className="update-page-name">
+                                <input type="text" placeholder={pages[pageId].pageName} onChange={handleChange}></input>
+                            </div>
+                        )}
+                    </div>
+                </div>
+                <div className="header-right">
+                    <div className="header-last-edit">
+                        Edited {hoursSinceLastUpdate}h ago
+                    </div>
+                    <div className="header-icons">
+                        <div className="header-icon-share">
+                            Share
+                        </div>
+                        <div className="header-icon-comment">
+                            <button>C</button>
+                        </div>
+                        <div className="header-icon-notifications">
+                            <button>N</button>
+                        </div>
+                        <div className="header-icon-favorite">
+                            <button className="add-to-favorite" onClick={handleClick}>F</button>
+                        </div>
+                        <div className="header-icon-more">
+                            <button>M</button>
+                        </div>
+                    </div>
+                </div>
+            </>
+        )
+    } else return null;
 }
 
 export default Headers;

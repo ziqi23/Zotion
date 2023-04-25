@@ -51,9 +51,11 @@ const Sidebar = ({active}) => {
             <div className="sidebar-personal">
                 <div className="favorites">
                     <h1>Favorites</h1>
-                    <SidebarItem props={{"text": "Journal"}}></SidebarItem>
-                    <SidebarItem props={{"text": "Getting Started"}}></SidebarItem>
-                    <SidebarItem props={{"text": "Personal Home"}}></SidebarItem>
+                    {Object.values(pages).map((page) => {
+                        if (page.favorite) {
+                            return <SidebarItem props={{"text": page.pageName}}></SidebarItem>
+                        }
+                    })}
                 </div>
                 <div className="teamspaces">
                     <h1>Teamspaces</h1>

@@ -25,7 +25,12 @@ const Signup = (props) => {
             method: 'POST',
             body: JSON.stringify({username, email, password}),
             'Content-Type': 'application/json'
-        }).catch(async (res) => {
+        })
+        .then((res => {
+            dispatch(login({credential: username, password}))
+            navigate('/home')
+        }))
+        .catch(async (res) => {
             let data;
             try {
                 data = await res.clone().json()
@@ -35,13 +40,7 @@ const Signup = (props) => {
             if (data?.errors) setSignUpErrors(data.errors)
             else if (data) setSignUpErrors([data])
             else setSignUpErrors([res.statusText])
-        })
-        if (signUpErrors.length === 0) {
-            dispatch(login({credential: username, password}))
-            navigate('/home')
-        }
-
-            
+        })            
 
         // let username, email
         // if (isEmail(credential)) {

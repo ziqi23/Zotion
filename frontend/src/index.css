@@ -235,9 +235,52 @@ table {
     height: 100vh
 }
 .user-homepage-headers {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     width:80vw;
     height:5vh;
     background-color: rgb(222, 222, 222);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    color: rgb(55, 53, 47);
+}
+
+.header-left {
+    position: relative;
+    display: flex;
+    padding-left: 12px;
+    padding-right: 10px;
+}
+
+.header-page-name:hover {
+    padding: 5px;
+    background-color: rgb(143, 142, 137, 0.3);
+    transition-duration: 200ms;
+}
+
+.update-page-name {
+    position: absolute;
+    top: 30px;
+}
+
+.header-right {
+    display: flex;
+    padding-left: 12px;
+    padding-right: 10px;
+}
+
+.header-last-edit {
+    display: flex;
+    padding-right: 30px;
+    color: rgb(55, 53, 47, 0.5);
+
+}
+
+.header-icons {
+    display: flex;
+    width: 150px;
+    justify-content: space-between;
 }
 
 .user-homepage-main {

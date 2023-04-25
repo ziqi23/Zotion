@@ -71,7 +71,7 @@ const pageReducer = (state=initialState, action) => {
     const newState = {...state};
     switch (action.type) {
         case (SHOWALLPAGES):
-            return ({...state, ...action.pages})
+            return ({...action.pages})
         case (CREATEPAGE):
             return ({ ...state, [action.page.id]: action.page }); 
             // return action.payload;

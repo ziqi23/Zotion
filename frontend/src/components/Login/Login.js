@@ -13,6 +13,7 @@ const Login = (props) => {
     async function handleSubmit(e) {
         e.preventDefault()
         dispatch(login({credential, password}))
+            .then(() => navigate('/home'))
             .catch(async (res) => {
                 let data;
                 try {
@@ -25,9 +26,6 @@ const Login = (props) => {
                 else if (data) setErrors([data])
                 else setErrors([res.statusText])
             })
-        if (errors.length === 0) {
-            navigate('/home')
-        }
     }
 
     return (
