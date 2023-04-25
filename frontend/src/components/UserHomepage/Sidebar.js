@@ -43,10 +43,10 @@ const Sidebar = ({active}) => {
                 {username}'s Notion
             </div>
             <div className="sidebar-default">
-                <SidebarItem props={{"text": "Search"}}></SidebarItem>
-                <SidebarItem props={{"text": "Updates"}}></SidebarItem>
-                <SidebarItem props={{"text": "All Teamspaces"}}></SidebarItem>
-                <SidebarItem props={{"text": "Settings & Members"}}></SidebarItem>
+                <SidebarItem props={{"text": "Search", "type":"default"}}></SidebarItem>
+                <SidebarItem props={{"text": "Updates", "type":"default"}}></SidebarItem>
+                <SidebarItem props={{"text": "All Teamspaces", "type":"default"}}></SidebarItem>
+                <SidebarItem props={{"text": "Settings & Members", "type":"default"}}></SidebarItem>
             </div>
             <div className="sidebar-personal">
                 <div className="favorites">

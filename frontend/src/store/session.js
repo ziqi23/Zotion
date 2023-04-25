@@ -52,6 +52,15 @@ export const logout = () => async(dispatch) => {
     storeCurrentUser(null)
 }
 
+export const signUpUser = ({username, email, password}) => async(dispatch) => {
+    await csrfFetch('/api/users', {
+        method: 'POST',
+        body: JSON.stringify({username, email, password}),
+        'Content-Type': 'application/json'
+    })
+    dispatch(login({credential: username, password}))
+}
+
 let initialState;
 if (sessionStorage.getItem('currentUser') === "undefined") {
     initialState = {

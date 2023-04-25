@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { modifyPage } from "../../store/page";
+import Tooltip from "./Tooltip";
+import HeaderItem from "./HeaderItem";
 
 const Headers = (props) => {
     const dispatch = useDispatch();
@@ -11,6 +13,7 @@ const Headers = (props) => {
     const pageId = query.slice(query.search("=") + 1, query.length)
     const pages = useSelector((state) => state.page)
     const [updateNameFieldVisible, setUpdateNameFieldVisible] = useState(false)
+    const [tooltipVisible, setTooltipVisible] = useState(false) 
     let hoursSinceLastUpdate
 
     if (pages[pageId]) {
@@ -57,21 +60,16 @@ const Headers = (props) => {
                         Edited {hoursSinceLastUpdate}h ago
                     </div>
                     <div className="header-icons">
-                        <div className="header-icon-share">
-                            Share
+                        <HeaderItem props={{name: "share"}} />
+                        <HeaderItem props={{name: "comment"}} />
+                        <HeaderItem props={{name: "notifications"}} />
+                        <div className="header-icon-favorite" onMouseEnter={() => setTooltipVisible(true)} onMouseLeave={() => setTooltipVisible(false)}>
+                            <button className="add-to-favorite" onClick={handleClick}>favorite</button>
+                            {tooltipVisible && (
+                                <Tooltip props={{"text": "Pin this page in your sidebar", "relativePosition": [0, 50]}}></Tooltip>
+                                )}
                         </div>
-                        <div className="header-icon-comment">
-                            <button>C</button>
-                        </div>
-                        <div className="header-icon-notifications">
-                            <button>N</button>
-                        </div>
-                        <div className="header-icon-favorite">
-                            <button className="add-to-favorite" onClick={handleClick}>F</button>
-                        </div>
-                        <div className="header-icon-more">
-                            <button>M</button>
-                        </div>
+                        <HeaderItem props={{name: "more"}} />
                     </div>
                 </div>
             </>

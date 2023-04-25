@@ -18,12 +18,17 @@ const UserHomepage = (props) => {
         }
     }
 
+    function handleDrag(e) {
+        e.preventDefault()
+        console.log("dragging")
+    }
     if (user) {
         return (
             <div className='user-homepage' onMouseMove={handleMouseMove}>
                 <div className='user-homepage-sidebar'>
                     <Sidebar active={activeElement === 'sidebar' ? 'true' : 'false'}/>
                 </div>
+                <div className='user-homepage-divider' draggable="true" onDrag={handleDrag}></div>
                 <div className='user-homepage-right'>
                     <div className='user-homepage-headers'>
                         <Headers />

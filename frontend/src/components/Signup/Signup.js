@@ -1,7 +1,7 @@
 import Icon from "../Homepage/Icon"
 import { useState } from "react"
 import { useDispatch } from "react-redux"
-import { login } from "../../store/session"
+import { login, signUpUser } from "../../store/session"
 import { csrfFetch } from "../../store/csrf"
 import { useNavigate } from "react-router-dom"
 
@@ -21,25 +21,20 @@ const Signup = (props) => {
     async function handleSubmit(e) {
         e.preventDefault()
 
-        await csrfFetch('/api/users', {
-            method: 'POST',
-            body: JSON.stringify({username, email, password}),
-            'Content-Type': 'application/json'
-        })
-        .then((res => {
-            dispatch(login({credential: username, password}))
-            navigate('/home')
-        }))
-        .catch(async (res) => {
-            let data;
-            try {
-                data = await res.clone().json()
-            } catch {
-                data = await res.text()
-            }
-            if (data?.errors) setSignUpErrors(data.errors)
-            else if (data) setSignUpErrors([data])
-            else setSignUpErrors([res.statusText])
+        dispatch(signUpUser({username, email, password}))
+            .then((res => {
+                navigate('/home')
+            }))
+            .catch(async (res) => {
+                let data;
+                try {
+                    data = await res.clone().json()
+                } catch {
+                    data = await res.text()
+                }
+                if (data?.errors) setSignUpErrors(data.errors)
+                else if (data) setSignUpErrors([data])
+                else setSignUpErrors([res.statusText])
         })            
 
         // let username, email
