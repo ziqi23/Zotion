@@ -8,23 +8,17 @@ const Main = (props) => {
     const location = useLocation();
     const query = location.search;
     const pageId = query.slice(query.search("=") + 1, query.length)
-    const pages = useSelector((state) => state.page)
-    const [content, setContent] = useState('')
-    
-    useEffect(() => {
-        if (pages[pageId]) setContent(pages[pageId].htmlContent)
-    }, [pageId])
+    const htmlContent = useSelector((state) => state.page[pageId] ? state.page[pageId].htmlContent : null)
 
     function handleChange(e) {
-        setContent(e.target.value)
-        dispatch(modifyPage({id: parseInt(pageId), htmlContent: content}))
+        // dispatch(modifyPage({id: parseInt(pageId), htmlContent: content}))
     }
 
-    if (content && pages[pageId]) {
+    if (pageId !== "undefined") {
         return (
-            <input type="textarea" value={content} onChange={handleChange}></input>
+            <input className= "main-manual-text" type="textarea" value={htmlContent} onChange={handleChange}></input>
         )
-    } else return <h1>Welcome to Notion</h1>
+    } else return <h1 className="main-default-text">&#128075;Welcome to Notion</h1>
 }
 
 export default Main;

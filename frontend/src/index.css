@@ -258,10 +258,11 @@ table {
 }
 
 .user-homepage-main {
+    display: flex;
     width: 80vw;
     height: 95vh;
     background-color: white;
-    border: 1px solid royalblue;
+    border: 1px solid rgb(55, 53, 47);
 }
 
 /* Header related */
@@ -572,4 +573,20 @@ i {
     font-size: 14px;
     color: white;
     position: absolute;
+}
+
+/* Main page related */
+
+.main-default-text {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    font-size: 72px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.main-manual-text {
+    display: flex;
+    width: 100%;
 }
