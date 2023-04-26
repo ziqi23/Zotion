@@ -298,8 +298,8 @@ table {
 
 .header-icons {
     display: flex;
-    width: 200px;
-    min-width: 200px;
+    width: 170px;
+    min-width: 170px;
     justify-content: space-between;
 }
 
