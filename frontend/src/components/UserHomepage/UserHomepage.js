@@ -9,7 +9,7 @@ const UserHomepage = (props) => {
     const user = useSelector((state) => state.session.user);
     const navigate = useNavigate();
     const [activeElement, setActiveElement] = useState('');
-    const sidebarWidth = 252;
+    const [sidebarWidth, setSidebarWidth] = useState(252);
     function handleMouseMove(e) {
         if (e.clientX > 0 && e.clientX < sidebarWidth) {
             setActiveElement('sidebar')
@@ -20,12 +20,20 @@ const UserHomepage = (props) => {
 
     function handleDrag(e) {
         e.preventDefault()
-        console.log("dragging")
+        const destination = e.clientX < 240 ? 240 : e.clientX < 300 ? e.clientX : 300
+        const distance = destination - sidebarWidth
+        // console.log(e)
+        if (e.clientX !== 0) {
+            setSidebarWidth(sidebarWidth + Math.min(10, distance / 10))
+        }
+        // console.log("dragging")
     }
+
+    // style={{"width": "300px"}}
     if (user) {
         return (
             <div className='user-homepage' onMouseMove={handleMouseMove}>
-                <div className='user-homepage-sidebar'>
+                <div className='user-homepage-sidebar' style={{"width": sidebarWidth}}>  
                     <Sidebar active={activeElement === 'sidebar' ? 'true' : 'false'}/>
                 </div>
                 <div className='user-homepage-divider' draggable="true" onDrag={handleDrag}></div>

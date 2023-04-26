@@ -234,14 +234,15 @@ table {
 }
 
 .user-homepage-divider {
-    background-color: rgb(251, 251, 250);
+    /* background-color: rgb(251, 251, 250); */
+    cursor: col-resize;
     width: 2px;
-    background: linear-gradient(#000, #000) no-repeat center/2px 100%;
+    /* background: linear-gradient(#000, #000) no-repeat center/2px 100%; */
     opacity: 0.3;
 }
 
 .user-homepage-right {
-    width: fit-content;
+    width: 70vw;
 }
 
 .user-homepage-headers {
