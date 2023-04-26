@@ -9,7 +9,7 @@ const UserHomepage = (props) => {
     const user = useSelector((state) => state.session.user);
     const navigate = useNavigate();
     const [activeElement, setActiveElement] = useState('');
-    const sidebarWidth = 220;
+    const sidebarWidth = 252;
     function handleMouseMove(e) {
         if (e.clientX > 0 && e.clientX < sidebarWidth) {
             setActiveElement('sidebar')

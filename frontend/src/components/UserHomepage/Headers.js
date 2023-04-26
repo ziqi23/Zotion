@@ -63,12 +63,7 @@ const Headers = (props) => {
                         <HeaderItem props={{name: "share"}} />
                         <HeaderItem props={{name: "comment"}} />
                         <HeaderItem props={{name: "notifications"}} />
-                        <div className="header-icon-favorite" onMouseEnter={() => setTooltipVisible(true)} onMouseLeave={() => setTooltipVisible(false)}>
-                            <button className="add-to-favorite" onClick={handleClick} style={pages[pageId].favorite ? {"backgroundColor": "pink"} : {}}>favorite</button>
-                            {tooltipVisible && (
-                                <Tooltip props={{"text": "Pin this page in your sidebar", "relativePosition": [0, 30]}}></Tooltip>
-                                )}
-                        </div>
+                        <HeaderItem props={{name: "favorite"}} />
                         <HeaderItem props={{name: "more"}} />
                     </div>
                 </div>

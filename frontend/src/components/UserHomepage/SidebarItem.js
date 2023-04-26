@@ -6,8 +6,10 @@ import Tooltip from "./Tooltip"
 import { showAssociatedPages } from "../../store/page"
 import { addPage } from "../../store/page"
 import { useEffect } from "react"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const SidebarItem = ({props}) => {
+    const icon = props.icon || "file-lines"
     const text = props.text
     const pageId = props.pageId
     const type = props.type
@@ -41,6 +43,7 @@ const SidebarItem = ({props}) => {
                 }
                 break
             case ('add-page'):
+                setCarrotDown(true)
                 dispatch(addPage({journalId: pageId}));
                 break
             default:
@@ -53,7 +56,7 @@ const SidebarItem = ({props}) => {
     }
 
     function handleShowPage(e) {
-        console.log(e)
+        e.stopPropagation();
         e.preventDefault();
         navigate(`/home?pageId=${pageId}`)
     }
@@ -70,7 +73,6 @@ const SidebarItem = ({props}) => {
             case ("All Teamspaces"):
                 tooltipText = "Browse all teamspaces"
                 break
-            
         }
     }
 
@@ -85,13 +87,15 @@ const SidebarItem = ({props}) => {
         onMouseLeave={() => setTooltipVisible(false)}>
             
             {props.type === "personal" && (
-            <button onClick={handleCarrotClick} style={carrotDown ? {"transform": "rotateZ(90deg)"} : {}}>
-                &#62;
-            </button>
+            <div onClick={handleCarrotClick} style={carrotDown ? {"transform": "rotateZ(90deg)"} : {}}>
+                <FontAwesomeIcon icon={`fa-chevron-right`} className="sidebar-icon"></FontAwesomeIcon>
+            </div>
             )}
+            <FontAwesomeIcon icon={`fa-${icon}`} className="sidebar-icon"></FontAwesomeIcon>
             {text}
             {props.type === "personal" && (
-                <span className="add-page" onClick={handleClick}>+</span>
+                
+                <div className="add-page" onClick={handleClick}><FontAwesomeIcon icon={`fa-plus`}></FontAwesomeIcon></div>
             )}
 
             {carrotDown && (

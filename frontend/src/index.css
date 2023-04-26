@@ -223,36 +223,48 @@ table {
     display: flex;
 }
 
+.user-homepage-sidebar {
+    box-sizing: border-box;
+    box-shadow: rgba(0, 0, 0, 0.024) -1px 0px 0px 0px inset;
+    width: 252px;
+    height: 100%;
+    background-color: rgb(251, 251, 250);
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgba(25, 23, 17, 0.6);
+    font-weight: 500;
+}
+
 .user-homepage-divider {
-    background-color: rgb(233, 233, 233);
+    background-color: rgb(251, 251, 250);
     width: 2px;
     background: linear-gradient(#000, #000) no-repeat center/2px 100%;
     opacity: 0.3;
 }
 
-.user-homepage-sidebar {
-    width: 25vw;
-    height: 100vh;
-    background-color: rgb(233, 233, 233);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.user-homepage-right {
+    width: fit-content;
 }
 
-.user-homepage-right {
-    width: 80vw;
-    height: 100vh
-}
 .user-homepage-headers {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width:80vw;
     height:5vh;
-    background-color: rgb(222, 222, 222);
+    background-color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 14px;
     color: rgb(55, 53, 47);
 }
 
+.user-homepage-main {
+    width: 80vw;
+    height: 95vh;
+    background-color: white;
+    border: 1px solid royalblue;
+}
+
+/* Header related */
 .header-left {
     position: relative;
     display: flex;
@@ -273,6 +285,7 @@ table {
 
 .header-right {
     display: flex;
+    width: fit-content;
     padding-left: 12px;
     padding-right: 10px;
 }
@@ -281,12 +294,12 @@ table {
     display: flex;
     padding-right: 30px;
     color: rgb(55, 53, 47, 0.5);
-
 }
 
 .header-icons {
     display: flex;
-    width: 350px;
+    width: 200px;
+    min-width: 200px;
     justify-content: space-between;
 }
 
@@ -296,46 +309,78 @@ table {
 
 .header-icon-comment {
     position: relative;
+    width: 20px;
+    height: 20px;
 }
 
 .header-icon-notifications {
     position: relative;
+    width: 20px;
+    height: 20px;
 }
 
 .header-icon-favorite {
     position: relative;
+    width: 20px;
+    height: 20px;
 }
 
 .header-icon-more {
     position: relative;
+    width: 20px;
+    height: 20px;
 }
 
-.user-homepage-main {
-    width: 80vw;
-    height: 95vh;
-    background-color: rgb(245, 245, 245);
-}
-
-.tooltip {
-    z-index: 100;
-    width: 300px;
-    height: 25px;
-    background-color: black;
-    border-radius: 5px;
-    padding: 5px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 14px;
-    color: white;
-    position: absolute;
-}
-
+/* Sidebar related */
 .sidebar-profile {
+    box-sizing: border-box;
     display: flex;
     align-items: center;
+    height: 45px;
+    width: inherit;
+}
+
+.sidebar-profile-user {
+    display: flex;
+    align-items: center;
+    width: 202px;
+    padding: 2px 14px;
+    cursor: pointer;
+}
+
+.sidebar-profile-user-icon {
+    display: flex;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(55, 53, 47, 0.09);
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25em;
+    margin-right: 8px;
+}
+
+.sidebar-profile-user-details {
+    display: flex;
+    align-items: center;
+    width: 144px;
     height: 21px;
-    padding: 12px;
+    font-family: inherit;
     font-size: 14px;
+    color: rgba(25, 23, 17);
     font-weight: 500;
+}
+
+.sidebar-profile-create-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    height: 32px;
+    width: 32px;
+    border: 1px solid rgba(55, 53, 47, 0.09);
+    border-radius: 100px;
+    background-color: white;
+    margin-right: 12px;
 }
 
 .sidebar-profile:hover {
@@ -353,6 +398,27 @@ table {
     left: 10px;
     border-radius: 5px;
     transition-duration: 500ms;
+}
+
+.user-email {
+    display: flex;
+    align-items: center;
+    height: 15%;
+    border-bottom: 1px solid rgba(0,0,0,.2);
+    color: rgb(55, 53, 47, 0.5);
+    font-size: 12px;
+    padding-left: 10px;
+}
+
+.current-user {
+    display: flex;
+    align-items: center;
+    height: 35%;
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(0,0,0,.2);
 }
 
 .current-user-icon {
@@ -382,26 +448,6 @@ table {
     color: rgba(55, 53, 47, 0.5);
 }
 
-.user-email {
-    display: flex;
-    align-items: center;
-    height: 15%;
-    border-bottom: 1px solid rgba(0,0,0,.2);
-    color: rgb(55, 53, 47, 0.5);
-    font-size: 12px;
-    padding-left: 10px;
-}
-
-.current-user {
-    display: flex;
-    align-items: center;
-    height: 35%;
-    padding-left: 14px;
-    padding-right: 14px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    border-bottom: 1px solid rgba(0,0,0,.2);
-}
 .profile-popup-default {
     color: rgb(55, 53, 47, 0.5);
     font-size: 14px;
@@ -427,10 +473,17 @@ i {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    cursor: pointer;
     position: relative;
-    height: 21px;
-    padding: 3px;
+    box-sizing: border-box;
+    width: 244px;
+    height: 27px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-top: 1px;
+    margin-bottom: 1px;
     font-size: 14px;
+    font-weight: 500;
     color: rgb(25, 23, 17, 0.6);
 }
 
@@ -450,34 +503,67 @@ i {
     transition-duration: 500ms;
 }
 
+.sidebar-icon {
+    height: 14px;
+    width: 14px;
+    margin-right: 8px;
+}
+
 .sidebar-default {
-    height: 12vh;
-    padding: 10px;
+    padding: 0px 10px 0px 10px;
+    padding-bottom: 8px;
 }
 
 .sidebar-personal {
     display: block;
-    height: 80vh;
-    padding: 10px;
+    margin-top: 6px;
+    margin-bottom: 2px;
+    width: 252px;
+    height: 100vh;
+    padding: 0px 10px 0px 10px;
+    box-sizing: border-box;
 }
 
 .sidebar-personal h1 {
     display: flex;
     flex: column;
+    width: 242px;
+    height: 24px;
+    padding: 0px 4px 0px 5px;
+    box-sizing: border-box;
+    align-items: center;
     justify-content: space-between;
     color: rgb(55, 53, 47, 0.5);
     font-size: 12px;
-    padding-bottom: 15px;
-    padding-top: 15px;
+}
+
+.favorites, .teamspaces, .private {
+    margin-top: 6px;
+    margin-bottom: 20px;
 }
 
 .add-page {
-    padding:3px;
+    margin-left: auto;
+    margin-right: 12px;
+    float: right;
     font-weight: bold;
 }
 
 .add-page:hover {
+    visibility: visible;
     background-color: rgb(143, 142, 137, 0.3);
     transition-duration: 200ms;
 }
 
+.tooltip {
+    z-index: 100;
+    width: 300px;
+    height: 25px;
+    background-color: black;
+    border-radius: 5px;
+    padding: 5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    color: white;
+    position: absolute;
+}

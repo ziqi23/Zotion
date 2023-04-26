@@ -7,6 +7,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as pageActions from '../../store/page'
 import SidebarItem from "./SidebarItem";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 
 const Sidebar = ({active}) => {
     const navigate = useNavigate()
@@ -23,7 +25,7 @@ const Sidebar = ({active}) => {
 
     function handleClick(e) {
         console.log(e)
-        switch (e.target.className) {
+        switch (e.currentTarget.className) {
             case ("sidebar-profile"):
                 setProfileOpen(!profileOpen)
                 break
@@ -32,7 +34,7 @@ const Sidebar = ({active}) => {
                 navigate('/')
                 break
             case ("add-page"):
-                dispatch(addPage());
+                dispatch(addPage({journalId: null}));
             default:
                 break
         }
@@ -40,13 +42,23 @@ const Sidebar = ({active}) => {
     return (
         <>
             <div className="sidebar-profile" onClick={handleClick}>
-                {username}'s Notion
+                <div className="sidebar-profile-user">
+                    <div className="sidebar-profile-user-icon">
+                        {username[0]}
+                    </div>
+                    <div className="sidebar-profile-user-details">
+                        {username}'s Notion
+                    </div>
+                </div>
+                <div className="sidebar-profile-create-page">
+                    X
+                </div>
             </div>
             <div className="sidebar-default">
-                <SidebarItem props={{"text": "Search", "type":"default"}}></SidebarItem>
-                <SidebarItem props={{"text": "Updates", "type":"default"}}></SidebarItem>
-                <SidebarItem props={{"text": "All Teamspaces", "type":"default"}}></SidebarItem>
-                <SidebarItem props={{"text": "Settings & Members", "type":"default"}}></SidebarItem>
+                <SidebarItem props={{"text": "Search", "type":"default", "icon": "magnifying-glass"}}></SidebarItem>
+                <SidebarItem props={{"text": "Updates", "type":"default", "icon": "clock"}}></SidebarItem>
+                <SidebarItem props={{"text": "All Teamspaces", "type":"default", "icon": "building-user"}}></SidebarItem>
+                <SidebarItem props={{"text": "Settings & Members", "type":"default", "icon": "gear"}}></SidebarItem>
             </div>
             <div className="sidebar-personal">
                 <div className="favorites">
@@ -67,7 +79,10 @@ const Sidebar = ({active}) => {
                 <div className="private">
                     <h1>
                         <span>Private</span>
-                        {active === 'true' ? <span className="add-page" onClick={handleClick}>+</span> : null}
+                        {active === 'true' ? 
+                            <span className="add-page" onClick={handleClick}>
+                                <FontAwesomeIcon icon="fa-plus"></FontAwesomeIcon>
+                            </span> : null}
                     </h1>
                     {Object.values(pages).map((page) => {
                         if (!page.journalId) {
