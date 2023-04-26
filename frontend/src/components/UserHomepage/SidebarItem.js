@@ -18,6 +18,7 @@ const SidebarItem = ({props}) => {
     const pages = useSelector(state => state.page)
     const [clickableOpen, setClickableOpen] = useState(false)
     const [tooltipVisible, setTooltipVisible] = useState(false) 
+    const [addPageTooltipVisible, setAddPageTooltipVisible] = useState(false)
     const [carrotDown, setCarrotDown] = useState(false)
     const [embeddedPages, setEmbeddedPages] = useState([])
     useEffect(() => {
@@ -92,10 +93,17 @@ const SidebarItem = ({props}) => {
             </div>
             )}
             <FontAwesomeIcon icon={`fa-${icon}`} className="sidebar-icon"></FontAwesomeIcon>
-            {text}
+            <div className="sidebar-page-name">{text}</div>
             {props.type === "personal" && (
                 
-                <div className="add-page" onClick={handleClick}><FontAwesomeIcon icon={`fa-plus`}></FontAwesomeIcon></div>
+                <div className="add-page" onClick={handleClick} 
+                onMouseEnter={() => setAddPageTooltipVisible(true)} 
+                onMouseLeave={() => setAddPageTooltipVisible(false)}>
+                    <FontAwesomeIcon icon={`fa-plus`}></FontAwesomeIcon>
+                    {addPageTooltipVisible && (
+                        <Tooltip props={{"text": "Quickly add a page inside", "relativePosition": [250, 0]}} />
+                    )}
+                </div>
             )}
 
             {carrotDown && (

@@ -61,8 +61,14 @@ const HeaderItem = ({props}) => {
          onClick={handleClick}
          style={pages[pageId].favorite && identifier === "favorite" ? {"color": "pink"} : {}}>
             {icon}
-            {tooltipVisible && (
-                <Tooltip props={{"text": text, "relativePosition": [0, 30]}}></Tooltip>
+            {tooltipVisible && identifier !== "favorite" && identifier !== "more" && (
+                <Tooltip props={{"text": text, "relativePosition": [-100, 30]}}></Tooltip>
+            )}
+            {tooltipVisible && identifier === "favorite" && (
+                <Tooltip props={{"text": text, "relativePosition": [-125, 30]}}></Tooltip>
+            )}
+            {tooltipVisible && identifier === "more" && (
+                <Tooltip props={{"text": text, "relativePosition": [-150, 30]}}></Tooltip>
             )}
         </div>
     )

@@ -8,12 +8,14 @@ import { useNavigate } from "react-router-dom";
 import * as pageActions from '../../store/page'
 import SidebarItem from "./SidebarItem";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Tooltip from "./Tooltip";
 
 
 const Sidebar = ({active}) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const username = useSelector(state => state.session.user.username)
+    const [tooltipVisible, setTooltipVisible] = useState(false) 
     const email = useSelector(state => state.session.user.email)
     const pages = useSelector(state => state.page)
     // console.log(active)
@@ -25,7 +27,11 @@ const Sidebar = ({active}) => {
 
     function handleClick(e) {
         console.log(e)
+        e.stopPropagation()
         switch (e.currentTarget.className) {
+            case ("sidebar-profile-create-page"):
+                dispatch(addPage({journalId: null}));
+                break
             case ("sidebar-profile"):
                 setProfileOpen(!profileOpen)
                 break
@@ -50,8 +56,15 @@ const Sidebar = ({active}) => {
                         {username}'s Notion
                     </div>
                 </div>
-                <div className="sidebar-profile-create-page">
-                    X
+                <div 
+                className="sidebar-profile-create-page"
+                onClick={handleClick} 
+                onMouseEnter={() => setTooltipVisible(true)} 
+                onMouseLeave={() => setTooltipVisible(false)}>
+                    <FontAwesomeIcon icon="pen-to-square"></FontAwesomeIcon>
+                    {tooltipVisible && (
+                        <Tooltip props={{"text": "Create a new page", "relativePosition": [200, 50]}} />
+                    )}
                 </div>
             </div>
             <div className="sidebar-default">
