@@ -7,6 +7,7 @@ import App from './App';
 import configureStore from './store'
 import * as sessionActions from './store/session';
 import * as pageActions from './store/page';
+import * as teamActions from './store/team';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faMagnifyingGlass, faClock, faBuildingUser, faGear, faFileLines, faChevronRight, faPlus, faCommentDots, faStar, faEllipsis, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 
@@ -16,6 +17,7 @@ if (process.env.NODE_ENV !== 'production') {
   window.store = store;
   window.sessionActions = sessionActions;
   window.pageActions = pageActions;
+  window.teamActions = teamActions;
 }
 
 library.add(faMagnifyingGlass, faClock, faBuildingUser, faGear, faFileLines, faChevronRight, faPlus, faCommentDots, faStar, faEllipsis, faPenToSquare)

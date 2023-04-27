@@ -1,7 +1,12 @@
 class Api::PagesController < ApplicationController
     def index
+        p params
         if (params[:page]) 
             @pages = current_user.pages.where("journal_id = #{params[:page]}")
+        elsif (params[:team])
+            p 'in team'
+            @pages = current_user.pages.where("team_id = #{params[:team]}")
+            p @pages
         else
             @pages = current_user.pages
         end
@@ -18,10 +23,14 @@ class Api::PagesController < ApplicationController
     end
 
     def update
+        p "here"
         @page = Page.find_by(id: params[:id])
+        p page_params
         page_params.keys.each do |key|
+            
             @page[key] = page_params[key]
         end
+        p @page
         if (@page.save)
             render :show
         else
@@ -46,6 +55,6 @@ class Api::PagesController < ApplicationController
     
     private
     def page_params
-        params.require('page').permit('page_icon', 'page_name', 'favorite', 'html_content', 'team_id', 'journal_id')
+        params.require(:page).permit(:page_icon, :page_name, :favorite, :html_content, :team_id, :journal_id)
     end
 end

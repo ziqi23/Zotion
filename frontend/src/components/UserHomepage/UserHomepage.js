@@ -42,7 +42,9 @@ const UserHomepage = (props) => {
                         <Headers />
                     </div>
                     <div className='user-homepage-main'>
+                        <div className='user-homepage-main-textarea'>
                         <Main active={activeElement === 'main' ? 'true' : 'false'}/>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -2,12 +2,14 @@ import {createStore, combineReducers, applyMiddleware, compose} from 'redux'
 import thunk from 'redux-thunk'
 import sessionReducer from './session';
 import pageReducer from './page';
+import teamReducer from './team';
 
 const preloadedState = {};
 
 const rootReducer = combineReducers({
     session: sessionReducer,
-    page: pageReducer
+    page: pageReducer,
+    team: teamReducer
 });
 
 let enhancer;

@@ -3,6 +3,14 @@ class User < ApplicationRecord
         foreign_key: :user_id,
         class_name: "Page",
         dependent: :destroy
+    
+    has_many :team_users,
+        foreign_key: :user_id,
+        class_name: "TeamUser"
+
+    has_many :teams,
+        through: :team_users,
+        source: :team
 
     has_secure_password
     before_validation :ensure_session_token

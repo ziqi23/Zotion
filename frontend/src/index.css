@@ -510,6 +510,17 @@ i {
     margin-right: 8px;
 }
 
+.sidebar-icon-teamspace {
+    display: flex;
+    height: 14px;
+    width: 14px;
+    margin-right: 8px;
+    background-color: rgba(55, 53, 47, 0.09);
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.25em;
+}
+
 .sidebar-default {
     padding: 0px 10px 0px 10px;
     padding-bottom: 8px;
@@ -562,6 +573,19 @@ i {
     transition-duration: 200ms;
 }
 
+.add-team-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 30%;
+    right: 30%;
+    background-color: gray;
+    width: 30vw;
+    height: 30vh;
+    border-radius: 50px;
+}
+
 .tooltip {
     z-index: 100;
     width: max-content;
@@ -578,6 +602,12 @@ i {
 
 /* Main page related */
 
+.user-homepage-main-textarea {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 100px;
+}
 .main-default-text {
     display: flex;
     flex-grow: 1;
@@ -589,14 +619,21 @@ i {
 
 .main-manual-text {
     display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(55, 53, 47);
     height: 21px;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     padding-left: 5vw;
     padding-right: 5vw;
-    width: 60vw;
 }
 
 [contenteditable] {
     outline: 0px solid transparent;
-  }
+}
+
+[contenteditable=true]:empty:not(:focus):before {
+    content: attr(data-ph);
+    color:grey;
+    font-style:italic;
+}

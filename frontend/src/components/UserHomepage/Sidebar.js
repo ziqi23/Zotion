@@ -6,21 +6,26 @@ import { addPage } from "../../store/page";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as pageActions from '../../store/page'
+import * as teamActions from '../../store/team'
 import SidebarItem from "./SidebarItem";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Tooltip from "./Tooltip";
+import AddTeamPanel from "./AddTeamPanel";
 
 
 const Sidebar = ({active}) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const username = useSelector(state => state.session.user.username)
-    const [tooltipVisible, setTooltipVisible] = useState(false) 
+    const [tooltipVisible, setTooltipVisible] = useState(false)
+    const [addTeamPanelVisible, setAddTeamPanelVisible] = useState(false) 
     const email = useSelector(state => state.session.user.email)
     const pages = useSelector(state => state.page)
+    const teams = useSelector(state => state.team)
     // console.log(active)
     useEffect(() => {
         dispatch(pageActions.showAll())
+        dispatch(teamActions.showAll())
     }, [])
     
     const [profileOpen, setProfileOpen] = useState(false)
@@ -41,6 +46,23 @@ const Sidebar = ({active}) => {
                 break
             case ("add-page"):
                 dispatch(addPage({journalId: null}));
+                break
+            case ("show-add-team-panel"):
+                setAddTeamPanelVisible(true)
+
+                function handlePanelClick(e) {
+                    const panel = document.getElementById('add-team-panel')
+                    const rect = panel.getBoundingClientRect();
+                    const mouseX = e.clientX;
+                    const mouseY = e.clientY;
+                    console.log(e)
+                    if (e.target.className === "submit-add-team" || mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom) {
+                        setTimeout(() => setAddTeamPanelVisible(false), 0)
+                        document.removeEventListener('click', handlePanelClick)
+                    }
+                }
+                document.addEventListener("click", handlePanelClick)
+                break
             default:
                 break
         }
@@ -83,11 +105,17 @@ const Sidebar = ({active}) => {
                     })}
                 </div>
                 <div className="teamspaces">
-                    <h1>Teamspaces</h1>
-                    <SidebarItem props={{"text": "Home"}}></SidebarItem>
-                    <SidebarItem props={{"text": "Wiki"}}></SidebarItem>
-                    <SidebarItem props={{"text": "Tasks"}}></SidebarItem>
-                    <SidebarItem props={{"text": "Projects"}}></SidebarItem>
+                    <h1>
+                        <span>Teamspaces</span>
+                        {active === 'true' ? 
+                            <span className="show-add-team-panel" onClick={handleClick}>
+                                <FontAwesomeIcon icon="fa-plus"></FontAwesomeIcon>
+                            </span> : null}
+                    </h1>
+                    {Object.values(teams).map((team) => {
+                        return <SidebarItem props={{"text": team.teamName, type: "team", teamId: team.id}}></SidebarItem>
+                        
+                    })}
                 </div>
                 <div className="private">
                     <h1>
@@ -98,7 +126,7 @@ const Sidebar = ({active}) => {
                             </span> : null}
                     </h1>
                     {Object.values(pages).map((page) => {
-                        if (!page.journalId) {
+                        if (!page.journalId && !page.teamId) {
                             return <SidebarItem props={{"text": page.pageName, "pageId": page.id, "type": "personal"}}></SidebarItem>
                         } else return null;
                     })}
@@ -124,6 +152,9 @@ const Sidebar = ({active}) => {
                     </div>
                 </div>
                 )}
+            {addTeamPanelVisible && (
+                <AddTeamPanel />
+            )}
         </>
     )
 }

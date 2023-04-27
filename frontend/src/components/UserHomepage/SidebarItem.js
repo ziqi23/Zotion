@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { deletePage } from "../../store/page"
 import Tooltip from "./Tooltip"
 import { showAssociatedPages } from "../../store/page"
+import { showAssociatedPages as showTeamPages } from "../../store/team"
 import { addPage } from "../../store/page"
 import { useEffect } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -12,10 +13,12 @@ const SidebarItem = ({props}) => {
     const icon = props.icon || "file-lines"
     const text = props.text
     const pageId = props.pageId
+    const teamId = props.teamId
     const type = props.type
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const pages = useSelector(state => state.page)
+    const teams = useSelector(state => state.team)
     const [clickableOpen, setClickableOpen] = useState(false)
     const [tooltipVisible, setTooltipVisible] = useState(false) 
     const [addPageTooltipVisible, setAddPageTooltipVisible] = useState(false)
@@ -27,6 +30,11 @@ const SidebarItem = ({props}) => {
                 .then(res => {
                     setEmbeddedPages(Object.values(res))
                 })
+        } else if (teamId) {
+            dispatch(showTeamPages(teamId))
+                .then(res => {
+                    setEmbeddedPages(Object.values(res))
+            })
         }
     }, [pages])
 
@@ -87,13 +95,31 @@ const SidebarItem = ({props}) => {
         onMouseEnter={() => setTooltipVisible(true)} 
         onMouseLeave={() => setTooltipVisible(false)}>
             
-            {props.type === "personal" && (
+            {(props.type === "personal") && (
+            <>
+            <div onClick={handleCarrotClick} style={carrotDown ? {"transform": "rotateZ(90deg)"} : {}}>
+                <FontAwesomeIcon icon={`fa-chevron-right`} className="sidebar-icon"></FontAwesomeIcon>
+            </div>
+            </>
+
+            )}
+            {(props.type === "personal" || props.type === "default") && (
+                <FontAwesomeIcon icon={`fa-${icon}`} className="sidebar-icon"></FontAwesomeIcon>
+            )} 
+            {(props.type === "team") && (
+                <div className="sidebar-icon-teamspace">
+                    {teams[teamId].teamName[0]}
+                </div>
+            )}
+
+
+            <div className="sidebar-page-name">{text}</div>
+
+            {(props.type === "team") && (
             <div onClick={handleCarrotClick} style={carrotDown ? {"transform": "rotateZ(90deg)"} : {}}>
                 <FontAwesomeIcon icon={`fa-chevron-right`} className="sidebar-icon"></FontAwesomeIcon>
             </div>
             )}
-            <FontAwesomeIcon icon={`fa-${icon}`} className="sidebar-icon"></FontAwesomeIcon>
-            <div className="sidebar-page-name">{text}</div>
             {props.type === "personal" && (
                 
                 <div className="add-page" onClick={handleClick} 
