@@ -52,7 +52,6 @@ export const addPage = (page) => async (dispatch) => {
 }
 
 export const modifyPage = (page) => async(dispatch) => {
-    console.log("in modify", page)
     const res = await csrfFetch(`/api/pages/${page.id}`, {
         method: "PATCH",
         body: JSON.stringify({

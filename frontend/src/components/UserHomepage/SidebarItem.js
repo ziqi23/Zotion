@@ -6,6 +6,7 @@ import Tooltip from "./Tooltip"
 import { showAssociatedPages } from "../../store/page"
 import { showAssociatedPages as showTeamPages } from "../../store/team"
 import { addPage } from "../../store/page"
+import { modifyPage } from "../../store/page"
 import { useEffect } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -76,6 +77,49 @@ const SidebarItem = ({props}) => {
         navigate(`/home?pageId=${pageId}`)
     }
 
+    // Handle another sidebar item hovered over
+    let dragStartId;
+    let dragEndId;
+
+    function handleDragStart(e) {
+        dragStartId = e.target.getAttribute("data-id")
+        e.dataTransfer.setData("text/plain", dragStartId)
+    }
+
+    function handleDragEnter(e) {
+        if (e.currentTarget.id === "user-journal-page" || e.currentTarget.id === "user-team-page") {
+            e.preventDefault()
+            e.dataTransfer.effectAllowed = "move"
+            e.dataTransfer.dropEffect = "move"
+        }
+    }
+
+    function handleDragOver(e) {
+        if (e.currentTarget.id === "user-journal-page" || e.currentTarget.id === "user-team-page") {
+            e.preventDefault()
+            e.dataTransfer.effectAllowed = "move"
+            e.dataTransfer.dropEffect = "move"
+            e.currentTarget.style.backgroundColor = "rgb(143, 142, 137, 0.3)"
+        }
+    }
+
+    function handleDragLeave(e) {
+        e.currentTarget.style.backgroundColor = ''
+    }
+
+    function handleDrop(e) {
+        e.currentTarget.style.backgroundColor = ''
+        dragStartId = (e.dataTransfer.getData("text/plain"))
+        dragEndId = e.currentTarget.getAttribute("data-id")
+        console.log("dropped")
+        console.log(dragStartId, dragEndId)
+        if (e.currentTarget.id === "user-journal-page") {
+            dispatch(modifyPage({id: dragStartId, journalId: dragEndId, teamId: null}))
+        } else if (e.currentTarget.id === "user-team-page") {
+            dispatch(modifyPage({id: dragStartId, teamId: dragEndId, journalId: null}))
+        }
+    }
+
     // Setup tooltip text and display position relative to DOM element
     let tooltipText;
     let relativePosition = [200, 0];
@@ -97,7 +141,15 @@ const SidebarItem = ({props}) => {
         <div 
         key={pageId} 
         className="clickable" 
+        id={pageId ? "user-journal-page" : teamId ? "user-team-page" : ""}
+        data-id={pageId || teamId}
+        draggable="true"
         style={carrotDown ? {"height": "auto"} : {}}
+        onDragStart={handleDragStart}
+        onDragEnter={handleDragEnter}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
         onContextMenu={handleClick} 
         onClick={handleShowPage} 
         onMouseEnter={() => setTooltipVisible(true)} 
