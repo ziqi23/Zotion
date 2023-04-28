@@ -70,7 +70,6 @@ export const deleteTeam = ({teamId}) => async(dispatch) => {
 }
 
 export const showAssociatedPages = (teamId) => async(dispatch) => {
-    console.log(teamId)
     const res = await csrfFetch(`api/pages?team=${teamId}`)
     const data = await res.json()
     return data

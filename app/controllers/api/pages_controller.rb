@@ -26,12 +26,11 @@ class Api::PagesController < ApplicationController
         p "here"
         @page = Page.find_by(id: params[:id])
         p page_params
-        page_params.keys.each do |key|
-            
-            @page[key] = page_params[key]
-        end
+        # page_params.keys.each do |key|
+        #     @page[key] = page_params[key]
+        # end
         p @page
-        if (@page.save)
+        if (@page.update(page_params))
             render :show
         else
             render json: {errors: @page.errors.full_messages}, status: :unprocessable_entity
@@ -55,6 +54,6 @@ class Api::PagesController < ApplicationController
     
     private
     def page_params
-        params.require(:page).permit(:page_icon, :page_name, :favorite, :html_content, :team_id, :journal_id)
+        params.require(:page).permit(:page_icon, :page_name, :favorite, :team_id, :journal_id, { :html_content => [:type, :text, :styles] })
     end
 end

@@ -16,22 +16,22 @@ import AddTeamPanel from "./AddTeamPanel";
 const Sidebar = ({active}) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const username = useSelector(state => state.session.user.username)
+    const [profileOpen, setProfileOpen] = useState(false)
     const [tooltipVisible, setTooltipVisible] = useState(false)
     const [addTeamPanelVisible, setAddTeamPanelVisible] = useState(false) 
+    const [addTeamToolTipVisible, setAddTeamTooltipVisible] = useState(false)
+    const [addPageToolTipVisible, setAddPageTooltipVisible] = useState(false)
+    const username = useSelector(state => state.session.user.username)
     const email = useSelector(state => state.session.user.email)
     const pages = useSelector(state => state.page)
     const teams = useSelector(state => state.team)
-    // console.log(active)
+
     useEffect(() => {
         dispatch(pageActions.showAll())
         dispatch(teamActions.showAll())
     }, [])
     
-    const [profileOpen, setProfileOpen] = useState(false)
-
     function handleClick(e) {
-        console.log(e)
         e.stopPropagation()
         switch (e.currentTarget.className) {
             case ("sidebar-profile-create-page"):
@@ -49,13 +49,11 @@ const Sidebar = ({active}) => {
                 break
             case ("show-add-team-panel"):
                 setAddTeamPanelVisible(true)
-
                 function handlePanelClick(e) {
                     const panel = document.getElementById('add-team-panel')
                     const rect = panel.getBoundingClientRect();
                     const mouseX = e.clientX;
                     const mouseY = e.clientY;
-                    console.log(e)
                     if (e.target.className === "submit-add-team" || mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom) {
                         setTimeout(() => setAddTeamPanelVisible(false), 0)
                         document.removeEventListener('click', handlePanelClick)
@@ -67,6 +65,7 @@ const Sidebar = ({active}) => {
                 break
         }
     }
+    
     return (
         <>
             <div className="sidebar-profile" onClick={handleClick}>
@@ -108,9 +107,14 @@ const Sidebar = ({active}) => {
                     <h1>
                         <span>Teamspaces</span>
                         {active === 'true' ? 
-                            <span className="show-add-team-panel" onClick={handleClick}>
+                            <span className="show-add-team-panel" onClick={handleClick}
+                            onMouseEnter={() => setAddTeamTooltipVisible(true)} 
+                            onMouseLeave={() => setAddTeamTooltipVisible(false)}>
                                 <FontAwesomeIcon icon="fa-plus"></FontAwesomeIcon>
                             </span> : null}
+                            {addTeamToolTipVisible && (
+                                <Tooltip props={{"text": "New teamspace", "relativePosition": [250, 0]}} />
+                            )}
                     </h1>
                     {Object.values(teams).map((team) => {
                         return <SidebarItem props={{"text": team.teamName, type: "team", teamId: team.id}}></SidebarItem>
@@ -121,9 +125,14 @@ const Sidebar = ({active}) => {
                     <h1>
                         <span>Private</span>
                         {active === 'true' ? 
-                            <span className="add-page" onClick={handleClick}>
+                            <span className="add-page" onClick={handleClick}
+                            onMouseEnter={() => setAddPageTooltipVisible(true)} 
+                            onMouseLeave={() => setAddPageTooltipVisible(false)}>
                                 <FontAwesomeIcon icon="fa-plus"></FontAwesomeIcon>
                             </span> : null}
+                            {addPageToolTipVisible && (
+                                <Tooltip props={{"text": "Add a page", "relativePosition": [250, 0]}} />
+                            )}
                     </h1>
                     {Object.values(pages).map((page) => {
                         if (!page.journalId && !page.teamId) {

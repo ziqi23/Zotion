@@ -86,7 +86,7 @@ const pageReducer = (state=initialState, action) => {
             return ({ ...state, [action.page.id]: action.page }); 
             // return action.payload;
         case (UPDATEPAGE):
-            return ({ ...state, [action.page.id]: { ...state[action.page.id], ...action.page }});
+            return ({ ...state, [action.page.id]: { ...state[action.page.id], ...action.page}});
             // newState = {};
             // return newState;
         case (REMOVEPAGE):

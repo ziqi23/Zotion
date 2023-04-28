@@ -37,6 +37,7 @@ const Main = (props) => {
                 break
             case ("Enter"):
                 document.push({type: "", text: ""})
+                console.log(pages[pageId])
                 dispatch(modifyPage({...pages[pageId], htmlContent: document}))
                 break
             default:
