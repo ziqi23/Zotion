@@ -1,14 +1,13 @@
 class Api::PagesController < ApplicationController
     def index
-        p params
         if (params[:page]) 
             @pages = current_user.pages.where("journal_id = #{params[:page]}")
         elsif (params[:team])
-            p 'in team'
             @pages = current_user.pages.where("team_id = #{params[:team]}")
-            p @pages
         else
-            @pages = current_user.pages
+            first_relation = current_user.pages
+            # second_relation = Page.find_by(team_id: User.find_by(id: current_user.id).teams)
+            @pages = first_relation#.or(second_relation)
         end
         render :index
     end
@@ -54,6 +53,6 @@ class Api::PagesController < ApplicationController
     
     private
     def page_params
-        params.require(:page).permit(:page_icon, :page_name, :favorite, :team_id, :journal_id, { :html_content => [:type, :text, :styles] })
+        params.require(:page).permit(:page_icon, :page_name, :favorite, :team_id, :journal_id, { :html_content => [:type, :text, { :styles => [:bold, :italic, :underline] }] })
     end
 end

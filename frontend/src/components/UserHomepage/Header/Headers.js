@@ -2,8 +2,8 @@ import { useParams, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { modifyPage } from "../../store/page";
-import Tooltip from "./Tooltip";
+import { modifyPage } from "../../../store/page";
+import Tooltip from "../Util/Tooltip";
 import HeaderItem from "./HeaderItem";
 
 const Headers = (props) => {
@@ -14,6 +14,7 @@ const Headers = (props) => {
     const pages = useSelector((state) => state.page)
     const [updateNameFieldVisible, setUpdateNameFieldVisible] = useState(false)
     const [tooltipVisible, setTooltipVisible] = useState(false) 
+
     let hoursSinceLastUpdate
 
     if (pages[pageId]) {

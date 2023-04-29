@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux"
-import { addTeam } from "../../store/team"
+import { addTeam } from "../../../store/team"
 import { useState } from "react"
 
 

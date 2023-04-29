@@ -1,22 +1,23 @@
 import { useSelector } from 'react-redux'
 import { useState } from 'react'
 import { redirect, useNavigate } from 'react-router-dom'
-import Headers from './Headers'
-import Sidebar from './Sidebar'
-import Main from './Main'
+import Headers from './Header/Headers'
+import Sidebar from './Sidebar/Sidebar'
+import Main from './Main/Main'
+import TextOptionsToolbar from '../Overlay/TextOptionsToolbar'
 
 const UserHomepage = (props) => {
     const user = useSelector((state) => state.session.user);
     const navigate = useNavigate();
-    const [activeElement, setActiveElement] = useState('');
+    // const [activeElement, setActiveElement] = useState('');
     const [sidebarWidth, setSidebarWidth] = useState(252);
-    function handleMouseMove(e) {
-        if (e.clientX > 0 && e.clientX < sidebarWidth) {
-            setActiveElement('sidebar')
-        } else {
-            setActiveElement('main')
-        }
-    }
+    // function handleMouseMove(e) {
+    //     if (e.clientX > 0 && e.clientX < sidebarWidth) {
+    //         setActiveElement('sidebar')
+    //     } else {
+    //         setActiveElement('main')
+    //     }
+    // }
 
     function handleDrag(e) {
         e.preventDefault()
@@ -32,9 +33,9 @@ const UserHomepage = (props) => {
     // style={{"width": "300px"}}
     if (user) {
         return (
-            <div className='user-homepage' onMouseMove={handleMouseMove}>
+            <div className='user-homepage' >
                 <div className='user-homepage-sidebar' style={{"width": sidebarWidth}}>  
-                    <Sidebar active={activeElement === 'sidebar' ? 'true' : 'false'}/>
+                    <Sidebar />
                 </div>
                 <div className='user-homepage-divider' draggable="true" onDrag={handleDrag}></div>
                 <div className='user-homepage-right'>
@@ -43,10 +44,11 @@ const UserHomepage = (props) => {
                     </div>
                     <div className='user-homepage-main'>
                         <div className='user-homepage-main-textarea'>
-                        <Main active={activeElement === 'main' ? 'true' : 'false'}/>
+                        <Main />
                         </div>
                     </div>
                 </div>
+                <TextOptionsToolbar />
             </div>
         )
     } else {

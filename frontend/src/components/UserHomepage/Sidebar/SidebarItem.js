@@ -1,12 +1,12 @@
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { deletePage } from "../../store/page"
-import Tooltip from "./Tooltip"
-import { showAssociatedPages } from "../../store/page"
-import { showAssociatedPages as showTeamPages } from "../../store/team"
-import { addPage } from "../../store/page"
-import { modifyPage } from "../../store/page"
+import { deletePage } from "../../../store/page"
+import Tooltip from "../Util/Tooltip"
+import { showAssociatedPages } from "../../../store/page"
+import { showAssociatedPages as showTeamPages } from "../../../store/team"
+import { addPage } from "../../../store/page"
+import { modifyPage } from "../../../store/page"
 import { useEffect } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -111,9 +111,8 @@ const SidebarItem = ({props}) => {
         e.currentTarget.style.backgroundColor = ''
         dragStartId = (e.dataTransfer.getData("text/plain"))
         dragEndId = e.currentTarget.getAttribute("data-id")
-        console.log("dropped")
-        console.log(dragStartId, dragEndId)
-        if (e.currentTarget.id === "user-journal-page") {
+
+        if (e.currentTarget.id === "user-journal-page" && dragStartId !== dragEndId) {
             dispatch(modifyPage({id: dragStartId, journalId: dragEndId, teamId: null}))
         } else if (e.currentTarget.id === "user-team-page") {
             dispatch(modifyPage({id: dragStartId, teamId: dragEndId, journalId: null}))
@@ -209,7 +208,7 @@ const SidebarItem = ({props}) => {
                     })
                 )}
                 {embeddedPages.length === 0 && (
-                    <div>No pages inside</div>
+                    <div className="no-pages-inside">No pages inside</div>
                 )}
                 </>
             )}

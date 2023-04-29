@@ -1,21 +1,22 @@
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { useEffect } from "react";
-import { logout } from "../../store/session"
-import { addPage } from "../../store/page";
+import { logout } from "../../../store/session"
+import { addPage } from "../../../store/page";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import * as pageActions from '../../store/page'
-import * as teamActions from '../../store/team'
+import * as pageActions from '../../../store/page'
+import * as teamActions from '../../../store/team'
 import SidebarItem from "./SidebarItem";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import Tooltip from "./Tooltip";
+import Tooltip from "../Util/Tooltip";
 import AddTeamPanel from "./AddTeamPanel";
 
 
-const Sidebar = ({active}) => {
+const Sidebar = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const [active, setActive] = useState('false');
     const [profileOpen, setProfileOpen] = useState(false)
     const [tooltipVisible, setTooltipVisible] = useState(false)
     const [addTeamPanelVisible, setAddTeamPanelVisible] = useState(false) 
@@ -30,6 +31,16 @@ const Sidebar = ({active}) => {
         dispatch(pageActions.showAll())
         dispatch(teamActions.showAll())
     }, [])
+
+    function handleMouseMove(e) {
+        console.log(e)
+        if (e.clientX > 0 && e.clientX < 240) {
+            setActive('true')
+        } else {
+            setActive('false')
+        }
+    }
+    console.log(active)
     
     function handleClick(e) {
         e.stopPropagation()
@@ -67,7 +78,7 @@ const Sidebar = ({active}) => {
     }
     
     return (
-        <>
+        <div onMouseMove={handleMouseMove}>
             <div className="sidebar-profile" onClick={handleClick}>
                 <div className="sidebar-profile-user">
                     <div className="sidebar-profile-user-icon">
@@ -164,7 +175,7 @@ const Sidebar = ({active}) => {
             {addTeamPanelVisible && (
                 <AddTeamPanel />
             )}
-        </>
+        </div>
     )
 }
 

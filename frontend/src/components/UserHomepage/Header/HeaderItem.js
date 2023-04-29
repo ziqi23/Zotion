@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Tooltip from "./Tooltip";
+import Tooltip from "../Util/Tooltip";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { modifyPage } from "../../store/page";
+import { modifyPage } from "../../../store/page";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
