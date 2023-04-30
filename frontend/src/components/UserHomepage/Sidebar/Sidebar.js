@@ -33,14 +33,14 @@ const Sidebar = () => {
     }, [])
 
     function handleMouseMove(e) {
-        console.log(e)
+        // console.log(e)
         if (e.clientX > 0 && e.clientX < 240) {
             setActive('true')
         } else {
             setActive('false')
         }
     }
-    console.log(active)
+    // console.log(active)
     
     function handleClick(e) {
         e.stopPropagation()

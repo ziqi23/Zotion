@@ -9,7 +9,7 @@ import "@blocknote/core/style.css";
 import React from "react";
 
 const Main = (props) => {
-    // const [toolbarVisible, setToolbarVisible] = useState(false)
+    const [toolbarVisible, setToolbarVisible] = useState(false)
     const dispatch = useDispatch();
     const location = useLocation();
     const query = location.search;
@@ -20,22 +20,24 @@ const Main = (props) => {
     let idxSelected;
     let charSelected;
     function handleSelect(e) {
-        // console.log(e)
         const selection = getSelection();
-        // console.log(selection)
-        // console.log(selection.anchorNode.parentElement.childNodes)
-        // console.log(Array.prototype.indexOf.call(selection.anchorNode.parentNode.childNodes, selection.anchorNode))
-        // console.log(Array.prototype.indexOf.call(selection.anchorNode.parentNode.childNodes, selection.focusNode))
-        if (selection.baseOffset !== selection.focusOffset) {
+        console.log(selection)
+        const selectionStartIdx = Array.prototype.indexOf.call(selection.anchorNode.parentNode.childNodes, selection.anchorNode)
+        const selectionEndIdx = Array.prototype.indexOf.call(selection.anchorNode.parentNode.childNodes, selection.focusNode)
+
+        if (selectionStartIdx !== selectionEndIdx) {
             idxSelected = e.target.getAttribute('data-idx')
-            charSelected = [selection.baseOffset, selection.focusOffset].sort()
-            // setToolbarVisible(true)
+            charSelected = [selectionStartIdx, selectionEndIdx].sort()
+            localStorage.setItem('selection', `${charSelected}`)
+            setToolbarVisible(true)
         } else {
-            // setToolbarVisible(false)
+            setToolbarVisible(false)
         }
 
         console.log(idxSelected, charSelected)
     }
+
+    console.log(localStorage.getItem('selection').split(',').map((ele) => parseInt(ele)))
 
     function handleToolbarClick(e) {
         e.preventDefault()
@@ -60,6 +62,7 @@ const Main = (props) => {
                 break
         }
     }
+
     let formattedHtmlContent;
     if (htmlContent) {
         formattedHtmlContent = []
@@ -94,16 +97,22 @@ const Main = (props) => {
                 className="main-manual-text" 
                 onKeyDown={handleChange}
                 onSelect={handleSelect}>
-                    {div.text.split('').map((char, idx)=>{
-                        return <>{char}</>
-                    })}
+                    <span>Person</span><span>al ho</span><span>me</span>
+                    {/* {div.text.split('').map((char, idx)=>{
+                        // let selection = localStorage.getItem('selection').split(',').map((ele) => parseInt(ele))
+                        // if (idx >= selection[0] && idx <= selection[1]) {
+                        //     return <span style={{backgroundColor: "blue"}}>{char}</span>
+                        // } else {
+                            return <>{char}</>
+                        // }
+                    })} */}
                 </CustomTag> 
             ))}
-            {/* {toolbarVisible && (
+            {toolbarVisible && (
                 <div>
                     <TextOptionsToolbar />
                 </div>
-            )} */}
+            )}
         </>
         )
     } else return <h1 className="main-default-text">&#128075;Welcome to Notion</h1>

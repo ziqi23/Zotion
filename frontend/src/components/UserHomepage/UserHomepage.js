@@ -4,6 +4,7 @@ import { redirect, useNavigate } from 'react-router-dom'
 import Headers from './Header/Headers'
 import Sidebar from './Sidebar/Sidebar'
 import Main from './Main/Main'
+import Title from './Main/Title'
 import TextOptionsToolbar from '../Overlay/TextOptionsToolbar'
 
 const UserHomepage = (props) => {
@@ -43,12 +44,12 @@ const UserHomepage = (props) => {
                         <Headers />
                     </div>
                     <div className='user-homepage-main'>
+                        <Title />
                         <div className='user-homepage-main-textarea'>
                         <Main />
                         </div>
                     </div>
                 </div>
-                <TextOptionsToolbar />
             </div>
         )
     } else {
