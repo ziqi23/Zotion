@@ -651,8 +651,8 @@ i {
     display: flex;
     height: 24px;
     margin: 16px 0px 4px -1px;
-    padding-left: 100px;
-    padding-right: 100px;
+    padding-left: 20%;
+    padding-right: 20%;
 }
 
 .add-cover {
@@ -674,7 +674,7 @@ i {
 .main-title-text {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     height: auto;
-    padding: 3px 100px 3px 100px;
+    padding: 3px 20% 3px 20%;
     font-size: 40px;
     color: rgb(55, 53, 47);
     font-weight: 700;
@@ -684,7 +684,7 @@ i {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding: 10px 100px 10px 100px;
+    padding: 10px 20% 10px 20%;
 }
 
 .user-homepage-main-textarea h1 {
@@ -717,28 +717,38 @@ i {
 
 .main-manual-text {
     display: flex;
+    flex-wrap: wrap;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     color: rgb(55, 53, 47);
     height: auto;
+    overflow-wrap: break-word;
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
 .block-options-toolbar {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 12px;
+    color: rgba(55, 53, 47, 0.65);
     display: flex;
     flex-direction: column;
     position: absolute;
     z-index: 100;
-    background-color: whitesmoke;
-    width: 25%;
-    height: 25%;
-    border-radius: 10px;
+    background-color: white;
+    width: 314px;
+    height: auto;
+    cursor: pointer;
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
 }
 
 .text-option-div, .text-option-h1, .text-option-h2, .text-option-h3, .text-option-ul, .text-option-ol {
     display: flex;
     flex-direction: row;
-    flex-grow: 1;
+    padding: 4px 0px 4px 0px;
+    height: 47px;
+    width: inherit;
 }
 
 .text-option-div:hover, .text-option-h1:hover, .text-option-h2:hover, .text-option-h3:hover, .text-option-ul:hover, .text-option-ol:hover {
@@ -763,16 +773,34 @@ i {
 }
 
 .text-option-img-block {
-    height: 50px;
-    width: 50px;
+    display: flex;
+    height: 46px;
+    width: 46px;
+    border-radius: 3px;
+    box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px;
+    margin: 4px 10px 4px 10px;
+}
+
+.text-option-img-block img {
+    flex-grow: 1;
+}
+
+.text-option-description {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .text-option-short-description {
-    height: 25px;
+    display: flex;
+    font-size: 14px;
+    color: rgb(55, 53, 47);
+    align-items: center;
 }
 
 .text-option-long-description {
-    height: 25px;
+    display: flex;
+    align-items: center;
 }
 
 [contenteditable] {

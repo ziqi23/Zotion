@@ -176,7 +176,7 @@ const Main = (props) => {
                 <CustomTag type={div.type} 
                 key={idx}
                 data-idx={idx}
-                data-ph="Write something..."
+                data-ph="Write something, or press '/' for commands..."
                 contentEditable="true" 
                 suppressContentEditableWarning={true}
                 className="main-manual-text" 
