@@ -59,7 +59,12 @@ const Main = (props) => {
         const selection = window.getSelection()
         if (ele && typeof ele.childNodes[divIndex] === 'object') {
             range.selectNode(ele.childNodes[divIndex])
-            range.setStart(ele.childNodes[divIndex], charIndex)
+            if (charIndex === 0) {
+                range.setStart(ele.childNodes[divIndex], charIndex)
+            } else {
+                range.setStart(ele.childNodes[divIndex].firstChild, charIndex)
+
+            }
             range.collapse(true)
             console.log(range)
     
@@ -70,15 +75,21 @@ const Main = (props) => {
         }
     }
     useEffect(() => {
-        setCaret(parseInt(localStorage.getItem('caretPos')), 0)
+
+        let caretPos = localStorage.getItem('caretPos')
+        if (caretPos) {
+            caretPos = caretPos.split(',').map((ele) => parseInt(ele))
+            setCaret(caretPos[0], caretPos[1])
+        }
         localStorage.removeItem('caretPos')
+
     },)
 
     function handleChange(e) {
         console.log(e)
         const index = parseInt(e.target.getAttribute('data-idx'))
         switch (e.key) {
-            case ("Shift" || "Control" || "Alt" || "Tab" || "Meta"):
+            case ("Shift" || "Control" || "Alt" || "Tab" || "Meta" || "ArrowLeft" || "ArrowRight" || "ArrowUp" || "ArrowDown"):
                 break
             case ("Backspace"):
                 if (document[index].text.length === 0 && document[index].type !== 'div') {
@@ -86,10 +97,18 @@ const Main = (props) => {
                     dispatch(modifyPage({...pages[pageId], htmlContent: document}))
                 } else if (document[index].text.length === 0 && index !== 0) {
                     document.splice(index, 1)
+                    localStorage.setItem('caretPos', `${index - 1}, ${document[index - 1].text.length}`)
                     dispatch(modifyPage({...pages[pageId], htmlContent: document}))
                 }
                 else {
-                    document[index].text = document[index].text.slice(0, document[index].text.length - 1)
+                    const currentIdx = getSelection().anchorOffset
+                    if (currentIdx === 0) break
+                    let currentText = document[index].text
+                    currentText = currentText.split('')
+                    currentText.splice(currentIdx - 1, 1)
+                    document[index].text = currentText.join('')
+                    // document[index].text = document[index].text.slice(0, document[index].text.length - 1)
+                    localStorage.setItem('caretPos', `${index},${currentIdx - 1}`)
                     dispatch(modifyPage({...pages[pageId], htmlContent: document}))
                 }
                 break
@@ -100,7 +119,7 @@ const Main = (props) => {
                     document.splice(index + 1, 0, {type: `div`, text: "", styles: {bold: [], italic: [], underline: []}})
                 }
                 dispatch(modifyPage({...pages[pageId], htmlContent: document}))
-                localStorage.setItem('caretPos', `${index + 1}`)
+                localStorage.setItem('caretPos', `${index + 1},0`)
                 break
             case ("/"):
                 setBlockOptionVisible(true);
@@ -121,7 +140,11 @@ const Main = (props) => {
                 window.document.addEventListener("mousedown", handlePanelClick)
                 break;
             default:
-                document[index].text += e.key
+                const currentIdx = getSelection().anchorOffset
+                let currentText = document[index].text
+                currentText = currentText.split('')
+                currentText.splice(currentIdx, 0, e.key)
+                document[index].text = currentText.join('')
                 break
         }
     }
