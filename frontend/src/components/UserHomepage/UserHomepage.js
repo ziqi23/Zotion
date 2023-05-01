@@ -45,7 +45,7 @@ const UserHomepage = (props) => {
                     </div>
                     <div className='user-homepage-main'>
                         <Title />
-                        <div className='user-homepage-main-textarea'>
+                        <div className='user-homepage-main-textarea' id='user-homepage-main-textarea'>
                         <Main />
                         </div>
                     </div>
