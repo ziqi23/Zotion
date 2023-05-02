@@ -60,22 +60,23 @@ const Main = (props) => {
         setBlockOptionVisible(false)
     }
     function setCaret(divIndex, charIndex) {
-        const ele = window.document.getElementById('user-homepage-main-textarea')
+        const ele = window.document.querySelector(`.main-manual-text[data-idx="${divIndex}"]`)
         const range = window.document.createRange()
         const selection = window.getSelection()
-        if (ele && typeof ele.childNodes[divIndex].childNodes[divIndex] === 'object') {
-            range.selectNode(ele.childNodes[divIndex].childNodes[divIndex])
+
+        if (ele && typeof ele === 'object') {
+            range.selectNode(ele)
             if (charIndex === 0) {
-                range.setStart(ele.childNodes[divIndex].childNodes[divIndex], charIndex)
+                range.setStart(ele, charIndex)
             } else {
-                range.setStart(ele.childNodes[divIndex].childNodes[divIndex].firstChild, charIndex)
+                range.setStart(ele.firstChild, charIndex)
 
             }
             range.collapse(true)
     
             selection.removeAllRanges()
             selection.addRange(range)
-            ele.childNodes[divIndex].focus()
+            ele.focus()
         }
     }
     useEffect(() => {
@@ -107,12 +108,11 @@ const Main = (props) => {
             e.preventDefault()
             e.dataTransfer.effectAllowed = "move"
             e.dataTransfer.dropEffect = "move"
+        
+        } else if (e.currentTarget.id === "main-manual-drag-block" || e.target.className === "main-manual-text") {
+            e.dataTransfer.effectAllowed = "none"
+            e.dataTransfer.dropEffect = "none"
         }
-        // } else if (e.currentTarget.id === "main-manual-drag-block" || e.target.className === "main-manual-text") {
-        //     e.preventDefault()
-        //     e.dataTransfer.effectAllowed = "none"
-        //     e.dataTransfer.dropEffect = "none"
-        // }
             
         
     }
@@ -122,13 +122,12 @@ const Main = (props) => {
             e.preventDefault()
             e.dataTransfer.effectAllowed = "move"
             e.dataTransfer.dropEffect = "move"
-            e.currentTarget.style.backgroundColor = "blue"
+            e.currentTarget.style.backgroundColor = "rgb(76, 156, 221, 0.5)"
+        
+        } else if (e.currentTarget.id === "main-manual-drag-block" || e.target.className === "main-manual-text") {
+            e.dataTransfer.effectAllowed = "none"
+            e.dataTransfer.dropEffect = "none"
         }
-        // } else if (e.currentTarget.id === "main-manual-drag-block" || e.target.className === "main-manual-text") {
-        //     e.preventDefault()
-        //     e.dataTransfer.effectAllowed = "none"
-        //     e.dataTransfer.dropEffect = "none"
-        // }
     }
 
     function handleDragLeave(e) {
@@ -136,24 +135,19 @@ const Main = (props) => {
     }
     function handleDrop(e) {
         if (e.target.className === "main-manual-drag-block" || e.target.className === "main-manual-text") {
-            console.log("insde")
-            e.dataTransfer.dropEffect = 'none'
-            return false;
+            e.preventDefault();
         } else {
             e.currentTarget.style.backgroundColor = ''
             dragStartId = parseInt(e.dataTransfer.getData("text/plain"))
             dragEndId = parseInt(e.currentTarget.getAttribute("data-idx"))
-            console.log(dragStartId, dragEndId)
-
+            setDragIconVisible(-1)
             if (dragStartId !== dragEndId) {
-                console.log(document)
                 document.splice(dragEndId + 1, 0, document[dragStartId])
                 if (dragStartId > dragEndId) {
                     document = document.slice(0, dragStartId + 1).concat(document.slice(dragStartId + 2))
                 } else {
                     document = document.slice(0, dragStartId).concat(document.slice(dragStartId + 1))
                 }
-                console.log(document)
                 dispatch(modifyPage({...pages[pageId], htmlContent: document}))
             }
         }
@@ -283,6 +277,14 @@ const Main = (props) => {
     if (pageId !== "undefined") {
         return (
         <>
+            <div className="main-manual-drop-block" 
+                id="main-manual-drop-block" 
+                data-idx="-1"
+                onDragEnter={handleDragEnter}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}>
+            </div>
             {document.map((div, idx) => (
                 <>
                 <div className="main-manual-drag-block"  
