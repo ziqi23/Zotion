@@ -610,15 +610,90 @@ i {
 
 .add-team-panel {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
     position: absolute;
     top: 30%;
     right: 30%;
-    background-color: gray;
-    width: 30vw;
-    height: 30vh;
-    border-radius: 50px;
+    background-color: white;
+    width: 480px;
+    height: 532px;
+    box-sizing: border-box;
+    padding: 22px 26px;
+    border-radius: 5px;
+    box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 5px 10px, rgba(15, 15, 15, 0.2) 0px 15px 40px;
+}
+
+.teamspace-short-description {
+    display: flex;
+    font-size: 18px;
+    color: rgb(55, 53, 47);
+    align-items: center;
+    padding: 5px;
+}
+
+.teamspace-long-description {
+    display: flex;
+    font-size: 12px;
+    color: rgba(55, 53, 47, 0.5);
+    align-items: center;
+    padding: 5px;
+    margin-bottom: 26px;
+}
+
+.add-team-panel form {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+.add-team-panel form label {
+    display: flex;
+    flex-direction: column;
+    margin-top: 14px;
+    margin-bottom: 4px;
+}
+
+.add-team-panel form label span{
+    font-size: 12px;
+    color: rgba(55, 53, 47, 0.65);
+    margin-bottom: 4px;
+}
+
+.add-team-panel form label input{
+    box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset;
+    background-color: rgba(242, 241, 238, 0.6);
+    color: rgb(55, 53, 47);
+    border-radius: 4px;
+    padding: 4px 10px;
+    border: 1px;
+}
+
+.teamspace-description-input {
+    height: 28px;
+}
+
+.teamspace-description-input {
+    display: flex;
+    justify-content: flex-start;
+    height: 68px;
+}
+
+.submit-add-team {
+    background-color: rgb(35, 131, 226);
+    box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset, rgba(15, 15, 15, 0.1) 0px 1px 2px;
+    border-radius: 4px;
+    border: 1px;
+    height: 32px;
+    opacity: 0.4;
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+}
+
+.submit-add-team:hover {
+    opacity: 0.9;
 }
 
 .tooltip {

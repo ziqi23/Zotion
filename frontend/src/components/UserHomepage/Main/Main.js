@@ -12,6 +12,8 @@ import React from "react";
 const Main = (props) => {
     const [toolbarVisible, setToolbarVisible] = useState(false)
     const [blockOptionVisible, setBlockOptionVisible] = useState(false)
+    const [history, setHistory] = useState([]);
+    const [pointer, setPointer] = useState(0);
     const dispatch = useDispatch();
     const location = useLocation();
     const query = location.search;
@@ -85,8 +87,12 @@ const Main = (props) => {
 
     },)
 
+    // useEffect(() => {
+    //     setPointer(history.length - 1)
+    // }, [htmlContent])
+
     function handleChange(e) {
-        console.log(e)
+        // console.log(e)
         const index = parseInt(e.target.getAttribute('data-idx'))
         switch (e.key) {
             case ("Shift" || "Control" || "Alt" || "Tab" || "Meta" || "ArrowLeft" || "ArrowRight" || "ArrowUp" || "ArrowDown"):
@@ -95,10 +101,14 @@ const Main = (props) => {
                 if (document[index].text.length === 0 && document[index].type !== 'div') {
                     document[index].type = 'div'
                     dispatch(modifyPage({...pages[pageId], htmlContent: document}))
+                    history.push(document)
+                    // setPointer(history.length - 1)
                 } else if (document[index].text.length === 0 && index !== 0) {
                     document.splice(index, 1)
                     localStorage.setItem('caretPos', `${index - 1}, ${document[index - 1].text.length}`)
                     dispatch(modifyPage({...pages[pageId], htmlContent: document}))
+                    history.push(document)
+                    // setPointer(history.length - 1)
                 }
                 else {
                     const currentIdx = getSelection().anchorOffset
@@ -110,6 +120,8 @@ const Main = (props) => {
                     // document[index].text = document[index].text.slice(0, document[index].text.length - 1)
                     localStorage.setItem('caretPos', `${index},${currentIdx - 1}`)
                     dispatch(modifyPage({...pages[pageId], htmlContent: document}))
+                    history.push(document)
+                    // setPointer(history.length - 1)
                 }
                 break
             case ("Enter"):
@@ -119,6 +131,9 @@ const Main = (props) => {
                     document.splice(index + 1, 0, {type: `div`, text: "", styles: {bold: [], italic: [], underline: []}})
                 }
                 dispatch(modifyPage({...pages[pageId], htmlContent: document}))
+                history.push(document)
+                console.log(history)
+                // setPointer(history.length - 1)
                 localStorage.setItem('caretPos', `${index + 1},0`)
                 break
             case ("/"):
@@ -136,7 +151,6 @@ const Main = (props) => {
                         window.document.removeEventListener('mousedown', handlePanelClick)
                     }
                 }
-
                 window.document.addEventListener("mousedown", handlePanelClick)
                 break;
             default:
@@ -146,6 +160,27 @@ const Main = (props) => {
                 currentText.splice(currentIdx, 0, e.key)
                 document[index].text = currentText.join('')
                 break
+        }
+    }
+    // console.log(history)
+    window.document.addEventListener('keydown', handleHistory)
+
+    function handleHistory(e) {
+        e.stopImmediatePropagation()
+        if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
+            console.log("o")
+            console.log(history)
+            // console.log(pointer)
+            // if (pointer - 1 >= 0) {
+            //     setPointer(pointer - 1)
+            if (history.length > 1) {
+                setHistory(history.slice(0, history.length - 1))
+                console.log(history)
+                console.log(pages[pageId])
+                dispatch(modifyPage({...pages[pageId], htmlContent: history[history.length - 1]}))
+            }
+                window.document.removeEventListener('keydown', handleHistory)
+            // }
         }
     }
 

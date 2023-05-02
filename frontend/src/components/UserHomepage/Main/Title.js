@@ -3,11 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { showAll } from "../../../store/page";
 import { modifyPage } from "../../../store/page";
-import cover1 from "../../../assets/rijksmuseum_avercamp_1608.jpeg"
-import cover2 from "../../../assets/rijksmuseum_jansz_1636.jpeg"
-import cover3 from "../../../assets/rijksmuseum_jansz_1649.jpeg"
-import cover4 from "../../../assets/woodcuts_1.jpeg"
-import cover5 from "../../../assets/woodcuts_2.jpeg"
 import { useState } from "react";
 
 
@@ -89,9 +84,14 @@ const Title = (props) => {
 
     return (
         <>
-        {pages[pageId]?.pageIcon && (
+        {pages[pageId]?.pageIcon && pages[pageId].pageIcon !== "Placeholder" && (
         <div className="main-title-cover">
             <img src={`./assets/${pages[pageId].pageIcon}.jpeg`} draggable="false"></img>
+        </div>
+        )}
+        {pages[pageId]?.pageIcon && pages[pageId].pageIcon === "Placeholder" && (
+        <div className="main-title-cover">
+            <img src={`./assets/rijksmuseum_milkmaid.jpeg`} draggable="false"></img>
         </div>
         )}
         <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -129,7 +129,7 @@ const Title = (props) => {
                         <img data-url="rijksmuseum_rembrandt_1642" src='./assets/rijksmuseum_rembrandt_1642.jpeg' draggable="false" onClick={handleChooseCover}></img>
                     </div>
                     <div className="individual-cover">
-                        <img data-url="rijksmuseum_milkmaid" src='./assets/rijksmuseum_vermeer_the_milkmaid.jpeg' draggable="false" onClick={handleChooseCover}></img>
+                        <img data-url="rijksmuseum_milkmaid" src='./assets/rijksmuseum_milkmaid.jpeg' draggable="false" onClick={handleChooseCover}></img>
                     </div>
                     <div className="individual-cover">
                         <img data-url="woodcuts_1" src='./assets/woodcuts_1.jpeg' draggable="false" onClick={handleChooseCover}></img>
