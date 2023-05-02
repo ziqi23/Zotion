@@ -612,6 +612,7 @@ i {
     display: flex;
     flex-direction: column;
     position: absolute;
+    z-index: 500;
     top: 30%;
     right: 30%;
     background-color: white;
@@ -666,6 +667,7 @@ i {
     border-radius: 4px;
     padding: 4px 10px;
     border: 1px;
+
 }
 
 .teamspace-description-input {
@@ -831,6 +833,7 @@ i {
 
 .main-manual-text {
     display: flex;
+    position: relative;
     flex-wrap: wrap;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     color: rgb(55, 53, 47);
@@ -840,6 +843,36 @@ i {
     padding-bottom: 5px;
 }
 
+.main-manual-drag-block {
+    position: relative;
+    /* width: 120%; */
+    /* padding-left: 10%;
+    padding-right: 10%; */
+    height: 30px;
+}
+
+.main-manual-drag-icon {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    box-sizing: border-box;
+    height: 26px;
+    width: 10px;
+    opacity: 0.65;
+    bottom: 5px;
+    left: -5%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.main-manual-drag-icon:hover {
+    background-color: rgb(55, 53, 47, 0.2);
+    transition-duration: 200ms;
+}
+
+.main-manual-drop-block {
+    height: 5px;
+}
 .block-options-toolbar {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 12px;

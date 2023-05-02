@@ -2,6 +2,7 @@ import { useParams, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { modifyPage } from "../../../store/page";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { BlockNoteEditor } from "@blocknote/core";
 import { BlockNoteView, useBlockNote } from "@blocknote/react";
 import TextOptionsToolbar from "../../Overlay/TextOptionsToolbar";
@@ -12,8 +13,9 @@ import React from "react";
 const Main = (props) => {
     const [toolbarVisible, setToolbarVisible] = useState(false)
     const [blockOptionVisible, setBlockOptionVisible] = useState(false)
+    const [dragIconVisible, setDragIconVisible] = useState(false)
     const [history, setHistory] = useState([]);
-    const [pointer, setPointer] = useState(0);
+    const [pointer, setPointer] = useState(-1);
     const dispatch = useDispatch();
     const location = useLocation();
     const query = location.search;
@@ -49,30 +51,30 @@ const Main = (props) => {
     // }
 
     const blockOption = (option) => {
+
         console.log(localStorage, option)
         document[parseInt(localStorage.getItem('blockIdx'))].type = option
         dispatch(modifyPage({...pages[pageId], htmlContent: document}))
         localStorage.removeItem('blockIdx')
+
         setBlockOptionVisible(false)
     }
     function setCaret(divIndex, charIndex) {
         const ele = window.document.getElementById('user-homepage-main-textarea')
         const range = window.document.createRange()
         const selection = window.getSelection()
-        if (ele && typeof ele.childNodes[divIndex] === 'object') {
-            range.selectNode(ele.childNodes[divIndex])
+        if (ele && typeof ele.childNodes[divIndex].childNodes[divIndex] === 'object') {
+            range.selectNode(ele.childNodes[divIndex].childNodes[divIndex])
             if (charIndex === 0) {
-                range.setStart(ele.childNodes[divIndex], charIndex)
+                range.setStart(ele.childNodes[divIndex].childNodes[divIndex], charIndex)
             } else {
-                range.setStart(ele.childNodes[divIndex].firstChild, charIndex)
+                range.setStart(ele.childNodes[divIndex].childNodes[divIndex].firstChild, charIndex)
 
             }
             range.collapse(true)
-            console.log(range)
     
             selection.removeAllRanges()
             selection.addRange(range)
-            console.log(window.getSelection())
             ele.childNodes[divIndex].focus()
         }
     }
@@ -87,6 +89,75 @@ const Main = (props) => {
 
     },)
 
+
+    let dragStartId;
+    let dragEndId;
+
+    function handleDragStart(e) {
+        dragStartId = e.target.getAttribute("data-idx")
+        let img = window.document.querySelector(`.main-manual-text[data-idx="${dragStartId}"]`)
+        console.log(img)
+        console.log(dragStartId)
+        e.dataTransfer.setData("text/plain", dragStartId)
+        e.dataTransfer.setDragImage(img, 25, 25)
+    }
+
+    function handleDragEnter(e) {
+        if (e.currentTarget.id === "main-manual-drop-block") {
+            e.preventDefault()
+            e.dataTransfer.effectAllowed = "move"
+            e.dataTransfer.dropEffect = "move"
+        }
+        // } else if (e.currentTarget.id === "main-manual-drag-block" || e.target.className === "main-manual-text") {
+        //     e.preventDefault()
+        //     e.dataTransfer.effectAllowed = "none"
+        //     e.dataTransfer.dropEffect = "none"
+        // }
+            
+        
+    }
+
+    function handleDragOver(e) {
+        if (e.currentTarget.id === "main-manual-drop-block") {
+            e.preventDefault()
+            e.dataTransfer.effectAllowed = "move"
+            e.dataTransfer.dropEffect = "move"
+            e.currentTarget.style.backgroundColor = "blue"
+        }
+        // } else if (e.currentTarget.id === "main-manual-drag-block" || e.target.className === "main-manual-text") {
+        //     e.preventDefault()
+        //     e.dataTransfer.effectAllowed = "none"
+        //     e.dataTransfer.dropEffect = "none"
+        // }
+    }
+
+    function handleDragLeave(e) {
+        e.currentTarget.style.backgroundColor = ''
+    }
+    function handleDrop(e) {
+        if (e.target.className === "main-manual-drag-block" || e.target.className === "main-manual-text") {
+            console.log("insde")
+            e.dataTransfer.dropEffect = 'none'
+            return false;
+        } else {
+            e.currentTarget.style.backgroundColor = ''
+            dragStartId = parseInt(e.dataTransfer.getData("text/plain"))
+            dragEndId = parseInt(e.currentTarget.getAttribute("data-idx"))
+            console.log(dragStartId, dragEndId)
+
+            if (dragStartId !== dragEndId) {
+                console.log(document)
+                document.splice(dragEndId + 1, 0, document[dragStartId])
+                if (dragStartId > dragEndId) {
+                    document = document.slice(0, dragStartId + 1).concat(document.slice(dragStartId + 2))
+                } else {
+                    document = document.slice(0, dragStartId).concat(document.slice(dragStartId + 1))
+                }
+                console.log(document)
+                dispatch(modifyPage({...pages[pageId], htmlContent: document}))
+            }
+        }
+    }
     // useEffect(() => {
     //     setPointer(history.length - 1)
     // }, [htmlContent])
@@ -166,6 +237,7 @@ const Main = (props) => {
     window.document.addEventListener('keydown', handleHistory)
 
     function handleHistory(e) {
+        // console.log(history)
         e.stopImmediatePropagation()
         if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
             console.log("o")
@@ -196,9 +268,13 @@ const Main = (props) => {
             }
         })
     }
+
+    
     let document = formattedHtmlContent || [
         {type: "div", text: ``, styles: {bold: [], italic: [], underline: []}}
     ]
+
+    console.log(document)
 
     function CustomTag({type, children, ...props}) {
         return React.createElement(type, props, children)
@@ -208,27 +284,52 @@ const Main = (props) => {
         return (
         <>
             {document.map((div, idx) => (
-                <CustomTag type={div.type} 
-                key={idx}
+                <>
+                <div className="main-manual-drag-block"  
+                onMouseOver={() => setDragIconVisible(idx)}
+                onMouseLeave={() => setDragIconVisible(-1)}            
+                >
+                    <CustomTag type={div.type} 
+                    key={idx}
+                    data-idx={idx}
+                    data-ph="Write something, or press '/' for commands..."
+                    contentEditable="true" 
+                    suppressContentEditableWarning={true}
+                    className="main-manual-text" 
+                    onKeyDown={handleChange}
+                    onDrop={handleDrop}
+                    draggable="false">
+                    {/* // onSelect={handleSelect}> */}
+                        {/* {div.text.split('').map((char, idx)=>{
+                            let selection = localStorage.getItem('selection').split(',').map((ele) => parseInt(ele))
+                            if (idx >= selection[0] && idx <= selection[1]) {
+                                return <span style={{backgroundColor: "blue"}}>{char}</span>
+                            } else { */}
+                        {(div.type === "ul" || div.type === "ol") && (
+                            <li>{div.text}</li>
+                        )}
+                        {(div.type !== "ul" && div.type !== "ol") && (
+                            <>{div.text}</>
+                        )}
+                    </CustomTag> 
+                    {idx === dragIconVisible && (
+                        <div className="main-manual-drag-icon" draggable="true"                 
+                        data-idx={idx}
+                        onDragStart={handleDragStart}
+                        onDrop={()=> {return false}}>
+                            <FontAwesomeIcon icon="ellipsis-vertical"></FontAwesomeIcon>
+                            <FontAwesomeIcon icon="ellipsis-vertical"></FontAwesomeIcon>
+                        </div>
+                    )}
+                </div>
+                <div className="main-manual-drop-block" 
+                id="main-manual-drop-block" 
                 data-idx={idx}
-                data-ph="Write something, or press '/' for commands..."
-                contentEditable="true" 
-                suppressContentEditableWarning={true}
-                className="main-manual-text" 
-                onKeyDown={handleChange}>
-                {/* // onSelect={handleSelect}> */}
-                    {/* {div.text.split('').map((char, idx)=>{
-                        let selection = localStorage.getItem('selection').split(',').map((ele) => parseInt(ele))
-                        if (idx >= selection[0] && idx <= selection[1]) {
-                            return <span style={{backgroundColor: "blue"}}>{char}</span>
-                        } else { */}
-                    {(div.type === "ul" || div.type === "ol") && (
-                        <li>{div.text}</li>
-                    )}
-                    {(div.type !== "ul" && div.type !== "ol") && (
-                        <>{div.text}</>
-                    )}
-                </CustomTag> 
+                onDragEnter={handleDragEnter}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}></div>
+                </>
             ))}
             {toolbarVisible && (
                 <div>

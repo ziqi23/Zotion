@@ -33,7 +33,6 @@ const SidebarItem = ({props}) => {
                     setEmbeddedPages(Object.values(res))
                 })
         } else if (teamId) {
-            console.log("here")
             dispatch(showTeamPages(teamId))
                 .then(res => {
                     setEmbeddedPages(Object.values(res))
