@@ -15,6 +15,8 @@ class Api::PagesController < ApplicationController
     def create
         if (page_params[:journal_id])
             @page = Page.create(user_id: current_user.id, journal_id: page_params[:journal_id])
+        elsif (page_params[:team_id])
+            @page = Page.create(user_id: current_user.id, team_id: page_params[:team_id])
         else
             @page = Page.create(user_id: current_user.id)
         end
@@ -22,13 +24,7 @@ class Api::PagesController < ApplicationController
     end
 
     def update
-        p "here"
         @page = Page.find_by(id: params[:id])
-        p page_params
-        # page_params.keys.each do |key|
-        #     @page[key] = page_params[key]
-        # end
-        p @page
         if (@page.update(page_params))
             render :show
         else

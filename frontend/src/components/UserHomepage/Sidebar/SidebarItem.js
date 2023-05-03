@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { deletePage } from "../../../store/page"
 import Tooltip from "../Util/Tooltip"
-import { showAssociatedPages } from "../../../store/page"
+import { showAssociatedPages, showAll } from "../../../store/page"
 import { showAssociatedPages as showTeamPages } from "../../../store/team"
 import { addPage } from "../../../store/page"
 import { modifyPage } from "../../../store/page"
@@ -38,7 +38,12 @@ const SidebarItem = ({props}) => {
                     setEmbeddedPages(Object.values(res))
                 })
             }
-        }, [pages])
+        // dispatch(showAll())
+        }, [pages, teams])
+
+    useEffect(() => {
+        dispatch(showAll())
+    }, [teams])
 
     // Handle left and right click actions on the sidebar
     function handleClick(e) {
@@ -56,7 +61,11 @@ const SidebarItem = ({props}) => {
                 break
             case ('add-page'):
                 setCarrotDown(true)
-                dispatch(addPage({journalId: pageId}));
+                if (teamId) {
+                    dispatch(addPage({teamId: teamId}))
+                } else {
+                    dispatch(addPage({journalId: pageId}));
+                }
                 break
             default:
                 break
@@ -182,6 +191,20 @@ const SidebarItem = ({props}) => {
                     <FontAwesomeIcon icon={`fa-chevron-right`} className="sidebar-icon-carrot-team"></FontAwesomeIcon>
                 )}
             </div>
+            )}
+
+            {/* Add icon for creating a new page within a team */}
+            {props.type === "team" && (  
+                <div className="add-page" onClick={handleClick} 
+                onMouseEnter={() => setAddPageTooltipVisible(true)} 
+                onMouseLeave={() => setAddPageTooltipVisible(false)}>
+                    {tooltipVisible && (
+                        <FontAwesomeIcon icon={`fa-plus`}></FontAwesomeIcon>
+                    )}
+                    {addPageTooltipVisible && (
+                        <Tooltip props={{"text": "Quickly add a page inside", "relativePosition": [250, 0]}} />
+                    )}
+                </div>
             )}
 
             {/* Add icon for creating a new page within a page */}

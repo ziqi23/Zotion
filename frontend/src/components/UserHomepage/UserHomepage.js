@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { redirect, useNavigate } from 'react-router-dom'
 import Headers from './Header/Headers'
 import Sidebar from './Sidebar/Sidebar'
@@ -19,6 +19,11 @@ const UserHomepage = (props) => {
     //         setActiveElement('main')
     //     }
     // }
+    // useEffect(() => {
+    //     if (!user) {
+    //         navigate('/login')
+    //     }
+    // }, [])
 
     function handleDrag(e) {
         e.preventDefault()
@@ -54,7 +59,7 @@ const UserHomepage = (props) => {
         )
     } else {
         return (
-        <h1>Not logged in</h1>
+            <h1>Not logged in</h1>
         )
     }
 }

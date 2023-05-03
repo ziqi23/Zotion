@@ -274,7 +274,7 @@ const Main = (props) => {
         return React.createElement(type, props, children)
     }
     
-    if (pageId !== "undefined") {
+    if (pageId && pageId !== "undefined") {
         return (
         <>
             <div className="main-manual-drop-block" 
@@ -289,8 +289,7 @@ const Main = (props) => {
                 <>
                 <div className="main-manual-drag-block"  
                 onMouseOver={() => setDragIconVisible(idx)}
-                onMouseLeave={() => setDragIconVisible(-1)}            
-                >
+                onMouseLeave={() => setDragIconVisible(-1)}>
                     <CustomTag type={div.type} 
                     key={idx}
                     data-idx={idx}

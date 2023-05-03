@@ -95,10 +95,10 @@ const Title = (props) => {
         </div>
         )}
         <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            {optionsVisible && (
+            {pageId && optionsVisible && (
             <div className="main-title-options">
                 <div className="add-cover" onClick={handleAddCover}>
-                    Add cover
+                    Change cover
                 </div>
             </div>
             )}
