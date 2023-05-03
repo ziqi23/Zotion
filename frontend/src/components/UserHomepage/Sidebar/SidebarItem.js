@@ -82,25 +82,35 @@ const SidebarItem = ({props}) => {
 
     // Append pageId to URL when user clicks on a page
     function handleShowPage(e) {
-        e.stopPropagation();
+        // console.log(e.target.className)
+        // e.stopPropagation();
         e.preventDefault();
         if (type === "personal") {
             navigate(`/home?pageId=${pageId}`)
         } else if (type === "default") {
             switch (text) {
                 case "Search":
+                    // console.log(e.target.className)
+
                     setSearchOpen(true)
                     function handlePanelClick(e) {
+                        // e.stopImmediatePropagation()
+                        console.log("hi")
+
                         const panel = document.getElementById('search-panel')
+                        panel.addEventListener("click", handlePanelClick)
+
                         const rect = panel.getBoundingClientRect();
                         const mouseX = e.clientX;
                         const mouseY = e.clientY;
-                        if (mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom) {
+                        if (e.target.className !== 'clickable' && (e.target.className === "result-item" || mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom)) {
                             setTimeout(() => setSearchOpen(false), 0)
                             document.removeEventListener('click', handlePanelClick)
                         }
                     }
                     document.addEventListener("click", handlePanelClick)
+
+                    // let ele = document.getElementById('search-panel')
                     break
                 default:
                     break

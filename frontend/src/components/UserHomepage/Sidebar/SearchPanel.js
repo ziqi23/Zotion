@@ -2,11 +2,13 @@ import { useDispatch, useSelector } from "react-redux"
 import { addTeam } from "../../../store/team"
 import { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { useNavigate } from "react-router-dom"
 
 function SearchPanel(props) {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [teamName, setTeamName] = useState('')
     const [query, setQuery] = useState('')
+    const [result, setResult] = useState([])
     const username = useSelector(state => state.session.user.username)
     const pages = useSelector(state => state.page)
     
@@ -37,48 +39,91 @@ function SearchPanel(props) {
         }
     })  
 
-    function handleChange(e) {
-        setTeamName(e.target.value)
-    }
-    function handleSubmit(e) {
-        e.preventDefault()
-        dispatch(addTeam({teamName}))
+    let searchResults = [];
+    async function handleQuery(e) {
+        setQuery(e.target.value)
+
+        if (!e.target.value) {
+            setResult([])
+            return;
+        }
+
+        Object.values(pages).forEach((page) => {
+            // let pageConsidered = false
+
+            // Search by page name
+            if (page.pageName?.includes(e.target.value)) {
+                searchResults.push([page.id, page.pageName, -1])
+                // pagesConsidered = true
+            }
+
+            // Search by content
+            page.htmlContent?.forEach((div, idx) => {
+                if (typeof div === 'string') {
+                    div = JSON.parse(div.replaceAll("=>", ":"))
+                }
+                if (div.text.includes(e.target.value)) {
+                    searchResults.push([page.id, page.pageName, idx])
+                }
+            })
+        })
+        setResult(searchResults)
     }
 
-    console.log(query, !!query)
-
+    function handleClick(e, page) {
+        if (page.id) {
+            navigate(`/home?pageId=${page.id}`)
+        } else {
+            navigate(`/home?pageId=${page[0]}`)
+            if (page[2] !== -1) {
+                const ele = window.document.getElementsByClassName("main-manual-drag-block")[page[2]]
+                ele?.focus()
+                console.log("focused?")
+            }
+        }
+    }
     return (
         <div className="search-panel" id="search-panel">
             <div className="search-panel-query">
                 <FontAwesomeIcon icon="magnifying-glass" />
-                <input type="text" placeholder={`Search ${username}'s Notion...`} value={query} onChange={(e) => setQuery(e.target.value)}></input>
+                <input type="text" placeholder={`Search ${username}'s Notion...`} value={query} onChange={handleQuery}></input>
             </div>
             {!query && (
             <div className="search-panel-result">
                 <div className="search-panel-result-today">
-                    <span>Today</span>
+                    <div className="today-result">Today</div>
                     {Object.values(pagesModifiedToday).map((page) => {
-                        return <div>{page.pageName}</div>
+                        return <div className="result-item" onClick={(e) => handleClick(e, page)}>{page.pageName}</div>
                     })}
                 </div>
                 <div className="search-panel-result-yesterday">
-                    <span>Yesterday</span>
+                    <div className="yesterday-result">Yesterday</div>
                     {Object.values(pagesModifiedYesterday).map((page) => {
                         console.log(page)
-                        return <div>{page.pageName}</div>
+                        return <div className="result-item" onClick={(e) => handleClick(e, page)}>{page.pageName}</div>
                     })}
                 </div>
                 <div className="search-panel-result-past-week">
-                    <span>Past Week</span>
+                    <div className="past-week-result">Past Week</div>
                     {Object.values(pagesModifiedPastWeek).map((page) => {
-                        return <div>{page.pageName}</div>
+                        return <div className="result-item" onClick={(e) => handleClick(e, page)}>{page.pageName}</div>
                     })}
                 </div>
             </div>
             )}
-            {query && (
+            {result !== [] && (
             <div className="dynamic-search-result">
-                <div>Searching...</div>
+                {result.map((pageData) => {
+                    if (pageData[2] !== -1) {
+                        return <div className="result-item" onClick={(e) => handleClick(e, pageData)}>
+                            {pageData[1]} --- {pages[pageData[0]].htmlContent[pageData[2]]}
+                        </div>
+                    } else {
+                        return <div className="result-item" onClick={(e) => handleClick(e, pageData)}>
+                            {pageData[1]}
+                        </div>
+                    }
+                })}
             </div>
             )}
         </div>

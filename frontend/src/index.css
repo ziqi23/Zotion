@@ -611,28 +611,83 @@ i {
 }
 
 .search-panel {
+    cursor: default;
     display: flex;
     flex-direction: column;
     position: absolute;
     z-index: 500;
-    top: 20vh;
-    left: 40vw;
+    top: 10vh;
+    left: 30vw;
     background-color: white;
-    width: 480px;
-    height: 532px;
+    width: 50vw;
+    height: 80vh;
     box-sizing: border-box;
-    padding: 22px 26px;
     border-radius: 5px;
     box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 5px 10px, rgba(15, 15, 15, 0.2) 0px 15px 40px;
 }
 
 .search-panel-query {
-    height: 15%;
-    border-bottom: 1px solid black;
+    padding: 10px 10px 0px 10px;
+    display: flex;
+    align-items: center;
+    height: 48px;
+    box-shadow: rgba(55, 53, 47, 0.09) 0px 1px 0px;
 }
 
-.search-panel-result {
-    height: 85%;
+.search-panel-query svg {
+    height: 18px;
+    width: 18px;
+    margin-right: 10px;
+}
+
+.search-panel-query input {
+    border: none;
+    height: 27px;
+    font-size: 18px;
+    color: rgba(55, 53, 47);
+    flex-grow: 1;
+}
+
+.search-panel-query input:focus{
+    outline: none;
+}
+
+.search-panel-result > div {
+    margin-bottom: 18px;
+}
+
+.result-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 36px;
+    font-size: 14px;
+    color: rgb(25, 23, 17);
+    margin-left: 5px;
+    margin-right: 4px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.result-item:hover {
+    background-color: rgb(143, 142, 137, 0.3);
+    transition-duration: 200ms;
+}
+
+.today-result, .yesterday-result, .past-week-result {
+    display: flex;
+    padding-left: 14px;
+    padding-right: 14px;
+    margin-top: 6px;
+    margin-bottom: 7px;
+    color: rgba(55, 53, 47, 0.65);
+    font-weight: 600;
+    font-size: 12px;
+    box-sizing: border-box;
 }
 
 .add-team-panel {
@@ -869,6 +924,11 @@ i {
     overflow-wrap: break-word;
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+.main-manual-drag-block:focus {
+    background-color: rgb(55, 53, 47, 0.2);
+    transition-duration: 500ms;
 }
 
 .main-manual-drag-block {

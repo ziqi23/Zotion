@@ -14,7 +14,7 @@ const Main = (props) => {
     const [toolbarVisible, setToolbarVisible] = useState(false)
     const [blockOptionVisible, setBlockOptionVisible] = useState(false)
     const [dragIconVisible, setDragIconVisible] = useState(false)
-    const [history, setHistory] = useState([]);
+    const [history, setHistory] = useState([1]);
     const [pointer, setPointer] = useState(-1);
     const dispatch = useDispatch();
     const location = useLocation();
@@ -152,9 +152,9 @@ const Main = (props) => {
             }
         }
     }
-    // useEffect(() => {
-    //     setPointer(history.length - 1)
-    // }, [htmlContent])
+    useEffect(() => {
+        console.log(history)
+    }, [history])
 
     function handleChange(e) {
         // console.log(e)
@@ -196,8 +196,14 @@ const Main = (props) => {
                     document.splice(index + 1, 0, {type: `div`, text: "", styles: {bold: [], italic: [], underline: []}})
                 }
                 dispatch(modifyPage({...pages[pageId], htmlContent: document}))
-                history.push(document)
-                console.log(history)
+                // console.log("document:", document) //deep dup before pushing into history
+                let documentDup = []
+                document.forEach((div) => {
+                    documentDup.push({...div})
+                })
+                // console.log("history:", history)
+                // console.log("history to be changed to ", [...history, documentDup])
+                setHistory(history => ([...history, documentDup]))
                 // setPointer(history.length - 1)
                 localStorage.setItem('caretPos', `${index + 1},0`)
                 break
@@ -227,25 +233,28 @@ const Main = (props) => {
                 break
         }
     }
-    // console.log(history)
-    window.document.addEventListener('keydown', handleHistory)
+    
+    useEffect(() => {
+        let ele = window.document.getElementById('user-homepage-main-textarea')
+        ele.addEventListener('keydown', handleHistory)
+    }, [])
 
     function handleHistory(e) {
         // console.log(history)
-        e.stopImmediatePropagation()
+        // e.stopImmediatePropagation()
         if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
-            console.log("o")
-            console.log(history)
+            console.log(history, "history!")
             // console.log(pointer)
             // if (pointer - 1 >= 0) {
             //     setPointer(pointer - 1)
-            if (history.length > 1) {
-                setHistory(history.slice(0, history.length - 1))
-                console.log(history)
-                console.log(pages[pageId])
-                dispatch(modifyPage({...pages[pageId], htmlContent: history[history.length - 1]}))
-            }
-                window.document.removeEventListener('keydown', handleHistory)
+            // if (history.length > 1) {
+            //     setHistory(history.slice(0, history.length - 1))
+            //     console.log(history)
+            //     console.log(pages[pageId])
+            //     dispatch(modifyPage({...pages[pageId], htmlContent: history[history.length - 1]}))
+            // }
+            return;
+
             // }
         }
     }
@@ -269,6 +278,8 @@ const Main = (props) => {
     ]
 
     // console.log(document)
+    // const ele = window.document.getElementsByClassName("main-manual-text")[0]
+    // ele?.focus()
 
     function CustomTag({type, children, ...props}) {
         return React.createElement(type, props, children)
@@ -288,6 +299,7 @@ const Main = (props) => {
             {document.map((div, idx) => (
                 <>
                 <div className="main-manual-drag-block"  
+                tabIndex={-1}
                 onMouseOver={() => setDragIconVisible(idx)}
                 onMouseLeave={() => setDragIconVisible(-1)}>
                     <CustomTag type={div.type} 
