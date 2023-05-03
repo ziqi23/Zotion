@@ -7,6 +7,7 @@ import { showAssociatedPages, showAll } from "../../../store/page"
 import { showAssociatedPages as showTeamPages } from "../../../store/team"
 import { addPage } from "../../../store/page"
 import { modifyPage } from "../../../store/page"
+import SearchPanel from "./SearchPanel"
 import { useEffect } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -20,6 +21,7 @@ const SidebarItem = ({props}) => {
     const navigate = useNavigate()
     const pages = useSelector(state => state.page)
     const teams = useSelector(state => state.team)
+    const [searchOpen, setSearchOpen] = useState(false)
     const [clickableOpen, setClickableOpen] = useState(false) // Used to track whether "Delete Page" pop-up is visible
     const [tooltipVisible, setTooltipVisible] = useState(false) // Used to track whether tooltip is visible
     const [addPageTooltipVisible, setAddPageTooltipVisible] = useState(false) // Used to track whether "Add Page" tooltip is visible
@@ -82,7 +84,28 @@ const SidebarItem = ({props}) => {
     function handleShowPage(e) {
         e.stopPropagation();
         e.preventDefault();
-        navigate(`/home?pageId=${pageId}`)
+        if (type === "personal") {
+            navigate(`/home?pageId=${pageId}`)
+        } else if (type === "default") {
+            switch (text) {
+                case "Search":
+                    setSearchOpen(true)
+                    function handlePanelClick(e) {
+                        const panel = document.getElementById('search-panel')
+                        const rect = panel.getBoundingClientRect();
+                        const mouseX = e.clientX;
+                        const mouseY = e.clientY;
+                        if (mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom) {
+                            setTimeout(() => setSearchOpen(false), 0)
+                            document.removeEventListener('click', handlePanelClick)
+                        }
+                    }
+                    document.addEventListener("click", handlePanelClick)
+                    break
+                default:
+                    break
+            }
+        }
     }
 
     // Handle another sidebar item hovered over
@@ -245,6 +268,10 @@ const SidebarItem = ({props}) => {
             {/* Logic for conditionally displaying tooltip on mouse hover*/}
             {tooltipVisible && tooltipText && (
             <Tooltip props={{"text": tooltipText, "relativePosition": relativePosition}} />
+            )}
+
+            {searchOpen && (
+                <SearchPanel />
             )}
         </div>
         

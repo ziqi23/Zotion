@@ -268,7 +268,7 @@ const Main = (props) => {
         {type: "div", text: ``, styles: {bold: [], italic: [], underline: []}}
     ]
 
-    console.log(document)
+    // console.log(document)
 
     function CustomTag({type, children, ...props}) {
         return React.createElement(type, props, children)
