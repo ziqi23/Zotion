@@ -34,8 +34,14 @@ const updateTeam = (team) => (
     }
 )
 
-export const showAll = () => async (dispatch) => {
-    const res = await csrfFetch("/api/teams")
+export const showAll = (arg) => async (dispatch) => {
+    let res;
+    if (arg === "All") {
+        res = csrfFetch("/api/teams?all=true")
+        return res;
+    } else {
+        res = await csrfFetch("/api/teams")
+    }
     const data = await res.json()
     console.log(data)
     dispatch(showAllTeams(data))

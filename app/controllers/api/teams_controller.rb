@@ -1,6 +1,10 @@
 class Api::TeamsController < ApplicationController
     def index
-        @teams = current_user.teams
+        if (!params[:all])
+            @teams = current_user.teams
+        else
+            @teams = Team.all
+        end
         render :index
     end
 

@@ -23,6 +23,7 @@ const Main = (props) => {
     const pages = useSelector((state) => state.page)
     const htmlContent = useSelector((state) => state.page[pageId] && state.page[pageId].htmlContent ? 
     state.page[pageId].htmlContent : null)
+
     // let idxSelected;
     // let charSelected;
     // function handleSelect(e) {
@@ -63,13 +64,17 @@ const Main = (props) => {
         const ele = window.document.querySelector(`.main-manual-text[data-idx="${divIndex}"]`)
         const range = window.document.createRange()
         const selection = window.getSelection()
-
         if (ele && typeof ele === 'object') {
             range.selectNode(ele)
             if (charIndex === 0) {
+                console.log(ele)
                 range.setStart(ele, charIndex)
             } else {
-                range.setStart(ele.firstChild, charIndex)
+                if (ele.firstChild.lastChild) {
+                    range.setStart(ele.firstChild.lastChild, charIndex)
+                } else {
+                    range.setStart(ele.firstChild, charIndex)
+                }
 
             }
             range.collapse(true)
@@ -79,15 +84,19 @@ const Main = (props) => {
             ele.focus()
         }
     }
-    useEffect(() => {
 
+    useEffect(() => {
+        localStorage.removeItem('caretPos')
+    }, [pageId])
+    
+    useEffect(() => {
+        
         let caretPos = localStorage.getItem('caretPos')
         if (caretPos) {
             caretPos = caretPos.split(',').map((ele) => parseInt(ele))
             setCaret(caretPos[0], caretPos[1])
         }
-        localStorage.removeItem('caretPos')
-
+        
     },)
 
 
@@ -163,6 +172,7 @@ const Main = (props) => {
             case ("Shift" || "Control" || "Alt" || "Tab" || "Meta" || "ArrowLeft" || "ArrowRight" || "ArrowUp" || "ArrowDown"):
                 break
             case ("Backspace"):
+                console.log(document[index].type, document[index].text, document[index])
                 if (document[index].text.length === 0 && document[index].type !== 'div') {
                     document[index].type = 'div'
                     dispatch(modifyPage({...pages[pageId], htmlContent: document}))
@@ -218,6 +228,7 @@ const Main = (props) => {
                     const mouseY = e.clientY;
                     if (rect && (mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom)) {
                         setTimeout(() => setBlockOptionVisible(false), 0)
+                        localStorage.setItem('caretPos', `${localStorage.getItem('blockIdx')},0`)
                         localStorage.removeItem('blockIdx')
                         window.document.removeEventListener('mousedown', handlePanelClick)
                     }

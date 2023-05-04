@@ -6,6 +6,7 @@ import Sidebar from './Sidebar/Sidebar'
 import Main from './Main/Main'
 import Title from './Main/Title'
 import TextOptionsToolbar from '../Overlay/TextOptionsToolbar'
+import AllTeamspacesPanel from './Sidebar/AllTeamspacesPanel'
 
 const UserHomepage = (props) => {
     const user = useSelector((state) => state.session.user);
@@ -40,9 +41,12 @@ const UserHomepage = (props) => {
     if (user) {
         return (
             <div className='user-homepage' >
-                <div className='user-homepage-sidebar' style={{"width": sidebarWidth}}>  
-                    <Sidebar />
-                </div>
+                {localStorage.getItem('teamspace') ? <AllTeamspacesPanel width={sidebarWidth}/> : 
+                    <div className='user-homepage-sidebar' style={{"width": sidebarWidth}}>  
+                        <Sidebar />
+                    </div>
+                }
+                <div className='user-homepage-sidebar-overlay' style={{"width": sidebarWidth}}></div>
                 <div className='user-homepage-divider' draggable="true" onDrag={handleDrag}></div>
                 <div className='user-homepage-right'>
                     <div className='user-homepage-headers'>

@@ -8,6 +8,9 @@ import { showAssociatedPages as showTeamPages } from "../../../store/team"
 import { addPage } from "../../../store/page"
 import { modifyPage } from "../../../store/page"
 import SearchPanel from "./SearchPanel"
+import UpdatePanel from './UpdatePanel'
+import SettingPanel from './SettingPanel'
+import AllTeamspacesPanel from "./AllTeamspacesPanel"
 import { useEffect } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -22,6 +25,9 @@ const SidebarItem = ({props}) => {
     const pages = useSelector(state => state.page)
     const teams = useSelector(state => state.team)
     const [searchOpen, setSearchOpen] = useState(false)
+    const [updateOpen, setUpdateOpen] = useState(false)
+    const [settingOpen, setSettingOpen] = useState(false)
+    const [teamspaceOpen, setTeamspaceOpen] = useState(false)
     const [clickableOpen, setClickableOpen] = useState(false) // Used to track whether "Delete Page" pop-up is visible
     const [tooltipVisible, setTooltipVisible] = useState(false) // Used to track whether tooltip is visible
     const [addPageTooltipVisible, setAddPageTooltipVisible] = useState(false) // Used to track whether "Add Page" tooltip is visible
@@ -82,35 +88,59 @@ const SidebarItem = ({props}) => {
 
     // Append pageId to URL when user clicks on a page
     function handleShowPage(e) {
-        // console.log(e.target.className)
-        // e.stopPropagation();
         e.preventDefault();
         if (type === "personal") {
             navigate(`/home?pageId=${pageId}`)
         } else if (type === "default") {
+            setTooltipVisible(false)
             switch (text) {
                 case "Search":
-                    // console.log(e.target.className)
-
                     setSearchOpen(true)
                     function handlePanelClick(e) {
-                        // e.stopImmediatePropagation()
-                        console.log("hi")
-
                         const panel = document.getElementById('search-panel')
                         panel.addEventListener("click", handlePanelClick)
-
                         const rect = panel.getBoundingClientRect();
                         const mouseX = e.clientX;
                         const mouseY = e.clientY;
-                        if (e.target.className !== 'clickable' && (e.target.className === "result-item" || mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom)) {
+                        if (e.target.getAttribute('data-id') !== 'Search' && (e.target.className === "result-item" || e.target.className === "result-item-details" || mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom)) {
                             setTimeout(() => setSearchOpen(false), 0)
                             document.removeEventListener('click', handlePanelClick)
                         }
                     }
                     document.addEventListener("click", handlePanelClick)
-
-                    // let ele = document.getElementById('search-panel')
+                    break
+                case "Updates":
+                    console.log("opening")
+                    setUpdateOpen(true)
+                    function handleUpdatePanelClick(e) {
+                        const panel = document.getElementById('update-panel')
+                        panel.addEventListener("click", handleUpdatePanelClick)
+                        const rect = panel.getBoundingClientRect();
+                        const mouseX = e.clientX;
+                        const mouseY = e.clientY;
+                        if (e.target.getAttribute('data-id') !== 'Updates' && (mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom)) {
+                            setTimeout(() => setUpdateOpen(false), 0)
+                            document.removeEventListener('click', handleUpdatePanelClick)
+                        }
+                    }
+                    document.addEventListener("click", handleUpdatePanelClick)
+                    break
+                case "All Teamspaces":
+                    localStorage.setItem('teamspace', 'visible')
+                    setTeamspaceOpen(true)
+                    function handleTeamspacePanelClick(e) {
+                        const panel = document.getElementById('teamspace-panel')
+                        panel.addEventListener("click", handleTeamspacePanelClick)
+                        const rect = panel.getBoundingClientRect();
+                        const mouseX = e.clientX;
+                        const mouseY = e.clientY;
+                        if (e.target.getAttribute('data-id') !== 'All Teamspaces' && (mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom)) {
+                            setTimeout(() => setTeamspaceOpen(false), 0)
+                            localStorage.removeItem('teamspace')
+                            document.removeEventListener('click', handleTeamspacePanelClick)
+                        }
+                    }
+                    document.addEventListener("click", handleTeamspacePanelClick)
                     break
                 default:
                     break
@@ -182,7 +212,7 @@ const SidebarItem = ({props}) => {
         key={pageId} 
         className="clickable" 
         id={pageId ? "user-journal-page" : teamId ? "user-team-page" : ""}
-        data-id={pageId || teamId}
+        data-id={pageId || teamId || text}
         draggable="true"
         style={carrotDown ? {"height": "auto"} : {}}
         onDragStart={handleDragStart}
@@ -215,7 +245,7 @@ const SidebarItem = ({props}) => {
             )}
 
             {/* Add text field */}
-            <div className="sidebar-page-name">{text}</div>
+            <div className="sidebar-page-name" data-id={text}>{text}</div>
 
             {/* Add > for teamspaces which come after text */}
             {(props.type === "team") && (
@@ -282,6 +312,18 @@ const SidebarItem = ({props}) => {
 
             {searchOpen && (
                 <SearchPanel />
+            )}
+
+            {updateOpen && (
+                <UpdatePanel />
+            )}
+
+            {settingOpen && (
+                <SettingPanel />   
+            )}
+
+            {teamspaceOpen && (
+                <AllTeamspacesPanel />
             )}
         </div>
         

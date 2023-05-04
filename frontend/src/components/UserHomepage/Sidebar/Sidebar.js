@@ -22,6 +22,7 @@ const Sidebar = () => {
     const [addTeamPanelVisible, setAddTeamPanelVisible] = useState(false) 
     const [addTeamToolTipVisible, setAddTeamTooltipVisible] = useState(false)
     const [addPageToolTipVisible, setAddPageTooltipVisible] = useState(false)
+    // const [teamspacePanelVisible, setTeamspacePanelVisible] = useState(false)
     const username = useSelector(state => state.session.user.username)
     const email = useSelector(state => state.session.user.email)
     const pages = useSelector(state => state.page)
@@ -161,13 +162,12 @@ const Sidebar = () => {
                         <div className="current-user-icon">
                             <p>{username[0]}</p>
                         </div>
-                        <div className="current-user-details">
+                        <div className="current-user-details" onClick={() => setProfileOpen(false)}>
                             <p>{username}'s Notion</p>
                             <p className="current-user-plan">Free Plan · 1 member</p>
                         </div>
                     </div>
                     <div className="profile-popup-default">
-                        <div>Add another account</div>
                         <div className="logout" onClick={handleClick}>Log out</div>
                     </div>
                 </div>

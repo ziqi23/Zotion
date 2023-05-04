@@ -82,6 +82,12 @@ function SearchPanel(props) {
             }
         }
     }
+
+    function getHighlightedText(text, highlight) {
+        const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+        return <div className="result-item-details">{parts.map(part => part.toLowerCase() === highlight.toLowerCase() ? <b className="result-item-details">{part}</b> : part)}</div>;
+    }
+    
     return (
         <div className="search-panel" id="search-panel">
             <div className="search-panel-query">
@@ -115,12 +121,19 @@ function SearchPanel(props) {
             <div className="dynamic-search-result">
                 {result.map((pageData) => {
                     if (pageData[2] !== -1) {
+                        let text;
+                        if (typeof pages[pageData[0]].htmlContent[pageData[2]] === 'string') {
+                            text = JSON.parse(pages[pageData[0]].htmlContent[pageData[2]].replaceAll("=>", ":")).text
+                        } else {
+                            text = pages[pageData[0]].htmlContent[pageData[2]].text
+                        }
                         return <div className="result-item" onClick={(e) => handleClick(e, pageData)}>
-                            {pageData[1]} --- {pages[pageData[0]].htmlContent[pageData[2]]}
+                            <div className="result-item-details">{pageData[1]}</div> 
+                            {getHighlightedText(text, query)}
                         </div>
                     } else {
                         return <div className="result-item" onClick={(e) => handleClick(e, pageData)}>
-                            {pageData[1]}
+                            <div className="result-item-details">{pageData[1]}</div>
                         </div>
                     }
                 })}
