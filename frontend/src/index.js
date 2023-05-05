@@ -9,7 +9,7 @@ import * as sessionActions from './store/session';
 import * as pageActions from './store/page';
 import * as teamActions from './store/team';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faMagnifyingGlass, faClock, faBuildingUser, faGear, faFileLines, faChevronRight, faPlus, faCommentDots, faStar, faEllipsis, faPenToSquare, faEllipsisVertical, faMap} from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faClock, faBuildingUser, faGear, faFileLines, faChevronRight, faPlus, faCommentDots, faStar, faEllipsis, faPenToSquare, faEllipsisVertical, faMap, faCheck} from '@fortawesome/free-solid-svg-icons'
 
 const store = configureStore();
 
@@ -20,7 +20,7 @@ if (process.env.NODE_ENV !== 'production') {
   window.teamActions = teamActions;
 }
 
-library.add(faMagnifyingGlass, faClock, faBuildingUser, faGear, faFileLines, faChevronRight, faPlus, faCommentDots, faStar, faEllipsis, faPenToSquare, faEllipsisVertical, faMap)
+library.add(faMagnifyingGlass, faClock, faBuildingUser, faGear, faFileLines, faChevronRight, faPlus, faCommentDots, faStar, faEllipsis, faPenToSquare, faEllipsisVertical, faMap, faCheck)
 
 const renderApp = () => {
   const domNode = document.getElementById('root')

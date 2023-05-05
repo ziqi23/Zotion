@@ -414,6 +414,7 @@ table {
 }
 
 .header-more-panel-font-item div:first-child {
+    cursor: pointer;
     height: 25px;
     font-size: 24px;
 }
@@ -424,12 +425,90 @@ table {
     margin-top: 4px;
 }
 
+.header-share-panel {
+    position: absolute;
+    width: 400px;
+    height: 78px;
+    top: 35px;
+    left: -300px;
+    background-color: white;
+    position: absolute;
+    border-radius: 4px;
+    transition-duration: 500ms;
+    box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
+}
+
+.header-share-panel-header {
+    display: flex;
+    align-items: center;
+    height: 28px;
+    box-sizing: border-box;
+    color: rgb(55, 53, 47, 0.65);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+    margin-top: 8px;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.header-share-panel-container {
+    display: flex;
+}
+
+.header-share-panel-container div:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 32px;
+    background-color: rgba(242, 241, 238, 0.6);
+    box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset;
+    font-size: 14px;
+    margin-left: 12px;
+    border-radius: 3px;
+    color: rgb(55, 53, 47, 0.65);
+}
+
+.header-share-panel-container div:last-child {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 32px;
+    border-radius: 4px;
+    box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset, rgba(15, 15, 15, 0.1) 0px 1px 2px;
+    background: rgb(35, 131, 226);
+    margin-left: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.header-share-panel-container div:last-child:hover {
+    cursor: pointer;
+    background-color: rgb(0, 117, 211);
+}
+
+.header-comment-panel {
+    position: absolute;
+    top: 35px;
+    left: -600px;
+}
+
+.header-notification-panel {
+    position: absolute;
+    top: 35px;
+    left: -600px;
+}
+
 .header-more-panel-font-item:hover {
     background-color: rgb(143, 142, 137, 0.3);
     transition-duration: 200ms;
 }
 
 .header-icon-share:hover, .header-icon-comment:hover, .header-icon-notifications:hover, .header-icon-favorite:hover, .header-icon-more:hover {
+    cursor: pointer;
     background-color: rgb(143, 142, 137, 0.3);
     transition-duration: 200ms;
 }
@@ -864,6 +943,10 @@ i {
     margin-right: 12px;
     float: right;
     font-weight: bold;
+}
+
+.show-add-team-panel svg, .add-page svg {
+    cursor: pointer;
 }
 
 .add-page:hover {

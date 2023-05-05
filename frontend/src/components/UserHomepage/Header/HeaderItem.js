@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Tooltip from "../Util/Tooltip";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { modifyPage } from "../../../store/page";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import HeaderMore from "./HeaderMore";
+import UpdatePanel from "../Sidebar/UpdatePanel";
+import HeaderShare from "./HeaderShare";
 
 
 const HeaderItem = ({props}) => {
@@ -30,20 +32,19 @@ const HeaderItem = ({props}) => {
                 break
             case ("header-icon-share"):
                 setTooltipVisible(false)
-                setShareVisible(true)
+                setShareVisible(!shareVisible)
                 break
             case ("header-icon-comment"):
                 setTooltipVisible(false)
-                setCommentVisible(true)
+                setCommentVisible(!commentVisible)
                 break
             case ("header-icon-notifications"):
                 setTooltipVisible(false)
-                setNotificationVisible(true)
+                setNotificationVisible(!notificationVisible)
                 break
             case ("header-icon-more"):
                 setTooltipVisible(false)
-                setMoreVisible(true)
-
+                setMoreVisible(!moreVisible)
                 break
             default:
                 break
@@ -96,19 +97,17 @@ const HeaderItem = ({props}) => {
             )}
         </div>
         {shareVisible && (
-            1
+            <HeaderShare />
         )}
         {commentVisible && (
-            2
+            <div className="header-comment-panel"><UpdatePanel /></div>
         )}
         {notificationVisible && (
-            3
+            <div className="header-notification-panel"><UpdatePanel /></div>
         )}
         {moreVisible && (
             <HeaderMore />
         )}
-
-
         </>
 
     )
