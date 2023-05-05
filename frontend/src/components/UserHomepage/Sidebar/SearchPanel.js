@@ -85,7 +85,7 @@ function SearchPanel(props) {
 
     function getHighlightedText(text, highlight) {
         const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
-        return <div className="result-item-details">{parts.map(part => part.toLowerCase() === highlight.toLowerCase() ? <b className="result-item-details">{part}</b> : part)}</div>;
+        return <div className="result-item-search-details">{parts.map(part => part.toLowerCase() === highlight.toLowerCase() ? <b className="result-item-details">{part}</b> : part)}</div>;
     }
     
     return (

@@ -24,7 +24,7 @@ const DesktopActions = (props) => {
     }
     return (
         <>
-            <div className="homepage-nav-bar-left">
+            <div className="homepage-nav-bar-left" style={{visibility: "hidden"}}>
                 <button id="product-button" onClick={handleButtonClick}>Product</button>
                 <button id="download-button" onClick={handleButtonClick}>Download</button>
                 <button id="solutions-button" onClick={handleButtonClick}>Solutions</button>
