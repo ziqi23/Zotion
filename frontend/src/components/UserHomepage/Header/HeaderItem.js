@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { modifyPage } from "../../../store/page";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import HeaderMore from "./HeaderMore";
 
 
 const HeaderItem = ({props}) => {
@@ -14,6 +15,10 @@ const HeaderItem = ({props}) => {
     const pageId = query.slice(query.search("=") + 1, query.length)
     const pages = useSelector((state) => state.page)
     const [tooltipVisible, setTooltipVisible] = useState(false)
+    const [shareVisible, setShareVisible] = useState(false)
+    const [commentVisible, setCommentVisible] = useState(false)
+    const [notificationVisible, setNotificationVisible] = useState(false)
+    const [moreVisible, setMoreVisible] = useState(false)
 
     function handleClick(e) {
         e.preventDefault()
@@ -21,6 +26,24 @@ const HeaderItem = ({props}) => {
             case ("header-icon-favorite"):
                 console.log("here")
                 dispatch(modifyPage({...pages[pageId], favorite: !pages[pageId].favorite}))
+                setTooltipVisible(false)
+                break
+            case ("header-icon-share"):
+                setTooltipVisible(false)
+                setShareVisible(true)
+                break
+            case ("header-icon-comment"):
+                setTooltipVisible(false)
+                setCommentVisible(true)
+                break
+            case ("header-icon-notifications"):
+                setTooltipVisible(false)
+                setNotificationVisible(true)
+                break
+            case ("header-icon-more"):
+                setTooltipVisible(false)
+                setMoreVisible(true)
+
                 break
             default:
                 break
@@ -54,6 +77,7 @@ const HeaderItem = ({props}) => {
             break
     }
     return (
+        <>
         <div 
          className={`header-icon-${identifier}`}
          onMouseEnter={() => setTooltipVisible(true)}
@@ -71,6 +95,22 @@ const HeaderItem = ({props}) => {
                 <Tooltip props={{"text": text, "relativePosition": [-150, 30]}}></Tooltip>
             )}
         </div>
+        {shareVisible && (
+            1
+        )}
+        {commentVisible && (
+            2
+        )}
+        {notificationVisible && (
+            3
+        )}
+        {moreVisible && (
+            <HeaderMore />
+        )}
+
+
+        </>
+
     )
 }
 

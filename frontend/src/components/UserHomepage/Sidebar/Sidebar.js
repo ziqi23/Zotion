@@ -29,10 +29,12 @@ const Sidebar = () => {
     const teams = useSelector(state => state.team)
 
     useEffect(() => {
-        dispatch(pageActions.showAll())
         dispatch(teamActions.showAll())
     }, [])
 
+    useEffect(() => {
+        dispatch(pageActions.showAll())
+    }, [teams])
     function handleMouseMove(e) {
         // console.log(e)
         if (e.clientX > 0 && e.clientX < 240) {

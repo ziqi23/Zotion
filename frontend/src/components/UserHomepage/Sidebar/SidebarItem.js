@@ -49,9 +49,10 @@ const SidebarItem = ({props}) => {
         // dispatch(showAll())
         }, [pages, teams])
 
-    useEffect(() => {
-        dispatch(showAll())
-    }, [teams])
+    // useEffect(() => {
+    //     console.log("firing")
+    //     dispatch(showAll())
+    // }, [teams])
 
     // Handle left and right click actions on the sidebar
     function handleClick(e) {

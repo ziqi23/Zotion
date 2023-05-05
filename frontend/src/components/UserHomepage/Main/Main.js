@@ -14,7 +14,7 @@ const Main = (props) => {
     const [toolbarVisible, setToolbarVisible] = useState(false)
     const [blockOptionVisible, setBlockOptionVisible] = useState(false)
     const [dragIconVisible, setDragIconVisible] = useState(false)
-    const [history, setHistory] = useState([1]);
+    const [history, setHistory] = useState([]);
     const [pointer, setPointer] = useState(-1);
     const dispatch = useDispatch();
     const location = useLocation();
@@ -67,7 +67,6 @@ const Main = (props) => {
         if (ele && typeof ele === 'object') {
             range.selectNode(ele)
             if (charIndex === 0) {
-                console.log(ele)
                 range.setStart(ele, charIndex)
             } else {
                 if (ele.firstChild.lastChild) {
