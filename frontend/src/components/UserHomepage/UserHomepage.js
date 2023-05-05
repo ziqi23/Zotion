@@ -25,6 +25,13 @@ const UserHomepage = (props) => {
     //         navigate('/login')
     //     }
     // }, [])
+    useEffect(() => {
+        console.log(sidebarWidth)
+    }, [sidebarWidth])
+
+    useEffect(() => {
+        console.log(localStorage.getItem('teamspace'))
+    }, [localStorage.getItem('teamspace')])
 
     function handleDrag(e) {
         e.preventDefault()

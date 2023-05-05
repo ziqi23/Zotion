@@ -43,7 +43,6 @@ export const showAll = (arg) => async (dispatch) => {
         res = await csrfFetch("/api/teams")
     }
     const data = await res.json()
-    console.log(data)
     dispatch(showAllTeams(data))
 }
 
@@ -56,6 +55,14 @@ export const addTeam = (team) => async (dispatch) => {
     })
     const data = await res.json();
     dispatch(createTeam(data));
+}
+
+export const addUserToTeam = (teamId) => async (dispatch) => {
+    const res = await csrfFetch(`/api/teams/${teamId}`, {
+        method: "PATCH"
+    })
+    const data = await res.json()
+    dispatch(showAllTeams(data))
 }
 
 export const modifyTeam = (team) => async(dispatch) => {

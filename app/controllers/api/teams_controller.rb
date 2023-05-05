@@ -3,7 +3,10 @@ class Api::TeamsController < ApplicationController
         if (!params[:all])
             @teams = current_user.teams
         else
-            @teams = Team.all
+            existing_team_ids = TeamUser.where(user_id: current_user.id).pluck(:team_id)
+            p existing_team_ids
+            @teams = Team.where('id NOT IN (?)', existing_team_ids)
+            p @teams
         end
         render :index
     end
@@ -22,20 +25,13 @@ class Api::TeamsController < ApplicationController
         end
     end
 
-    # def update
-    #     @team = Team.find_by(id: params[:id])
-    #     p team_params
-    #     team_params.keys.each do |key|
-            
-    #         @team[key] = team_params[key]
-    #     end
-    #     p @team
-    #     if (@team.save)
-    #         render :show
-    #     else
-    #         render json: {errors: @team.errors.full_messages}, status: :unprocessable_entity
-    #     end
-    # end
+    def update
+        team = Team.find_by(id: params[:id])
+        TeamUser.create(user_id: current_user.id, team_id: team.id)
+
+        @teams = current_user.teams
+        render :index
+    end
 
     # def destroy
     #     @team = team.find_by(id: params[:id])

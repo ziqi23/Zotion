@@ -60,12 +60,15 @@ const SidebarItem = ({props}) => {
         e.preventDefault();
         switch (e.currentTarget.className) {
             case ('clickable'):
-                setClickableOpen(!clickableOpen)
+                if (pageId) {
+                    setClickableOpen(!clickableOpen)
+                }
                 break
-            case ('clickable-delete'):
+            case ('clickable-dropdown-container'):
                 if (pageId) {
                     dispatch(deletePage({pageId}))
                     setClickableOpen(!clickableOpen)
+                    navigate(`/home`)
                 }
                 break
             case ('add-page'):
@@ -132,11 +135,8 @@ const SidebarItem = ({props}) => {
                     function handleTeamspacePanelClick(e) {
                         const panel = document.getElementById('teamspace-panel')
                         panel.addEventListener("click", handleTeamspacePanelClick)
-                        const rect = panel.getBoundingClientRect();
-                        const mouseX = e.clientX;
-                        const mouseY = e.clientY;
-                        if (e.target.getAttribute('data-id') !== 'All Teamspaces' && (mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom)) {
-                            setTimeout(() => setTeamspaceOpen(false), 0)
+                        if (e.target.getAttribute('data-id') !== 'All Teamspaces' && (Array.prototype.includes.call(e.target.classList, 'leave-teamspace-panel') === true || Array.prototype.includes.call(e.target.parentElement.classList, 'leave-teamspace-panel') === true)) {
+                            setTimeout(() => setTeamspaceOpen(false), 500)
                             localStorage.removeItem('teamspace')
                             document.removeEventListener('click', handleTeamspacePanelClick)
                         }
@@ -302,7 +302,10 @@ const SidebarItem = ({props}) => {
             {/* Logic for displaying option to delete page on user right click */}
             {clickableOpen && (
                 <div className="clickable-dropdown">
-                    <div className="clickable-delete" onClick={handleClick}>Delete Page</div>
+                    <div className="clickable-dropdown-container" onClick={handleClick}>
+                    <FontAwesomeIcon icon="trash-can" className="clickable-trash-can" />
+                    <div className="clickable-delete">Delete Page</div>
+                    </div>
                 </div>
             )}
 
