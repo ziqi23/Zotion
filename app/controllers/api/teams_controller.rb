@@ -4,9 +4,7 @@ class Api::TeamsController < ApplicationController
             @teams = current_user.teams
         else
             existing_team_ids = TeamUser.where(user_id: current_user.id).pluck(:team_id)
-            p existing_team_ids
             @teams = Team.where('id NOT IN (?)', existing_team_ids)
-            p @teams
         end
         render :index
     end
@@ -29,6 +27,13 @@ class Api::TeamsController < ApplicationController
         team = Team.find_by(id: params[:id])
         TeamUser.create(user_id: current_user.id, team_id: team.id)
 
+        @teams = current_user.teams
+        render :index
+    end
+
+    def leave
+        team = Team.find_by(id: params[:id])
+        TeamUser.find_by(user_id: current_user.id, team_id: team.id)&.destroy
         @teams = current_user.teams
         render :index
     end

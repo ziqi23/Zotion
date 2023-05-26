@@ -65,6 +65,14 @@ export const addUserToTeam = (teamId) => async (dispatch) => {
     dispatch(showAllTeams(data))
 }
 
+export const leaveTeam = (teamId) => async (dispatch) => {
+    const res = await csrfFetch(`/api/teams/${teamId}/leave`, {
+        method: "PATCH"
+    })
+    const data = await res.json()
+    dispatch(showAllTeams(data))
+}
+
 export const modifyTeam = (team) => async(dispatch) => {
     const res = await csrfFetch(`/api/teams/${team.id}`, {
         method: "PATCH",

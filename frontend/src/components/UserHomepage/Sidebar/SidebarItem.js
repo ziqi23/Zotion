@@ -7,6 +7,7 @@ import { showAssociatedPages, showAll } from "../../../store/page"
 import { showAssociatedPages as showTeamPages } from "../../../store/team"
 import { addPage } from "../../../store/page"
 import { modifyPage } from "../../../store/page"
+import { leaveTeam } from "../../../store/team"
 import SearchPanel from "./SearchPanel"
 import UpdatePanel from './UpdatePanel'
 import SettingPanel from './SettingPanel'
@@ -27,6 +28,7 @@ const SidebarItem = ({props}) => {
     const [searchOpen, setSearchOpen] = useState(false)
     const [updateOpen, setUpdateOpen] = useState(false)
     const [settingOpen, setSettingOpen] = useState(false)
+    const [leaveTeamPanelOpen, setLeaveTeamPanelOpen] = useState(false)
     const [teamspaceOpen, setTeamspaceOpen] = useState(false)
     const [clickableOpen, setClickableOpen] = useState(false) // Used to track whether "Delete Page" pop-up is visible
     const [tooltipVisible, setTooltipVisible] = useState(false) // Used to track whether tooltip is visible
@@ -63,11 +65,19 @@ const SidebarItem = ({props}) => {
                 if (pageId) {
                     setClickableOpen(!clickableOpen)
                 }
+                if (teamId) {
+                    setLeaveTeamPanelOpen(!leaveTeamPanelOpen)
+                }
                 break
             case ('clickable-dropdown-container'):
                 if (pageId) {
                     dispatch(deletePage({pageId}))
                     setClickableOpen(!clickableOpen)
+                    navigate(`/home`)
+                }
+                if (teamId) {
+                    dispatch(leaveTeam(teamId))
+                    setLeaveTeamPanelOpen(!leaveTeamPanelOpen)
                     navigate(`/home`)
                 }
                 break
@@ -305,6 +315,15 @@ const SidebarItem = ({props}) => {
                     <div className="clickable-dropdown-container" onClick={handleClick}>
                     <FontAwesomeIcon icon="trash-can" className="clickable-trash-can" />
                     <div className="clickable-delete">Delete Page</div>
+                    </div>
+                </div>
+            )}
+
+            {leaveTeamPanelOpen && (
+                <div className="clickable-dropdown">
+                    <div className="clickable-dropdown-container" onClick={handleClick}>
+                    <FontAwesomeIcon icon="trash-can" className="clickable-trash-can" />
+                    <div className="clickable-delete">Leave Teamspace</div>
                     </div>
                 </div>
             )}
