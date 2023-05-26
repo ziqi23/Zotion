@@ -22,7 +22,6 @@ const Sidebar = () => {
     const [addTeamPanelVisible, setAddTeamPanelVisible] = useState(false) 
     const [addTeamToolTipVisible, setAddTeamTooltipVisible] = useState(false)
     const [addPageToolTipVisible, setAddPageTooltipVisible] = useState(false)
-    // const [teamspacePanelVisible, setTeamspacePanelVisible] = useState(false)
     const username = useSelector(state => state.session.user.username)
     const email = useSelector(state => state.session.user.email)
     const pages = useSelector(state => state.page)
@@ -35,6 +34,7 @@ const Sidebar = () => {
     useEffect(() => {
         dispatch(pageActions.showAll())
     }, [teams])
+
     function handleMouseMove(e) {
         // console.log(e)
         if (e.clientX > 0 && e.clientX < 240) {

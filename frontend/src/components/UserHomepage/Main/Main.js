@@ -287,10 +287,6 @@ const Main = (props) => {
         {type: "div", text: ``, styles: {bold: [], italic: [], underline: []}}
     ]
 
-    // console.log(document)
-    // const ele = window.document.getElementsByClassName("main-manual-text")[0]
-    // ele?.focus()
-
     function CustomTag({type, children, ...props}) {
         return React.createElement(type, props, children)
     }

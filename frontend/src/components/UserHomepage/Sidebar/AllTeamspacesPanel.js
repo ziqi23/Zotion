@@ -4,8 +4,7 @@ import { addUserToTeam, showAll } from "../../../store/team"
 import SidebarItem from "./SidebarItem"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-function AllTeamspacesPanel({width}) {
-    // console.log(width)
+function AllTeamspacesPanel() {
     const teams = useSelector(state => state.team)
     const dispatch = useDispatch()
     const [data, setData] = useState({})
@@ -24,7 +23,6 @@ function AllTeamspacesPanel({width}) {
     function handleLeavePanel(e) {
         let ele = document.getElementById('teamspace-panel')
         ele.style.animation = "0.25s 1 forwards slideout"
-        localStorage.removeItem('teamspace')
     }
 
     function handleClick(e) {

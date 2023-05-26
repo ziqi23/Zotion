@@ -1,13 +1,13 @@
 class Api::PagesController < ApplicationController
     def index
         if (params[:page]) 
-            @pages = current_user.pages.where("journal_id = #{params[:page]}")
+            @pages = current_user&.pages.where("journal_id = #{params[:page]}")
         elsif (params[:team])
-            @pages = current_user.pages.where("team_id = #{params[:team]}")
+            @pages = Page.where("team_id = #{params[:team]}")
         else
             first_relation = current_user.pages
-            # second_relation = Page.find_by(team_id: User.find_by(id: current_user.id).teams)
-            @pages = first_relation#.or(second_relation)
+            second_relation = Page.where(team_id: current_user.teams.ids)
+            @pages = first_relation.or(second_relation)
         end
         render :index
     end

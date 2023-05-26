@@ -227,7 +227,6 @@ table {
 .user-homepage-sidebar {
     z-index: 500;
     position: fixed;
-    /* overflow: scroll; */
     box-sizing: border-box;
     box-shadow: rgba(0, 0, 0, 0.024) -1px 0px 0px 0px inset;
     width: 252px;
@@ -753,7 +752,7 @@ i {
     height: 100%;
     background-color: rgb(251, 251, 250);
     cursor: default;
-    overflow: scroll;
+    overflow-x: hidden;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
@@ -764,6 +763,16 @@ i {
 @keyframes slideout {
     from {left: 0px; }
     to {left: -252px; }
+}
+
+.overlay {
+    position: fixed;
+    cursor: default;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 15, 15, 0.6);
 }
 
 .teamspace-panel-header {
@@ -1051,19 +1060,21 @@ i {
     flex-direction: column;
     position: absolute;
     z-index: 500;
-    top: 10vh;
-    left: 30vw;
+    top: 5vh;
+    left: 25vw;
     background-color: white;
     width: 50vw;
     height: 80vh;
+    max-width: 660px;
     box-sizing: border-box;
     border-radius: 5px;
     box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 5px 10px, rgba(15, 15, 15, 0.2) 0px 15px 40px;
 }
 
 .search-panel-query {
-    padding: 10px 10px 0px 10px;
+    padding: 0px 14px 0px 14px;
     display: flex;
+    justify-content: center;
     align-items: center;
     height: 48px;
     box-shadow: rgba(55, 53, 47, 0.09) 0px 1px 0px;
@@ -1072,7 +1083,7 @@ i {
 .search-panel-query svg {
     height: 18px;
     width: 18px;
-    margin-right: 10px;
+    margin-right: 8px;
 }
 
 .search-panel-query input {
@@ -1093,16 +1104,17 @@ i {
 
 .result-item {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     cursor: pointer;
     position: relative;
     box-sizing: border-box;
-    width: fit-content;
+    width: 95%;
     height: 36px;
     font-size: 14px;
-    color: rgb(25, 23, 17);
+    color: rgb(55, 53, 47);
+    padding-left: 20px;
     margin-left: 15px;
     margin-right: 4px;
     padding-top: 8px;

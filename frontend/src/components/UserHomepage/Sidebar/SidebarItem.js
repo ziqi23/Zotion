@@ -48,13 +48,7 @@ const SidebarItem = ({props}) => {
                     setEmbeddedPages(Object.values(res))
                 })
             }
-        // dispatch(showAll())
         }, [pages, teams])
-
-    // useEffect(() => {
-    //     console.log("firing")
-    //     dispatch(showAll())
-    // }, [teams])
 
     // Handle left and right click actions on the sidebar
     function handleClick(e) {
@@ -140,14 +134,12 @@ const SidebarItem = ({props}) => {
                     document.addEventListener("click", handleUpdatePanelClick)
                     break
                 case "All Teamspaces":
-                    localStorage.setItem('teamspace', 'visible')
                     setTeamspaceOpen(true)
                     function handleTeamspacePanelClick(e) {
                         const panel = document.getElementById('teamspace-panel')
                         panel.addEventListener("click", handleTeamspacePanelClick)
                         if (e.target.getAttribute('data-id') !== 'All Teamspaces' && (Array.prototype.includes.call(e.target.classList, 'leave-teamspace-panel') === true || Array.prototype.includes.call(e.target.parentElement.classList, 'leave-teamspace-panel') === true)) {
                             setTimeout(() => setTeamspaceOpen(false), 500)
-                            localStorage.removeItem('teamspace')
                             document.removeEventListener('click', handleTeamspacePanelClick)
                         }
                     }
@@ -322,7 +314,7 @@ const SidebarItem = ({props}) => {
             {leaveTeamPanelOpen && (
                 <div className="clickable-dropdown">
                     <div className="clickable-dropdown-container" onClick={handleClick}>
-                    <FontAwesomeIcon icon="trash-can" className="clickable-trash-can" />
+                    <FontAwesomeIcon icon="arrow-right-from-bracket" className="clickable-trash-can" />
                     <div className="clickable-delete">Leave Teamspace</div>
                     </div>
                 </div>

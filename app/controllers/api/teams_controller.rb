@@ -4,7 +4,11 @@ class Api::TeamsController < ApplicationController
             @teams = current_user.teams
         else
             existing_team_ids = TeamUser.where(user_id: current_user.id).pluck(:team_id)
-            @teams = Team.where('id NOT IN (?)', existing_team_ids)
+            if (existing_team_ids.length == 0)
+                @teams = Team.all
+            else 
+                @teams = Team.where('id NOT IN (?)', existing_team_ids)
+            end
         end
         render :index
     end
@@ -12,10 +16,10 @@ class Api::TeamsController < ApplicationController
     def create
         @team = Team.create(team_params)
         if (@team.save)
-            Page.create({user_id: current_user.id, team_id: @team.id, page_name: "Teamspace Home"})
-            Page.create({user_id: current_user.id, team_id: @team.id, page_name: "Wiki"})
-            Page.create({user_id: current_user.id, team_id: @team.id, page_name: "Tasks"})
-            Page.create({user_id: current_user.id, team_id: @team.id, page_name: "Projects"})
+            Page.create({team_id: @team.id, page_name: "Teamspace Home"})
+            Page.create({team_id: @team.id, page_name: "Wiki"})
+            Page.create({team_id: @team.id, page_name: "Tasks"})
+            Page.create({team_id: @team.id, page_name: "Projects"})
             TeamUser.create(user_id: current_user.id, team_id: @team.id)
             render :show
         else
