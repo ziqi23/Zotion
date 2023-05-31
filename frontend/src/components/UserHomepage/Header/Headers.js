@@ -58,7 +58,7 @@ const Headers = (props) => {
                 </div>
                 <div className="header-right">
                     <div className="header-last-edit">
-                        Edited {hoursSinceLastUpdate}h ago
+                        {hoursSinceLastUpdate > 24 ? `Edited ${Math.floor(hoursSinceLastUpdate / 24)}d ago` : `Edited ${hoursSinceLastUpdate}h ago`}
                     </div>
                     <div className="header-icons">
                         <HeaderItem props={{name: "share"}} />

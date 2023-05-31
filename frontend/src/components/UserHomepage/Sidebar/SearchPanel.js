@@ -94,11 +94,12 @@ function SearchPanel({setSearchOpen}) {
             route = getRoute(pages[page.journalId]);
         }
         if (this === page) {
-            route.push(<FontAwesomeIcon icon="file-lines"/>)
+            route.push(<FontAwesomeIcon icon="file-lines"/>);
             route.push(<h1>{page.pageName}</h1>);
         } else {
-            route.push(<FontAwesomeIcon icon="file-lines"/>)
-            route.push(<h1>{page.pageName + ' / '}</h1>);
+            route.push(<FontAwesomeIcon icon="file-lines"/>);
+            route.push(<h1>{page.pageName}</h1>);
+            route.push(<FontAwesomeIcon icon="slash" style={{"transform": "rotateZ(75deg)"}}/>);
         }
         return route;
     }
@@ -106,8 +107,9 @@ function SearchPanel({setSearchOpen}) {
     function getTeam(page) {
         let route = [];
         if (page.teamId) {
-            route.push(<div className="sidebar-icon-teamspace">{teams[page.teamId].teamName[0]}</div>)
-            route.push(<h1>{teams[page.teamId].teamName + " / "}</h1>);
+            route.push(<div className="sidebar-icon-teamspace">{teams[page.teamId].teamName[0]}</div>);
+            route.push(<h1>{teams[page.teamId].teamName}</h1>);
+            route.push(<FontAwesomeIcon icon="slash" style={{"transform": "rotateZ(75deg)"}}/>);
             return route;
         }
         if (page.journalId) {

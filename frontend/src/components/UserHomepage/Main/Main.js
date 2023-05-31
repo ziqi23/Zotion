@@ -2,27 +2,44 @@ import { useParams, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { modifyPage } from "../../../store/page";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { BlockNoteEditor } from "@blocknote/core";
-import { BlockNoteView, useBlockNote } from "@blocknote/react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextOptionsToolbar from "../../Overlay/TextOptionsToolbar";
 import BlockOptionsToolbar from "./BlockOptionsToolbar";
 import "@blocknote/core/style.css";
 import React from "react";
 
 const Main = (props) => {
-    const [toolbarVisible, setToolbarVisible] = useState(false)
-    const [blockOptionVisible, setBlockOptionVisible] = useState(false)
-    const [dragIconVisible, setDragIconVisible] = useState(false)
+    const [toolbarVisible, setToolbarVisible] = useState(false);
+    const [blockOptionVisible, setBlockOptionVisible] = useState(false);
+    const [dragIconVisible, setDragIconVisible] = useState(false);
     const [history, setHistory] = useState([]);
     const [pointer, setPointer] = useState(-1);
     const dispatch = useDispatch();
     const location = useLocation();
     const query = location.search;
-    const pageId = query.slice(query.search("=") + 1, query.length)
-    const pages = useSelector((state) => state.page)
+    const pageId = query.slice(query.search("=") + 1, query.length);
+    const pages = useSelector((state) => state.page);
     const htmlContent = useSelector((state) => state.page[pageId] && state.page[pageId].htmlContent ? 
-    state.page[pageId].htmlContent : null)
+    state.page[pageId].htmlContent : null);
+
+    // Format journal content stored in the database (string) to array format
+    let formattedHtmlContent;
+    if (htmlContent) {
+        formattedHtmlContent = [];
+        htmlContent.forEach((ele) => {
+            if (typeof ele === "string") {
+                ele = ele.replaceAll("=>", ":");
+                formattedHtmlContent.push(JSON.parse(ele));
+            } else {
+                formattedHtmlContent.push(ele);
+            }
+        })
+    }
+
+    // Pull existing content stored with the journal. If none, create a blank document
+    let document = formattedHtmlContent || [
+        {type: "div", text: ``, styles: {bold: [], italic: [], underline: []}}
+    ]
 
     // let idxSelected;
     // let charSelected;
@@ -51,45 +68,45 @@ const Main = (props) => {
     //     document[idxSelected].styles.bold.push(charSelected)
     // }
 
+    // Function passed to sub-component to allow users to change input style, e.g. h1, h2, bullets
     const blockOption = (option) => {
-
-        console.log(localStorage, option)
-        document[parseInt(localStorage.getItem('blockIdx'))].type = option
-        dispatch(modifyPage({...pages[pageId], htmlContent: document}))
-        localStorage.removeItem('blockIdx')
-
-        setBlockOptionVisible(false)
+        document[parseInt(localStorage.getItem('blockIdx'))].type = option;
+        dispatch(modifyPage({...pages[pageId], htmlContent: document}));
+        localStorage.removeItem('blockIdx');
+        setBlockOptionVisible(false);
     }
+
+    // Set caret position
     function setCaret(divIndex, charIndex) {
-        const ele = window.document.querySelector(`.main-manual-text[data-idx="${divIndex}"]`)
-        const range = window.document.createRange()
-        const selection = window.getSelection()
+        const ele = window.document.querySelector(`.main-manual-text[data-idx="${divIndex}"]`);
+        const range = window.document.createRange();
+        const selection = window.getSelection();
         if (ele && typeof ele === 'object') {
-            range.selectNode(ele)
+            range.selectNode(ele);
             if (charIndex === 0) {
-                range.setStart(ele, charIndex)
+                range.setStart(ele, charIndex);
             } else {
                 if (ele.firstChild.lastChild) {
-                    range.setStart(ele.firstChild.lastChild, charIndex)
+                    range.setStart(ele.firstChild.lastChild, charIndex);
                 } else {
-                    range.setStart(ele.firstChild, charIndex)
+                    range.setStart(ele.firstChild, charIndex);
                 }
 
             }
-            range.collapse(true)
-    
-            selection.removeAllRanges()
-            selection.addRange(range)
-            ele.focus()
+            range.collapse(true);
+            selection.removeAllRanges();
+            selection.addRange(range);
+            ele.focus();
         }
     }
 
+    // Remove caret position when switching between pages
     useEffect(() => {
         localStorage.removeItem('caretPos')
     }, [pageId])
     
+    // Call setCaret on each render
     useEffect(() => {
-        
         let caretPos = localStorage.getItem('caretPos')
         if (caretPos) {
             caretPos = caretPos.split(',').map((ele) => parseInt(ele))
@@ -98,15 +115,12 @@ const Main = (props) => {
         
     },)
 
-
+    // Handle dragging lines of text to re-organize content in pages and journals
     let dragStartId;
     let dragEndId;
-
     function handleDragStart(e) {
         dragStartId = e.target.getAttribute("data-idx")
         let img = window.document.querySelector(`.main-manual-text[data-idx="${dragStartId}"]`)
-        console.log(img)
-        console.log(dragStartId)
         e.dataTransfer.setData("text/plain", dragStartId)
         e.dataTransfer.setDragImage(img, 25, 25)
     }
@@ -116,13 +130,10 @@ const Main = (props) => {
             e.preventDefault()
             e.dataTransfer.effectAllowed = "move"
             e.dataTransfer.dropEffect = "move"
-        
         } else if (e.currentTarget.id === "main-manual-drag-block" || e.target.className === "main-manual-text") {
             e.dataTransfer.effectAllowed = "none"
             e.dataTransfer.dropEffect = "none"
         }
-            
-        
     }
 
     function handleDragOver(e) {
@@ -131,7 +142,6 @@ const Main = (props) => {
             e.dataTransfer.effectAllowed = "move"
             e.dataTransfer.dropEffect = "move"
             e.currentTarget.style.backgroundColor = "rgb(76, 156, 221, 0.5)"
-        
         } else if (e.currentTarget.id === "main-manual-drag-block" || e.target.className === "main-manual-text") {
             e.dataTransfer.effectAllowed = "none"
             e.dataTransfer.dropEffect = "none"
@@ -141,6 +151,7 @@ const Main = (props) => {
     function handleDragLeave(e) {
         e.currentTarget.style.backgroundColor = ''
     }
+
     function handleDrop(e) {
         if (e.target.className === "main-manual-drag-block" || e.target.className === "main-manual-text") {
             e.preventDefault();
@@ -160,16 +171,23 @@ const Main = (props) => {
             }
         }
     }
-    useEffect(() => {
-        console.log(history)
-    }, [history])
 
-    function handleChange(e) {
-        // console.log(e)
+    // Detect regular key entries (a-z, 0-9, backspace, enter, space, etc.)
+    function isRegularKey(keycode) {
+        const validCodes = [8, 13, 32, 191]
+        if ((keycode >= 48 && keycode <= 90) || validCodes.includes(keycode)) {
+            return true;
+        }
+        return false;
+    }
+
+    // Log user keypresses and persist to database
+    function handleChange(e) { 
+        if (!isRegularKey(parseInt(e.keyCode))) {
+            return;
+        }
         const index = parseInt(e.target.getAttribute('data-idx'))
         switch (e.key) {
-            case ("Shift" || "Control" || "Alt" || "Tab" || "Meta" || "ArrowLeft" || "ArrowRight" || "ArrowUp" || "ArrowDown"):
-                break
             case ("Backspace"):
                 console.log(document[index].type, document[index].text, document[index])
                 if (document[index].text.length === 0 && document[index].type !== 'div') {
@@ -244,48 +262,31 @@ const Main = (props) => {
         }
     }
     
-    useEffect(() => {
-        let ele = window.document.getElementById('user-homepage-main-textarea')
-        ele.addEventListener('keydown', handleHistory)
-    }, [])
+    // useEffect(() => {
+    //     let ele = window.document.getElementById('user-homepage-main-textarea')
+    //     ele.addEventListener('keydown', handleHistory)
+    // }, [])
 
-    function handleHistory(e) {
-        // console.log(history)
-        // e.stopImmediatePropagation()
-        if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
-            console.log(history, "history!")
-            // console.log(pointer)
-            // if (pointer - 1 >= 0) {
-            //     setPointer(pointer - 1)
-            // if (history.length > 1) {
-            //     setHistory(history.slice(0, history.length - 1))
-            //     console.log(history)
-            //     console.log(pages[pageId])
-            //     dispatch(modifyPage({...pages[pageId], htmlContent: history[history.length - 1]}))
-            // }
-            return;
+    // function handleHistory(e) {
+    //     // console.log(history)
+    //     // e.stopImmediatePropagation()
+    //     if (e.keyCode === 90 && (e.ctrlKey || e.metaKey)) {
+    //         console.log(history, "history!")
+    //         // console.log(pointer)
+    //         // if (pointer - 1 >= 0) {
+    //         //     setPointer(pointer - 1)
+    //         // if (history.length > 1) {
+    //         //     setHistory(history.slice(0, history.length - 1))
+    //         //     console.log(history)
+    //         //     console.log(pages[pageId])
+    //         //     dispatch(modifyPage({...pages[pageId], htmlContent: history[history.length - 1]}))
+    //         // }
+    //         return;
 
-            // }
-        }
-    }
+    //         // }
+    //     }
+    // }
 
-    let formattedHtmlContent;
-    if (htmlContent) {
-        formattedHtmlContent = []
-        htmlContent.forEach((ele) => {
-            if (typeof ele === "string") {
-                ele = ele.replaceAll("=>", ":")
-                formattedHtmlContent.push(JSON.parse(ele))
-            } else {
-                formattedHtmlContent.push(ele)
-            }
-        })
-    }
-
-    
-    let document = formattedHtmlContent || [
-        {type: "div", text: ``, styles: {bold: [], italic: [], underline: []}}
-    ]
 
     function CustomTag({type, children, ...props}) {
         return React.createElement(type, props, children)
@@ -363,12 +364,6 @@ const Main = (props) => {
         </>
         )
     } else return <h1 className="main-default-text">&#128075;Welcome to Notion</h1>
-
-    // const editor = useBlockNote({})
-    // console.log(editor)
-    // if (editor) {
-    //     return <BlockNoteView editor={editor} />;
-    // } else return null
 }
 
 export default Main;
