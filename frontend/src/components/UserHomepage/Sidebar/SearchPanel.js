@@ -4,7 +4,7 @@ import { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useNavigate } from "react-router-dom"
 
-function SearchPanel(props) {
+function SearchPanel({setSearchOpen}) {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [query, setQuery] = useState('')
@@ -52,7 +52,7 @@ function SearchPanel(props) {
 
         Object.values(pages).forEach((page) => {
             // Search by page name
-            if (page.pageName?.includes(e.target.value)) {
+            if (page.pageName?.toLowerCase().includes(e.target.value.toLowerCase())) {
                 searchResults.push([page.id, page.pageName, -1])
             }
 
@@ -61,7 +61,7 @@ function SearchPanel(props) {
                 if (typeof div === 'string') {
                     div = JSON.parse(div.replaceAll("=>", ":"))
                 }
-                if (div.text.includes(e.target.value)) {
+                if (div.text.toLowerCase().includes(e.target.value.toLowerCase())) {
                     searchResults.push([page.id, page.pageName, idx])
                 }
             })
@@ -72,33 +72,43 @@ function SearchPanel(props) {
     function handleClick(e, page) {
         if (page.id) {
             navigate(`/home?pageId=${page.id}`)
+            setSearchOpen(false)
         } else {
             navigate(`/home?pageId=${page[0]}`)
             if (page[2] !== -1) {
                 const ele = window.document.getElementsByClassName("main-manual-drag-block")[page[2]]
+                setSearchOpen(false)
                 ele?.focus()
             }
         }
     }
 
     function getHighlightedText(text, highlight) {
-        const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+        const parts = text.split(new RegExp(`(${highlight})`, 'i'));
         return <div className="result-item-search-details">{parts.map(part => part.toLowerCase() === highlight.toLowerCase() ? <b className="result-item-details">{part}</b> : part)}</div>;
     }
 
     function getRoute(page) {
-        let route = "";
+        let route = [];
         if (page.journalId) {
-            route += getRoute(pages[page.journalId]);
+            route = getRoute(pages[page.journalId]);
         }
-        route += page.pageName + ' / ';
+        if (this === page) {
+            route.push(<FontAwesomeIcon icon="file-lines"/>)
+            route.push(<h1>{page.pageName}</h1>);
+        } else {
+            route.push(<FontAwesomeIcon icon="file-lines"/>)
+            route.push(<h1>{page.pageName + ' / '}</h1>);
+        }
         return route;
     }
 
     function getTeam(page) {
-        console.log(page)
+        let route = [];
         if (page.teamId) {
-            return teams[page.teamId].teamName + " / ";
+            route.push(<div className="sidebar-icon-teamspace">{teams[page.teamId].teamName[0]}</div>)
+            route.push(<h1>{teams[page.teamId].teamName + " / "}</h1>);
+            return route;
         }
         if (page.journalId) {
             return getTeam(pages[page.journalId]);
@@ -125,8 +135,12 @@ function SearchPanel(props) {
                                 onClick={(e) => handleClick(e, page)} 
                                 onMouseEnter={() => setHoveredIdx(["today", idx])} 
                                 onMouseLeave={() => setHoveredIdx([])}>
-                                    <div>
-                                        {getTeam(page)}{page.journalId ? getRoute(page) : page.pageName + " / "}
+                                    <div className="result-item-text">
+                                        {getTeam(page)}{page.journalId ? getRoute.call(page, page) : 
+                                        <>
+                                        <FontAwesomeIcon icon="file-lines"/>
+                                        <h1>{page.pageName}</h1>
+                                        </>}
                                     </div>
                                     {hoveredIdx[0] === "today" && hoveredIdx[1] === idx ? 
                                     <div>
@@ -144,8 +158,12 @@ function SearchPanel(props) {
                                 onClick={(e) => handleClick(e, page)}
                                 onMouseEnter={() => setHoveredIdx(["yesterday", idx])} 
                                 onMouseLeave={() => setHoveredIdx([])}>
-                                    <div>
-                                        {getTeam(page)}{page.journalId ? getRoute(page) : page.pageName + " / "}
+                                    <div className="result-item-text">
+                                        {getTeam(page)}{page.journalId ? getRoute.call(page, page) : 
+                                        <>
+                                            <FontAwesomeIcon icon="file-lines"/>
+                                            <h1>{page.pageName}</h1>
+                                        </>}
                                     </div>
                                     {hoveredIdx[0] === "yesterday" && hoveredIdx[1] === idx ? 
                                     <div>
@@ -163,8 +181,12 @@ function SearchPanel(props) {
                                 onClick={(e) => handleClick(e, page)}
                                 onMouseEnter={() => setHoveredIdx(["lastweek", idx])} 
                                 onMouseLeave={() => setHoveredIdx([])}>
-                                    <div>
-                                        {getTeam(page)}{page.journalId ? getRoute(page) : page.pageName + " / "}
+                                    <div className="result-item-text">
+                                        {getTeam(page)}{page.journalId ? getRoute.call(page, page) :
+                                        <>
+                                            <FontAwesomeIcon icon="file-lines"/>
+                                            <h1>{page.pageName}</h1>
+                                        </>}
                                     </div>
                                     {hoveredIdx[0] === "lastweek" && hoveredIdx[1] === idx ? 
                                     <div>
@@ -186,13 +208,15 @@ function SearchPanel(props) {
                             } else {
                                 text = pages[pageData[0]].htmlContent[pageData[2]].text
                             }
-                            return <div className="result-item" onClick={(e) => handleClick(e, pageData)}>
-                                <div className="result-item-details">{pageData[1]}</div> 
+                            return <div className="dynamic-result-item" onClick={(e) => handleClick(e, pageData)}>
+                                <div className="dynamic-result-item-text">{pageData[1]}</div> 
                                 {getHighlightedText(text, query)}
                             </div>
                         } else {
-                            return <div className="result-item" onClick={(e) => handleClick(e, pageData)}>
-                                <div className="result-item-details">{pageData[1]}</div>
+                            return <div className="dynamic-result-item" onClick={(e) => handleClick(e, pageData)}>
+                                <div className="dynamic-result-item-text">
+                                    {getTeam(pages[pageData[0]])}{pages[pageData[0]].journalId ? getRoute.call(pages[pageData[0]], pages[pageData[0]]) : pages[pageData[0]].pageName}
+                                </div>
                             </div>
                         }
                     })}

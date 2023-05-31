@@ -110,7 +110,8 @@ const SidebarItem = ({props}) => {
                         const rect = panel.getBoundingClientRect();
                         const mouseX = e.clientX;
                         const mouseY = e.clientY;
-                        if (e.target.getAttribute('data-id') !== 'Search' && (e.target.className === "result-item" || e.target.className === "result-item-details" || mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom)) {
+                        const classNameList = ['result-item-text', 'result-item', 'dynamic-result-item', 'dynamic-result-item-text', 'result-item-details', 'result-item-search-details']
+                        if (e.target.getAttribute('data-id') !== 'Search' && (classNameList.includes(e.target.className) || mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom)) {
                             setTimeout(() => setSearchOpen(false), 0)
                             document.removeEventListener('click', handlePanelClick)
                         }
@@ -326,7 +327,7 @@ const SidebarItem = ({props}) => {
             )}
 
             {searchOpen && (
-                <SearchPanel />
+                <SearchPanel setSearchOpen={setSearchOpen} />
             )}
 
             {updateOpen && (

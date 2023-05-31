@@ -1104,11 +1104,10 @@ i {
 
 .result-item {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     cursor: pointer;
     position: relative;
+    align-items: center;
+    justify-content: space-between;
     box-sizing: border-box;
     width: 95%;
     height: 36px;
@@ -1122,11 +1121,49 @@ i {
     border-radius: 5px;
 }
 
-.result-item > div:first-child {
+.result-item-text {
     display: flex;
     font-size: 12px;
-    width: 100%;
     font-weight: 500;
+    align-items: center;
+    justify-content: flex-start;
+    width: 80%;
+}
+
+.result-item-text h1 {
+    padding: 0px 4px 0px 0px;
+}
+
+.result-item-text svg {
+    padding: 0px 4px 0px 0px;
+}
+
+.result-item > div:nth-child(2) {
+    margin-right: 12px;
+    opacity: 0.5;
+}
+
+.dynamic-result-item {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    position: relative;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 95%;
+    height: 36px;
+    font-size: 14px;
+    color: rgb(55, 53, 47);
+    padding-left: 20px;
+    margin-left: 15px;
+    margin-right: 4px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 5px;
+}
+
+.dynamic-result-item-text {
+    display: flex;
 }
 
 .result-item-search-details {
@@ -1138,7 +1175,8 @@ i {
 b {
     font-weight: 700;
 }
-.result-item:hover {
+
+.dynamic-result-item:hover, .result-item:hover {
     background-color: rgb(143, 142, 137, 0.3);
     transition-duration: 200ms;
 }
