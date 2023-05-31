@@ -12,8 +12,6 @@ const Main = (props) => {
     const [toolbarVisible, setToolbarVisible] = useState(false);
     const [blockOptionVisible, setBlockOptionVisible] = useState(false);
     const [dragIconVisible, setDragIconVisible] = useState(false);
-    const [history, setHistory] = useState([]);
-    const [pointer, setPointer] = useState(-1);
     const dispatch = useDispatch();
     const location = useLocation();
     const query = location.search;
@@ -40,33 +38,6 @@ const Main = (props) => {
     let document = formattedHtmlContent || [
         {type: "div", text: ``, styles: {bold: [], italic: [], underline: []}}
     ]
-
-    // let idxSelected;
-    // let charSelected;
-    // function handleSelect(e) {
-    //     const selection = getSelection();
-    //     console.log(selection)
-    //     const selectionStartIdx = Array.prototype.indexOf.call(selection.anchorNode.parentNode.childNodes, selection.anchorNode)
-    //     const selectionEndIdx = Array.prototype.indexOf.call(selection.anchorNode.parentNode.childNodes, selection.focusNode)
-
-    //     if (selectionStartIdx !== selectionEndIdx) {
-    //         idxSelected = e.target.getAttribute('data-idx')
-    //         charSelected = [selectionStartIdx, selectionEndIdx].sort()
-    //         localStorage.setItem('selection', `${charSelected}`)
-    //         setToolbarVisible(true)
-    //     } else {
-    //         setToolbarVisible(false)
-    //     }
-
-    //     console.log(idxSelected, charSelected)
-    // }
-
-    // console.log(localStorage.getItem('selection').split(',').map((ele) => parseInt(ele)))
-
-    // function handleToolbarClick(e) {
-    //     e.preventDefault()
-    //     document[idxSelected].styles.bold.push(charSelected)
-    // }
 
     // Function passed to sub-component to allow users to change input style, e.g. h1, h2, bullets
     const blockOption = (option) => {
@@ -112,7 +83,6 @@ const Main = (props) => {
             caretPos = caretPos.split(',').map((ele) => parseInt(ele))
             setCaret(caretPos[0], caretPos[1])
         }
-        
     },)
 
     // Handle dragging lines of text to re-organize content in pages and journals
@@ -174,70 +144,83 @@ const Main = (props) => {
 
     // Detect regular key entries (a-z, 0-9, backspace, enter, space, etc.)
     function isRegularKey(keycode) {
-        const validCodes = [8, 13, 32, 191]
+        const validCodes = [8, 32, 106, 107, 109, 110, 111, 186, 187, 188, 189, 190, 191, 192, 219, 220, 221, 222]
         if ((keycode >= 48 && keycode <= 90) || validCodes.includes(keycode)) {
             return true;
         }
         return false;
     }
 
+    // Debounce database hits
+    let timeout;
+    function debounce(func, delay) {
+        return function executedFunction(...args) {
+          const later = () => {
+            timeout = null;
+            func(...args);
+          }; 
+          clearTimeout(timeout);
+          timeout = setTimeout(later, delay);
+        };
+    }
+
+    function updateDocument() {
+        dispatch(modifyPage({...pages[pageId], htmlContent: document}));
+    }
+
+    function handleNewline(e) {
+        if (e.key === "Enter") {
+            const textBeforeCursor = e.target.textContent.slice(0, getSelection().anchorOffset)
+            const textAfterCursor = e.target.textContent.slice(getSelection().anchorOffset)
+            const index = parseInt(e.target.getAttribute('data-idx'))
+            document[index].text = textBeforeCursor
+                // Create new line on "enter" keypress. If previous line was a bullet point, inherit the same styling
+                if (document[index].type === "ol" || document[index].type === "ul") {
+                    document.splice(index + 1, 0, {type: `${document[index].type}`, text: `${textAfterCursor}`, styles: {bold: [], italic: [], underline: []}})
+                } else {
+                    document.splice(index + 1, 0, {type: `div`, text: `${textAfterCursor}`, styles: {bold: [], italic: [], underline: []}})
+                }
+                debounce(updateDocument, 0)()
+                localStorage.setItem('caretPos', `${index + 1},0`)
+                // let documentDup = []
+                // document.forEach((div) => {
+                //     documentDup.push({...div})
+                // })
+                // // console.log("history:", history)
+                // // console.log("history to be changed to ", [...history, documentDup])
+                // setHistory(history => ([...history, documentDup]))
+                // // setPointer(history.length - 1)
+        }
+    }
     // Log user keypresses and persist to database
-    function handleChange(e) { 
-        if (!isRegularKey(parseInt(e.keyCode))) {
+    function handleChange(e) {
+        if (!isRegularKey(parseInt(e.which))) {
             return;
         }
         const index = parseInt(e.target.getAttribute('data-idx'))
         switch (e.key) {
             case ("Backspace"):
-                console.log(document[index].type, document[index].text, document[index])
+                // If no text, backspace removes any styling
                 if (document[index].text.length === 0 && document[index].type !== 'div') {
                     document[index].type = 'div'
-                    dispatch(modifyPage({...pages[pageId], htmlContent: document}))
-                    history.push(document)
-                    // setPointer(history.length - 1)
+                    debounce(updateDocument, 0)()
+                // If no text or styling, backspace removes entire row
                 } else if (document[index].text.length === 0 && index !== 0) {
                     document.splice(index, 1)
                     localStorage.setItem('caretPos', `${index - 1}, ${document[index - 1].text.length}`)
-                    dispatch(modifyPage({...pages[pageId], htmlContent: document}))
-                    history.push(document)
-                    // setPointer(history.length - 1)
+                    debounce(updateDocument, 0)()
                 }
+                // If contains text, backspace removes one character
                 else {
                     const currentIdx = getSelection().anchorOffset
-                    if (currentIdx === 0) break
-                    let currentText = document[index].text
-                    currentText = currentText.split('')
-                    currentText.splice(currentIdx - 1, 1)
-                    document[index].text = currentText.join('')
-                    // document[index].text = document[index].text.slice(0, document[index].text.length - 1)
-                    localStorage.setItem('caretPos', `${index},${currentIdx - 1}`)
-                    dispatch(modifyPage({...pages[pageId], htmlContent: document}))
-                    history.push(document)
-                    // setPointer(history.length - 1)
+                    document[index].text = e.target.textContent
+                    localStorage.setItem('caretPos', `${index},${currentIdx}`)
+                    debounce(updateDocument, 500)()
                 }
-                break
-            case ("Enter"):
-                if (document[index].type === "ol" || document[index].type === "ul") {
-                    document.splice(index + 1, 0, {type: `${document[index].type}`, text: "", styles: {bold: [], italic: [], underline: []}})
-                } else {
-                    document.splice(index + 1, 0, {type: `div`, text: "", styles: {bold: [], italic: [], underline: []}})
-                }
-                dispatch(modifyPage({...pages[pageId], htmlContent: document}))
-                // console.log("document:", document) //deep dup before pushing into history
-                let documentDup = []
-                document.forEach((div) => {
-                    documentDup.push({...div})
-                })
-                // console.log("history:", history)
-                // console.log("history to be changed to ", [...history, documentDup])
-                setHistory(history => ([...history, documentDup]))
-                // setPointer(history.length - 1)
-                localStorage.setItem('caretPos', `${index + 1},0`)
-                break
+                break;
             case ("/"):
                 setBlockOptionVisible(true);
                 localStorage.setItem('blockIdx', e.target.getAttribute('data-idx'))
-
                 function handlePanelClick(e) {
                     const panel = window.document.getElementById('block-options-toolbar')
                     const rect = panel?.getBoundingClientRect();
@@ -254,11 +237,10 @@ const Main = (props) => {
                 break;
             default:
                 const currentIdx = getSelection().anchorOffset
-                let currentText = document[index].text
-                currentText = currentText.split('')
-                currentText.splice(currentIdx, 0, e.key)
-                document[index].text = currentText.join('')
-                break
+                document[index].text = e.target.textContent;
+                localStorage.setItem('caretPos', `${index},${currentIdx}`)
+                debounce(updateDocument, 500)()
+                break;
         }
     }
     
@@ -282,11 +264,9 @@ const Main = (props) => {
     //         //     dispatch(modifyPage({...pages[pageId], htmlContent: history[history.length - 1]}))
     //         // }
     //         return;
-
     //         // }
     //     }
     // }
-
 
     function CustomTag({type, children, ...props}) {
         return React.createElement(type, props, children)
@@ -316,15 +296,10 @@ const Main = (props) => {
                     contentEditable="true" 
                     suppressContentEditableWarning={true}
                     className="main-manual-text" 
-                    onKeyDown={handleChange}
+                    onKeyDown={handleNewline}
+                    onKeyUp={handleChange}
                     onDrop={handleDrop}
                     draggable="false">
-                    {/* // onSelect={handleSelect}> */}
-                        {/* {div.text.split('').map((char, idx)=>{
-                            let selection = localStorage.getItem('selection').split(',').map((ele) => parseInt(ele))
-                            if (idx >= selection[0] && idx <= selection[1]) {
-                                return <span style={{backgroundColor: "blue"}}>{char}</span>
-                            } else { */}
                         {(div.type === "ul" || div.type === "ol") && (
                             <li>{div.text}</li>
                         )}
