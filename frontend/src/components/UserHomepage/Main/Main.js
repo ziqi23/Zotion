@@ -9,7 +9,6 @@ import "@blocknote/core/style.css";
 import React from "react";
 
 const Main = (props) => {
-    const [toolbarVisible, setToolbarVisible] = useState(false);
     const [blockOptionVisible, setBlockOptionVisible] = useState(false);
     const [dragIconVisible, setDragIconVisible] = useState(false);
     const dispatch = useDispatch();
@@ -333,11 +332,6 @@ const Main = (props) => {
                 onDrop={handleDrop}></div>
                 </>
             ))}
-            {toolbarVisible && (
-                <div>
-                    <TextOptionsToolbar />
-                </div>
-            )}
             {blockOptionVisible && (
                 <div className="block-options-toolbar" id="block-options-toolbar">
                     <BlockOptionsToolbar blockOption={blockOption}/>

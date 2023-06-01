@@ -23,6 +23,7 @@ const SidebarItem = ({props}) => {
     const type = props.type
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const user = useSelector(state => state.session)
     const pages = useSelector(state => state.page)
     const teams = useSelector(state => state.team)
     const [searchOpen, setSearchOpen] = useState(false)
@@ -186,12 +187,12 @@ const SidebarItem = ({props}) => {
     function handleDrop(e) {
         e.stopPropagation();
         e.currentTarget.style.backgroundColor = ''
-        dragStartId = (e.dataTransfer.getData("text/plain"))
+        dragStartId = e.dataTransfer.getData("text/plain")
         dragEndId = e.currentTarget.getAttribute("data-id")
         console.log(dragEndId)
 
         if (e.currentTarget.id === "user-journal-page" && dragStartId !== dragEndId) {
-            dispatch(modifyPage({id: dragStartId, journalId: dragEndId, teamId: null}))
+            dispatch(modifyPage({id: dragStartId, journalId: dragEndId, userId: user?.user.id, teamId: null}))
         } else if (e.currentTarget.id === "user-team-page") {
             dispatch(modifyPage({id: dragStartId, teamId: dragEndId, journalId: null}))
         }

@@ -49,6 +49,6 @@ class Api::PagesController < ApplicationController
     
     private
     def page_params
-        params.require(:page).permit(:page_icon, :page_name, :favorite, :team_id, :journal_id, { :html_content => [:type, :text, { :styles => [:bold, :italic, :underline] }] })
+        params.require(:page).permit(:page_icon, :page_name, :favorite, :user_id, :team_id, :journal_id, { :html_content => [:type, :text, { :styles => [:bold, :italic, :underline] }] })
     end
 end
