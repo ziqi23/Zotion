@@ -227,7 +227,7 @@ const Main = (props) => {
             case ("/"):
                 setBlockOptionVisible(true);
                 localStorage.setItem('blockIdx', e.target.getAttribute('data-idx'))
-                function handlePanelClick(e) {
+                function handleOptionPanelClick(e) {
                     const panel = window.document.getElementById('block-options-toolbar')
                     const rect = panel?.getBoundingClientRect();
                     const mouseX = e.clientX;
@@ -236,10 +236,10 @@ const Main = (props) => {
                         setTimeout(() => setBlockOptionVisible(false), 0)
                         localStorage.setItem('caretPos', `${localStorage.getItem('blockIdx')},0`)
                         localStorage.removeItem('blockIdx')
-                        window.document.removeEventListener('mousedown', handlePanelClick)
+                        window.document.removeEventListener('mousedown', handleOptionPanelClick)
                     }
                 }
-                window.document.addEventListener("mousedown", handlePanelClick)
+                window.document.addEventListener("mousedown", handleOptionPanelClick)
                 break;
             default:
                 const currentIdx = getSelection().anchorOffset

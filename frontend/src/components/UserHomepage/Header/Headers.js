@@ -1,5 +1,5 @@
 import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { modifyPage } from "../../../store/page";
@@ -17,10 +17,38 @@ const Headers = (props) => {
     const pages = useSelector((state) => state.page)
     const teams = useSelector((state) => state.team)
     const [updateNameFieldVisible, setUpdateNameFieldVisible] = useState(false)
-    const [tooltipVisible, setTooltipVisible] = useState(false) 
+    const [updatePageNameOpen, setUpdatePageNameOpen] = useState(false)
+    const [newPageName, setNewPageName] = useState('')
 
-    let hoursSinceLastUpdate
+    useEffect(() => {
+        setNewPageName(pages[pageId]?.pageName)
+    }, [pages, pageId])
 
+    useEffect(() => {
+        const panel = document.querySelector('.header-page-name-change')
+        if (panel) {
+            panel.addEventListener('keydown', handleEnter)
+            document.addEventListener('mousedown', handleMouseClick)
+        }
+
+        function handleEnter(e) {
+            if (e.which === 13) {
+                setUpdatePageNameOpen(false)
+                panel.removeEventListener('keydown', handleEnter)
+            }
+        }
+
+        function handleMouseClick(e) {
+            let rect = panel.getBoundingClientRect()
+            if ((e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom)) {
+                setUpdatePageNameOpen(false)
+                rect = null;
+                document.removeEventListener('mousedown', handleMouseClick)
+            }
+        }
+    }, [updatePageNameOpen])
+
+    let hoursSinceLastUpdate;
     if (pages[pageId]) {
         const formattedLastModified = pages[pageId].updatedAt
         const modifiedDate = new Date(formattedLastModified)
@@ -31,20 +59,27 @@ const Headers = (props) => {
     function handleClick(e) {
         e.stopPropagation();
         e.preventDefault();
-        console.log(e.currentTarget)
-        switch (e.target.className){
-            case ("add-to-favorite"):
-                dispatch(modifyPage({...pages[pageId], favorite: !pages[pageId].favorite}))
+        switch (e.currentTarget.className){
+            case ("header-page-individual"):
+                setUpdatePageNameOpen(true)
                 break
             default:
                 break
         }
     }
 
-    function handleChange(e) {
+    function handlePageNameChange(e) {
         e.preventDefault()
-        dispatch(modifyPage({...pages[pageId], pageName: e.target.value}))
+        if (e.target.value === '') {
+            setNewPageName('Untitled')
+        } else {
+            setNewPageName(e.target.value)
+        }
     }
+
+    useEffect(() => {
+        dispatch(modifyPage({id: pageId, pageName: newPageName}))
+    }, [newPageName])
 
     function getRoute(page) {
         let route = [];
@@ -55,6 +90,11 @@ const Headers = (props) => {
             route.push(
             <div className="header-page-individual" onClick={handleClick}>
                 {[<FontAwesomeIcon icon="file-lines"/>, <h1>{page.pageName}</h1>]}
+                {updatePageNameOpen && (
+                    <div className="header-page-name-change">
+                        <input value={newPageName} onChange={handlePageNameChange} placeholder="Untitled" />
+                    </div>
+                )}
             </div>);
         } else {
             route.push(
@@ -84,23 +124,23 @@ const Headers = (props) => {
         }
         return "";
     }
-
     if (pages[pageId]) {
         return (
             <>
                 <div className="header-left">
                     <div className="header-page-name" onClick={handleClick}>
                         {getTeam(pages[pageId])}{pages[pageId].journalId ? getRoute.call(pages[pageId], pages[pageId]) : 
-                        <div className="header-page-individual">
-                        <FontAwesomeIcon icon="file-lines"/>
-                        <h1>{pages[pageId].pageName}</h1>
+                        <div className="header-page-individual" onClick={() => setUpdatePageNameOpen(true)}>
+                            <FontAwesomeIcon icon="file-lines"/>
+                            <h1>{pages[pageId].pageName}</h1>
+                            {updatePageNameOpen && (
+                                <div className="header-page-name-change">
+                                    <input defaultValue={newPageName} onChange={handlePageNameChange} placeholder="Untitled" />
+                                </div>
+                            )}
                         </div>}
-                        {updateNameFieldVisible && (
-                            <div className="update-page-name">
-                                <input type="text" placeholder={pages[pageId].pageName} onChange={handleChange}></input>
-                            </div>
-                        )}
                     </div>
+
                 </div>
                 <div className="header-right">
                     <div className="header-last-edit">

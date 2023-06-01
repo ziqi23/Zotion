@@ -17,7 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const SidebarItem = ({props}) => {
     const icon = props.icon || "file-lines"
-    const text = props.text
+    const text = props.text || ""
     const pageId = props.pageId
     const teamId = props.teamId
     const type = props.type
@@ -106,22 +106,35 @@ const SidebarItem = ({props}) => {
             switch (text) {
                 case "Search":
                     setSearchOpen(true)
-                    function handlePanelClick(e) {
-                        const panel = document.getElementById('search-panel')
-                        panel.addEventListener("click", handlePanelClick)
-                        const rect = panel.getBoundingClientRect();
-                        const mouseX = e.clientX;
-                        const mouseY = e.clientY;
-                        const classNameList = ['result-item-text', 'result-item', 'dynamic-result-item', 'dynamic-result-item-text', 'result-item-details', 'result-item-search-details']
-                        if (e.target.getAttribute('data-id') !== 'Search' && (classNameList.includes(e.target.className) || mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom)) {
+                    const panel = document.getElementById('search-panel')
+                    const rect = panel?.getBoundingClientRect();
+                    const mouseX = e.clientX;
+                    const mouseY = e.clientY;
+
+                    const results = document.querySelectorAll('.result-item')
+                    results.forEach(result => {
+                        result.addEventListener('mousedown', handleSearchPanelClick)
+                    })
+                    document.addEventListener('mousedown', handleOverlayClick)
+
+                    function handleOverlayClick(e) {
+                        if (mouseX < rect?.left || mouseX > rect?.right || mouseY < rect?.top || mouseY > rect?.bottom) {
                             setTimeout(() => setSearchOpen(false), 0)
-                            document.removeEventListener('click', handlePanelClick)
+                            document.removeEventListener('mousedown', handleSearchPanelClick)
                         }
                     }
-                    document.addEventListener("click", handlePanelClick)
+
+                    function handleSearchPanelClick(e) {
+                        if (e.currentTarget.className === 'result-item') {
+                            console.log('click')
+                            setTimeout(() => setSearchOpen(false), 0)
+                            results.forEach(result => {
+                                result.removeEventListener('mousedown', handleSearchPanelClick)
+                            })
+                        }
+                    }
                     break
                 case "Updates":
-                    console.log("opening")
                     setUpdateOpen(true)
                     function handleUpdatePanelClick(e) {
                         const panel = document.getElementById('update-panel')

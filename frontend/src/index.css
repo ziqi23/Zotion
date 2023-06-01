@@ -22,6 +22,11 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
+
+input {
+    all: unset;
+}
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
@@ -291,18 +296,61 @@ table {
     display: flex;
     justify-content: center;
     align-items: center;
+    white-space: nowrap;
 }
 
 .header-page-name > svg {
     height: 20px;
 }
 
+.header-page-name-change {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 250px;
+    min-width: 180px;
+    max-width: calc(100vw - 24px);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: rgb(55, 53, 47);
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: white;
+    box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
+    overflow: hidden;
+}
+
+.header-page-name-change input {
+    white-space: pre-wrap;
+    word-break: break-word;
+    display: block;
+    flex-grow: 1;
+    max-width: 100%;
+    width: 100%;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset;
+    background: rgba(242, 241, 238, 0.6);
+    cursor: text;
+    position: relative;
+}
+
 .header-page-individual {
     padding: 2px 4px;
+    height: 24px;
     display: flex;
+    position: relative;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+}
+
+.header-page-individual svg {
+    margin-right: 8px;
 }
 
 .header-page-individual:hover {
@@ -321,6 +369,7 @@ table {
     width: fit-content;
     padding-left: 12px;
     padding-right: 10px;
+    white-space: nowrap;
 }
 
 .header-last-edit {
@@ -446,7 +495,7 @@ table {
 .header-share-panel {
     position: absolute;
     width: 400px;
-    height: 78px;
+    height: fit-content;
     top: 35px;
     left: -300px;
     background-color: white;
@@ -506,6 +555,24 @@ table {
 .header-share-panel-container div:last-child:hover {
     cursor: pointer;
     background-color: rgb(0, 117, 211);
+}
+
+.header-share-footer {
+    display: flex;
+    margin-top: 10px;
+    box-sizing: border-box;
+    height: 25px;
+    padding-left: 12px;
+    box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px;
+}
+
+.header-share-footer a {
+    display: flex;
+    padding-right: 12px;
+    justify-content: center;
+    align-items: center;
+    color: rgb(22, 22, 22);
+    font-size: 20px;
 }
 
 .header-comment-panel {
@@ -783,6 +850,7 @@ i {
 
 .overlay {
     position: fixed;
+    z-index: 50;
     cursor: default;
     top: 0;
     left: 0;
@@ -905,6 +973,7 @@ i {
     margin-bottom: 1px;
     font-size: 14px;
     font-weight: 500;
+    border-radius: 3px;
     color: rgb(25, 23, 17, 0.6);
 }
 
@@ -1075,17 +1144,33 @@ i {
     display: flex;
     flex-direction: column;
     position: absolute;
-    overflow-y: scroll;
     z-index: 500;
     top: 5vh;
-    left: 25vw;
+    left: 20vw;
     background-color: white;
-    width: 50vw;
-    height: 80vh;
+    width: 60vw;
+    height: fit-content;
+    max-height: 80vh;
     max-width: 660px;
     box-sizing: border-box;
     border-radius: 5px;
     box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 5px 10px, rgba(15, 15, 15, 0.2) 0px 15px 40px;
+}
+
+.search-panel-footer {
+    display: flex;
+    align-items: center;
+    line-height: 120%;
+    width: 100%;
+    user-select: none;
+    min-height: 28px;
+    font-size: 12px;
+    color: rgba(55, 53, 47, 0.5);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 12px;
+    box-shadow: rgba(55, 53, 47, 0.09) 0px -1px 0px;
 }
 
 .search-panel-query {
@@ -1093,26 +1178,35 @@ i {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 48px;
+    min-height: 48px;
     box-shadow: rgba(55, 53, 47, 0.09) 0px 1px 0px;
 }
 
 .search-panel-query svg {
     height: 18px;
     width: 18px;
-    margin-right: 8px;
+    margin-right: 16px;
 }
 
 .search-panel-query input {
+    cursor: text;
     border: none;
-    height: 27px;
     font-size: 18px;
     color: rgba(55, 53, 47);
     flex-grow: 1;
 }
 
+.search-panel-query input::placeholder {
+    color: rgba(55, 53, 47, 0.3);
+    font-size: 16px;
+}
+
 .search-panel-query input:focus{
     outline: none;
+}
+
+.search-panel-result {
+    overflow-y: scroll;
 }
 
 .search-panel-result > div {
@@ -1130,7 +1224,6 @@ i {
     height: 36px;
     font-size: 14px;
     color: rgb(55, 53, 47);
-    padding-left: 20px;
     margin-left: 15px;
     margin-right: 4px;
     padding-top: 8px;
@@ -1138,23 +1231,48 @@ i {
     border-radius: 5px;
 }
 
+.result-item-route {
+    display: flex;
+    align-items: center;
+    color: rgba(55, 53, 47, 0.65);
+    font-size: 12px;
+}
+
+.result-item-route > svg {
+    height: 12px;
+    width: 12px;
+    padding: 0px 4px 0px 4px;
+}
+
+.result-item-route > h1 {
+    white-space: nowrap;
+}
+
+.result-item-route .sidebar-icon-teamspace {
+    height: 16px;
+    width: 16px;
+}
+
 .result-item-text {
     display: flex;
+    color: rgba(55, 53, 47);
     font-size: 12px;
     font-weight: 500;
     align-items: center;
     justify-content: flex-start;
-    width: 80%;
+    width: fit-content;
 }
 
-.result-item-text h1 {
+.result-item-text > h1 {
+    font-size: 14px;
     padding: 0px 4px 0px 0px;
 }
 
-.result-item-text svg {
+.result-item-text > svg {
     height: 16px;
     width: 16px;
-    padding: 0px 4px 0px 4px;
+    padding: 0px 12px 0px 4px;
+    opacity: 0.75;
 }
 
 .result-item > div:nth-child(2) {
@@ -1162,29 +1280,72 @@ i {
     opacity: 0.5;
 }
 
+.dynamic-search-result {
+    overflow-y: scroll;
+}
+
 .dynamic-result-item {
     display: flex;
-    flex-direction: column;
     cursor: pointer;
     position: relative;
-    justify-content: center;
+    align-items: center;
     box-sizing: border-box;
     width: 95%;
-    height: 36px;
+    height: fit-content;
+    min-height: 36px;
     font-size: 14px;
     color: rgb(55, 53, 47);
-    padding-left: 20px;
     margin-left: 15px;
     margin-right: 4px;
     padding-top: 8px;
     padding-bottom: 8px;
-    border-radius: 5px;
+    border-radius: 3px;
+    border-bottom: 1px solid rgba(55, 53, 47, 0.09);
 }
 
 .dynamic-result-item-text {
     display: flex;
+    flex-direction: column;
+    color: rgba(55, 53, 47, 0.65);
+    font-weight: 500;
+    font-size: 15px;
 }
 
+.dynamic-result-item-route {
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: rgba(55, 53, 47, 0.65);
+}
+
+.dynamic-result-item-route > svg {
+    height: 12px;
+    width: 12px;
+    padding: 0px 4px 0px 4px;
+}
+
+.dynamic-result-item-route > h1 {
+    white-space: nowrap;
+}
+
+.dynamic-result-item-route .sidebar-icon-teamspace {
+    height: 16px;
+    width: 16px;
+}
+
+.dynamic-result-item-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 12px 0px 4px;
+    opacity: 0.75;
+}
+
+.dynamic-result-item-icon svg {
+    height: 16px;
+    width: 16px;
+}
 .result-item-search-details {
     font-size: 12px;
     font-weight: 500;
