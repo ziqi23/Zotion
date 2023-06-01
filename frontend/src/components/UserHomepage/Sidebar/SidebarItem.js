@@ -96,6 +96,7 @@ const SidebarItem = ({props}) => {
 
     // Append pageId to URL when user clicks on a page
     function handleShowPage(e) {
+        e.stopPropagation();
         e.preventDefault();
         if (type === "personal") {
             navigate(`/home?pageId=${pageId}`)
@@ -183,9 +184,11 @@ const SidebarItem = ({props}) => {
     }
 
     function handleDrop(e) {
+        e.stopPropagation();
         e.currentTarget.style.backgroundColor = ''
         dragStartId = (e.dataTransfer.getData("text/plain"))
         dragEndId = e.currentTarget.getAttribute("data-id")
+        console.log(dragEndId)
 
         if (e.currentTarget.id === "user-journal-page" && dragStartId !== dragEndId) {
             dispatch(modifyPage({id: dragStartId, journalId: dragEndId, teamId: null}))
@@ -249,7 +252,7 @@ const SidebarItem = ({props}) => {
             )}
 
             {/* Add text field */}
-            <div className="sidebar-page-name" data-id={text}>{text}</div>
+            <div className="sidebar-page-name" data-id={text}>{props.type !== 'default' && text.length > 15 ? text.slice(0, 15) + '...' : text}</div>
 
             {/* Add > for teamspaces which come after text */}
             {(props.type === "team") && (

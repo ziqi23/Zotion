@@ -62,7 +62,6 @@ const Main = (props) => {
                 } else {
                     range.setStart(ele.firstChild, charIndex);
                 }
-
             }
             range.collapse(true);
             selection.removeAllRanges();
@@ -200,7 +199,7 @@ const Main = (props) => {
         const index = parseInt(e.target.getAttribute('data-idx'))
         switch (e.key) {
             case ("Backspace"):
-                // If no text, backspace removes any styling
+                // If no text but contains styling, backspace removes any styling
                 if (document[index].text.length === 0 && document[index].type !== 'div') {
                     document[index].type = 'div'
                     debounce(updateDocument, 0)()
@@ -213,9 +212,17 @@ const Main = (props) => {
                 // If contains text, backspace removes one character
                 else {
                     const currentIdx = getSelection().anchorOffset
-                    document[index].text = e.target.textContent
-                    localStorage.setItem('caretPos', `${index},${currentIdx}`)
-                    debounce(updateDocument, 500)()
+                    if (currentIdx === 0 && index >= 1) {
+                        const prevRowLength = document[index - 1].text.length
+                        document[index - 1].text += e.target.textContent
+                        document.splice(index, 1)
+                        localStorage.setItem('caretPos', `${index - 1},${prevRowLength}`)
+                        debounce(updateDocument, 0)()
+                    } else {
+                        document[index].text = e.target.textContent
+                        localStorage.setItem('caretPos', `${index},${currentIdx}`)
+                        debounce(updateDocument, 500)()
+                    }
                 }
                 break;
             case ("/"):

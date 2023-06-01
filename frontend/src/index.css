@@ -281,14 +281,33 @@ table {
 .header-left {
     position: relative;
     display: flex;
+    justify-content: center;
+    align-items: center;
     padding-left: 12px;
     padding-right: 10px;
 }
 
-.header-page-name:hover {
-    padding: 5px;
+.header-page-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-page-name > svg {
+    height: 20px;
+}
+
+.header-page-individual {
+    padding: 2px 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.header-page-individual:hover {
+    border-radius: 5px ;
     background-color: rgb(143, 142, 137, 0.3);
-    transition-duration: 200ms;
 }
 
 .update-page-name {
@@ -1056,6 +1075,7 @@ i {
     display: flex;
     flex-direction: column;
     position: absolute;
+    overflow-y: scroll;
     z-index: 500;
     top: 5vh;
     left: 25vw;

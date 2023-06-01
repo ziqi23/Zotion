@@ -28,11 +28,35 @@ const Title = (props) => {
         e.preventDefault()
         setOptionsVisible(false)
     }
+
+    function setCaret() {
+        const ele = window.document.querySelector(`.main-title-text`);
+        const range = window.document.createRange();
+        const selection = window.getSelection();
+        range.selectNode(ele);
+        if (ele.firstChild) {
+            range.setStart(ele, 1);
+        } else {
+            range.setStart(ele, 0);
+        }
+        range.collapse(true);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        ele.focus();
+    }
     
     function handlePageNameChange(e) {
-        dispatch(modifyPage({id: pageId, pageName: e.target.innerHTML}))
+        const title = e.target.textContent.length > 30 ? e.target.textContent.slice(0, 30) : e.target.textContent
+        dispatch(modifyPage({id: pageId, pageName: title}))
+        setCaret();
     }
 
+    function handleEnter(e) {
+        if (e.which === 13) {
+            e.preventDefault();
+            debounce(handlePageNameChange, 0)(e)
+        }
+    }
     function handleAddCover(e) {
         setAddCoverVisible(true)
 
@@ -54,31 +78,15 @@ const Title = (props) => {
         setAddCoverVisible(false)
     }
 
-    const debounce = (func, wait) => {
-        let timeout;
-      
-        // This is the function that is returned and will be executed many times
-        // We spread (...args) to capture any number of parameters we want to pass
+    let timeout;
+    const debounce = (func, delay) => {
         return function executedFunction(...args) {
-      
-          // The callback function to be executed after 
-          // the debounce time has elapsed
           const later = () => {
-            // null timeout to indicate the debounce ended
             timeout = null;
-            
-            // Execute the callback
             func(...args);
-          };
-          // This will reset the waiting every function execution.
-          // This is the step that prevents the function from
-          // being executed because it will never reach the 
-          // inside of the previous setTimeout  
+          }; 
           clearTimeout(timeout);
-          
-          // Restart the debounce waiting period.
-          // setTimeout returns a truthy value (it differs in web vs Node)
-          timeout = setTimeout(later, wait);
+          timeout = setTimeout(later, delay);
         };
     }
 
@@ -107,7 +115,7 @@ const Title = (props) => {
                 </div>
             )}
             {pages[pageId] && (
-                <div className="main-title-text" contentEditable="true" suppressContentEditableWarning="true" onInput={debounce(handlePageNameChange, 500)}>
+                <div className="main-title-text" contentEditable="true" suppressContentEditableWarning="true" onKeyDown={handleEnter} onInput={debounce(handlePageNameChange, 500)}>
                     {pages[pageId].pageName}
                 </div>
             )}
