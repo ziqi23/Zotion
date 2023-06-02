@@ -106,10 +106,6 @@ const SidebarItem = ({props}) => {
             switch (text) {
                 case "Search":
                     setSearchOpen(true)
-                    const panel = document.getElementById('search-panel')
-                    const rect = panel?.getBoundingClientRect();
-                    const mouseX = e.clientX;
-                    const mouseY = e.clientY;
 
                     const results = document.querySelectorAll('.result-item')
                     results.forEach(result => {
@@ -118,9 +114,17 @@ const SidebarItem = ({props}) => {
                     document.addEventListener('mousedown', handleOverlayClick)
 
                     function handleOverlayClick(e) {
+                        const panel = document.getElementById('search-panel')
+                        const rect = panel?.getBoundingClientRect();
+                        const mouseX = e.clientX;
+                        const mouseY = e.clientY;
                         if (mouseX < rect?.left || mouseX > rect?.right || mouseY < rect?.top || mouseY > rect?.bottom) {
+                            console.log(1)
                             setTimeout(() => setSearchOpen(false), 0)
-                            document.removeEventListener('mousedown', handleSearchPanelClick)
+                            document.removeEventListener('mousedown', handleOverlayClick)
+                            results.forEach(result => {
+                                result.removeEventListener('mousedown', handleOverlayClick)
+                            })
                         }
                     }
 
@@ -128,6 +132,7 @@ const SidebarItem = ({props}) => {
                         if (e.currentTarget.className === 'result-item') {
                             console.log('click')
                             setTimeout(() => setSearchOpen(false), 0)
+                            document.removeEventListener('mousedown', handleSearchPanelClick)
                             results.forEach(result => {
                                 result.removeEventListener('mousedown', handleSearchPanelClick)
                             })
@@ -142,7 +147,7 @@ const SidebarItem = ({props}) => {
                         const rect = panel.getBoundingClientRect();
                         const mouseX = e.clientX;
                         const mouseY = e.clientY;
-                        if (e.target.getAttribute('data-id') !== 'Updates' && (mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom)) {
+                        if ((mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom)) {
                             setTimeout(() => setUpdateOpen(false), 0)
                             document.removeEventListener('click', handleUpdatePanelClick)
                         }
@@ -153,13 +158,16 @@ const SidebarItem = ({props}) => {
                     setTeamspaceOpen(true)
                     function handleTeamspacePanelClick(e) {
                         const panel = document.getElementById('teamspace-panel')
-                        panel.addEventListener("click", handleTeamspacePanelClick)
+                        if (panel) {
+                            panel.addEventListener("mousedown", handleTeamspacePanelClick)
+                        }
                         if (e.target.getAttribute('data-id') !== 'All Teamspaces' && (Array.prototype.includes.call(e.target.classList, 'leave-teamspace-panel') === true || Array.prototype.includes.call(e.target.parentElement.classList, 'leave-teamspace-panel') === true)) {
                             setTimeout(() => setTeamspaceOpen(false), 500)
-                            document.removeEventListener('click', handleTeamspacePanelClick)
+                            panel.removeEventListener("mousedown", handleTeamspacePanelClick)
+                            document.removeEventListener('mousedown', handleTeamspacePanelClick)
                         }
                     }
-                    document.addEventListener("click", handleTeamspacePanelClick)
+                    document.addEventListener("mousedown", handleTeamspacePanelClick)
                     break
                 default:
                     break

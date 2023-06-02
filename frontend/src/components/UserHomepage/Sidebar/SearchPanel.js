@@ -77,10 +77,10 @@ function SearchPanel({setSearchOpen}) {
     function handleClick(e, page) {
         if (page.id) {
             navigate(`/home?pageId=${page.id}`)
-            setSearchOpen(false)
+            setTimeout(() => setSearchOpen(false), 0)
         } else {
             navigate(`/home?pageId=${page[0]}`)
-            setSearchOpen(false)
+            setTimeout(() => setSearchOpen(false), 0)
             if (page[2] !== -1) {
                 const ele = window.document.getElementsByClassName("main-manual-drag-block")[page[2]]
                 ele?.focus()
@@ -138,7 +138,7 @@ function SearchPanel({setSearchOpen}) {
                         {Object.values(pagesModifiedToday).map((page, idx) => {
                             return (
                                 <div className="result-item" 
-                                onClick={(e) => handleClick(e, page)} 
+                                onMouseDown={(e) => handleClick(e, page)} 
                                 onMouseEnter={() => setHoveredIdx(["today", idx])} 
                                 onMouseLeave={() => setHoveredIdx([])}>
                                     <div className="result-item-text">
@@ -230,7 +230,7 @@ function SearchPanel({setSearchOpen}) {
                                 text = pages[pageData[0]].htmlContent[pageData[2]].text
                             }
                             return (
-                            <div className="dynamic-result-item" onClick={(e) => handleClick(e, pageData)}>
+                            <div className="dynamic-result-item" onMouseDown={(e) => handleClick(e, pageData)}>
                                 <div className="dynamic-result-item-icon">
                                     <FontAwesomeIcon icon="file-lines"/>
                                 </div>

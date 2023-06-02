@@ -78,7 +78,9 @@ const Headers = (props) => {
     }
 
     useEffect(() => {
-        dispatch(modifyPage({id: pageId, pageName: newPageName}))
+        if (newPageName && pages[pageId]?.pageName !== newPageName) {
+            dispatch(modifyPage({id: pageId, pageName: newPageName}))
+        }
     }, [newPageName])
 
     function getRoute(page) {

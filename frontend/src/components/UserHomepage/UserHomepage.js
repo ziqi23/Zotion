@@ -10,41 +10,17 @@ import AllTeamspacesPanel from './Sidebar/AllTeamspacesPanel'
 
 const UserHomepage = (props) => {
     const user = useSelector((state) => state.session.user);
-    const navigate = useNavigate();
-    // const [activeElement, setActiveElement] = useState('');
     const [sidebarWidth, setSidebarWidth] = useState(252);
-    // function handleMouseMove(e) {
-    //     if (e.clientX > 0 && e.clientX < sidebarWidth) {
-    //         setActiveElement('sidebar')
-    //     } else {
-    //         setActiveElement('main')
-    //     }
-    // }
-    // useEffect(() => {
-    //     if (!user) {
-    //         navigate('/login')
-    //     }
-    // }, [])
-    useEffect(() => {
-        console.log(sidebarWidth)
-    }, [sidebarWidth])
-
-    useEffect(() => {
-        console.log(localStorage.getItem('teamspace'))
-    }, [localStorage.getItem('teamspace')])
 
     function handleDrag(e) {
         e.preventDefault()
         const destination = e.clientX < 240 ? 240 : e.clientX < 300 ? e.clientX : 300
         const distance = destination - sidebarWidth
-        // console.log(e)
         if (e.clientX !== 0) {
             setSidebarWidth(sidebarWidth + Math.min(10, distance / 10))
         }
-        // console.log("dragging")
     }
 
-    // style={{"width": "300px"}}
     if (user) {
         return (
             <div className='user-homepage' >
@@ -70,7 +46,7 @@ const UserHomepage = (props) => {
         )
     } else {
         return (
-            <h1>Not logged in</h1>
+            null
         )
     }
 }
