@@ -26,7 +26,6 @@ const HeaderItem = ({props}) => {
         e.preventDefault()
         switch (e.currentTarget.className) {
             case ("header-icon-favorite"):
-                console.log("here")
                 dispatch(modifyPage({...pages[pageId], favorite: !pages[pageId].favorite}))
                 setTooltipVisible(false)
                 break

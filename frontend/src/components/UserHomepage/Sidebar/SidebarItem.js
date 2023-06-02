@@ -111,7 +111,7 @@ const SidebarItem = ({props}) => {
                     results.forEach(result => {
                         result.addEventListener('mousedown', handleSearchPanelClick)
                     })
-                    document.addEventListener('mousedown', handleOverlayClick)
+                    document.querySelector('.overlay')?.addEventListener('mousedown', handleOverlayClick)
 
                     function handleOverlayClick(e) {
                         const panel = document.getElementById('search-panel')
@@ -119,9 +119,8 @@ const SidebarItem = ({props}) => {
                         const mouseX = e.clientX;
                         const mouseY = e.clientY;
                         if (mouseX < rect?.left || mouseX > rect?.right || mouseY < rect?.top || mouseY > rect?.bottom) {
-                            console.log(1)
                             setTimeout(() => setSearchOpen(false), 0)
-                            document.removeEventListener('mousedown', handleOverlayClick)
+                            document.querySelector('.overlay')?.removeEventListener('mousedown', handleOverlayClick)
                             results.forEach(result => {
                                 result.removeEventListener('mousedown', handleOverlayClick)
                             })
@@ -130,7 +129,6 @@ const SidebarItem = ({props}) => {
 
                     function handleSearchPanelClick(e) {
                         if (e.currentTarget.className === 'result-item') {
-                            console.log('click')
                             setTimeout(() => setSearchOpen(false), 0)
                             document.removeEventListener('mousedown', handleSearchPanelClick)
                             results.forEach(result => {
@@ -210,7 +208,6 @@ const SidebarItem = ({props}) => {
         e.currentTarget.style.backgroundColor = ''
         dragStartId = e.dataTransfer.getData("text/plain")
         dragEndId = e.currentTarget.getAttribute("data-id")
-        console.log(dragEndId)
 
         if (e.currentTarget.id === "user-journal-page" && dragStartId !== dragEndId) {
             dispatch(modifyPage({id: dragStartId, journalId: dragEndId, userId: user?.user.id, teamId: null}))

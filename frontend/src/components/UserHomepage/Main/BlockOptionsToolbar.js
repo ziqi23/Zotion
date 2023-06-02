@@ -8,7 +8,6 @@ import ul from "../../../assets/ul.png"
 
 
 const BlockOptionsToolbar = ({blockOption}) => {
-    console.log(blockOption)
     function handleClick(e) {
         switch (e.currentTarget.className) {
             case ('text-option-div'):
