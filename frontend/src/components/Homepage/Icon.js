@@ -11,9 +11,9 @@ const Icon = (props) => {
     }
     return (
         <>
-            <button onClick={(handleClick)}>
+            <div onClick={(handleClick)}>
                 <img src={logo}></img>
-            </button>
+            </div>
         </>
     )
 }

@@ -83,6 +83,7 @@ table {
 
 .homepage-nav-bar button:hover {
     background: rgb(233, 232, 232);
+    border-radius: 5px;
 }
 
 #signup-button {
@@ -99,7 +100,12 @@ table {
     display: flex;
     flex-direction: column;
     align-content: center;
-    width: 5vw;
+    width: 32px;
+    margin-left: 12px;
+}
+
+.homepage-icon:hover {
+    cursor: pointer;
 }
 
 .homepage-icon img {
@@ -129,9 +135,11 @@ table {
 
 .homepage-nav-bar-right {
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-evenly;
+    white-space: nowrap;
     width: 30vw;
+    min-width: 300px;
+    margin-right: 12px;
 }
 
 
@@ -210,13 +218,24 @@ table {
 }
 
 #login-submit {
-    background: none;
-	font-family: inherit;
-    padding: 2px;
-	border: 2px solid rgb(55, 53, 47);
-	font-size: 14px;
-    margin-top: 20px;
-    width: 320px;
+    user-select: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    height: 36px;
+    border-radius: 4px;
+    color: rgb(17, 17, 17);
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 500;
+    background: white;
+    border: 1px solid rgba(15, 15, 15, 0.15);
+    width: 100%;
+    box-shadow: rgba(15, 15, 15, 0.05) 0px 1px 2px;
+    margin-bottom: 4px;
+    margin-top: 12px;
 }
 
 .error-message {

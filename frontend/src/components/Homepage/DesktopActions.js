@@ -14,7 +14,7 @@ const DesktopActions = (props) => {
                 navigate('/login')
                 break
             case "demo-login-button":
-                await dispatch(login({credential: "Ziqi", password: "123456"}))
+                dispatch(login({credential: "Ziqi", password: "123456"}))
                 navigate('home')
                 break
             case "signup-button":

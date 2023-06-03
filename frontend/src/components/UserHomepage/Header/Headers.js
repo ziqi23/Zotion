@@ -16,7 +16,6 @@ const Headers = (props) => {
     const pageId = query.slice(query.search("=") + 1, query.length)
     const pages = useSelector((state) => state.page)
     const teams = useSelector((state) => state.team)
-    const [updateNameFieldVisible, setUpdateNameFieldVisible] = useState(false)
     const [updatePageNameOpen, setUpdatePageNameOpen] = useState(false)
     const [newPageName, setNewPageName] = useState('')
 
@@ -40,7 +39,8 @@ const Headers = (props) => {
 
         function handleMouseClick(e) {
             let rect = panel.getBoundingClientRect()
-            if ((e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom)) {
+            if ((e.target.parentElement?.className !== 'header-page-individual' && e.target.className !== 'header-page-individual') && 
+            (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom)) {
                 setUpdatePageNameOpen(false)
                 rect = null;
                 document.removeEventListener('mousedown', handleMouseClick)
@@ -130,9 +130,9 @@ const Headers = (props) => {
         return (
             <>
                 <div className="header-left">
-                    <div className="header-page-name" onClick={handleClick}>
+                    <div className="header-page-name">
                         {getTeam(pages[pageId])}{pages[pageId].journalId ? getRoute.call(pages[pageId], pages[pageId]) : 
-                        <div className="header-page-individual" onClick={() => setUpdatePageNameOpen(true)}>
+                        <div className="header-page-individual" onClick={handleClick}>
                             <FontAwesomeIcon icon="file-lines"/>
                             <h1>{pages[pageId].pageName}</h1>
                             {updatePageNameOpen && (
