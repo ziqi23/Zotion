@@ -107,35 +107,41 @@ const SidebarItem = ({props}) => {
                 case "Search":
                     setSearchOpen(true)
 
-                    const results = document.querySelectorAll('.result-item')
-                    results.forEach(result => {
-                        result.addEventListener('mousedown', handleSearchPanelClick)
-                    })
-                    document.querySelector('.overlay')?.addEventListener('mousedown', handleOverlayClick)
-
-                    function handleOverlayClick(e) {
-                        const panel = document.getElementById('search-panel')
-                        const rect = panel?.getBoundingClientRect();
-                        const mouseX = e.clientX;
-                        const mouseY = e.clientY;
-                        if (mouseX < rect?.left || mouseX > rect?.right || mouseY < rect?.top || mouseY > rect?.bottom) {
-                            setTimeout(() => setSearchOpen(false), 0)
-                            document.querySelector('.overlay')?.removeEventListener('mousedown', handleOverlayClick)
-                            results.forEach(result => {
-                                result.removeEventListener('mousedown', handleOverlayClick)
-                            })
+                    function handleSearchClick(e) {
+                        const results = document.querySelectorAll('.result-item')
+                        results.forEach(result => {
+                            result.addEventListener('mouseup', handleSearchPanelClick)
+                        })
+                        document.querySelector('.overlay')?.addEventListener('mouseup', handleOverlayClick)
+    
+                        function handleOverlayClick(e) {
+                            const panel = document.getElementById('search-panel')
+                            console.log(panel)
+                            const rect = panel?.getBoundingClientRect();
+                            const mouseX = e.clientX;
+                            const mouseY = e.clientY;
+                            console.log(rect, mouseX, mouseY)
+                            if (mouseX < rect?.left || mouseX > rect?.right || mouseY < rect?.top || mouseY > rect?.bottom) {
+                                console.log(1)
+                                setTimeout(() => setSearchOpen(false), 0)
+                                document.querySelector('.overlay')?.removeEventListener('mouseup', handleOverlayClick)
+                                results.forEach(result => {
+                                    result.removeEventListener('mouseup', handleOverlayClick)
+                                })
+                            }
+                        }
+    
+                        function handleSearchPanelClick(e) {
+                            if (e.currentTarget.className === 'result-item') {
+                                setTimeout(() => setSearchOpen(false), 0)
+                                document.removeEventListener('mouseup', handleSearchPanelClick)
+                                results.forEach(result => {
+                                    result.removeEventListener('mouseup', handleSearchPanelClick)
+                                })
+                            }
                         }
                     }
-
-                    function handleSearchPanelClick(e) {
-                        if (e.currentTarget.className === 'result-item') {
-                            setTimeout(() => setSearchOpen(false), 0)
-                            document.removeEventListener('mousedown', handleSearchPanelClick)
-                            results.forEach(result => {
-                                result.removeEventListener('mousedown', handleSearchPanelClick)
-                            })
-                        }
-                    }
+                    document.addEventListener('mousedown', handleSearchClick)
                     break
                 case "Updates":
                     setUpdateOpen(true)
@@ -167,6 +173,20 @@ const SidebarItem = ({props}) => {
                     }
                     document.addEventListener("mousedown", handleTeamspacePanelClick)
                     break
+                case "Settings & Members":
+                    setSettingOpen(true)
+                    function handleSettingPanelClick(e) {
+                        const panel = document.getElementById('setting-panel')
+                        panel.addEventListener("click", handleSettingPanelClick)
+                        const rect = panel.getBoundingClientRect();
+                        const mouseX = e.clientX;
+                        const mouseY = e.clientY;
+                        if ((mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom)) {
+                            setTimeout(() => setSettingOpen(false), 0)
+                            document.removeEventListener('click', handleSettingPanelClick)
+                        }
+                    }
+                    document.addEventListener("click", handleSettingPanelClick)
                 default:
                     break
             }
