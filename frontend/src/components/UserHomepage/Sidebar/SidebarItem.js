@@ -98,7 +98,6 @@ const SidebarItem = ({props}) => {
     // Append pageId to URL when user clicks on a page
     function handleShowPage(e) {
         e.stopPropagation();
-        e.preventDefault();
         if (type === "personal") {
             navigate(`/home?pageId=${pageId}`)
         } else if (type === "default") {

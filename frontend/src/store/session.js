@@ -26,7 +26,10 @@ export const updateUser = ({credential, password}) => async (dispatch) => {
         })
     })
     const data = await res.json();
-    dispatch(setSession(data.user))
+    if (data.user) {
+        dispatch(setSession(data.user))
+    }
+    return data;
 }
 
 export const restoreSession = () => async (dispatch) => {
@@ -53,7 +56,7 @@ export const login = ({credential, password}) => async (dispatch) => {
     const data = await res.json();
     dispatch(setSession(data.user));
     storeCurrentUser(data.user)
-    return res;
+    return data;
 }
 
 export const logout = () => async(dispatch) => {

@@ -21,9 +21,8 @@ class Api::SessionsController < ApplicationController
   end
 
   def update
-    current_user.update(strong_params)
     @user = current_user
-    if (@user)
+    if (current_user.update(strong_params))
       render "api/users/show"
     else
       render json: {errors: ['The provided credentials were invalid.']}

@@ -6,6 +6,8 @@ import { BsArrowUpRightSquare } from 'react-icons/bs'
 import { FiGithub } from 'react-icons/fi'
 import { RiLinkedinLine } from 'react-icons/ri'
 import { login, updateUser } from "../../../store/session";
+import { TfiPencilAlt } from 'react-icons/tfi'
+import { Link } from "react-router-dom";
 
 function SettingPanel(props) {
     const navigate = useNavigate()
@@ -18,18 +20,69 @@ function SettingPanel(props) {
     const [userInputPassword, setUserInputPassword] = useState('');
     const [userCredentialVerified, setUserCredentialVerified] = useState(false);
     const [newEmail, setNewEmail] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [newPasswordConfirmation, setNewPasswordConfirmation] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
-    async function checkUserCredentials(e) {
-        const res = await dispatch(login({credential: email, password: userInputPassword}))
+    useEffect(() => {
+        if (showChangeEmailPanel) {
+            document.addEventListener('mousedown', closeChangeEmailPanel)
+
+            function closeChangeEmailPanel(e) {
+                const panel = document.querySelector('.change-email-panel')
+                const rect = panel?.getBoundingClientRect()
+                if (e.clientX < rect?.left || e.clientX > rect?.right || e.clientY < rect?.top || e.clientY > rect?.bottom) {
+                    setTimeout(setShowChangeEmailPanel(false), 0);
+                    document.removeEventListener('mousedown', closeChangeEmailPanel)
+                }
+            }
+        }
+        if (showChangePasswordPanel) {
+            document.addEventListener('mousedown', closeChangePasswordPanel)
+
+            function closeChangePasswordPanel(e) {
+                const panel = document.querySelector('.change-password-panel')
+                const rect = panel?.getBoundingClientRect()
+                if (e.clientX < rect?.left || e.clientX > rect?.right || e.clientY < rect?.top || e.clientY > rect?.bottom) {
+                    setTimeout(setShowChangePasswordPanel(false), 0)
+                    document.removeEventListener('mousedown', closeChangePasswordPanel)
+                }
+            }
+
+        }
+    }, [showChangeEmailPanel, showChangePasswordPanel])
+
+    async function checkUserCredentials() {
+        const res = await dispatch(login({credential: email, password: userInputPassword}));
+        // const data = res.json()
+        console.log(res)
         if (res) {
             setUserCredentialVerified(true);
+            return true;
         }
+        return false;
     }
 
     function handleSubmitChange(e) {
         e.preventDefault();
-        if (userCredentialVerified) {
-            dispatch(updateUser({credential: newEmail}))
+        if (e.target.className === 'confirm-email-change' && userCredentialVerified) {
+            const res = dispatch(updateUser({credential: newEmail}))
+            if (res.error) {
+                setErrorMessage(res.error)
+            } else {
+                setShowChangeEmailPanel(false)
+            }
+        }
+
+        if (e.target.className === 'confirm-password-change' && newPassword === newPasswordConfirmation) {
+            if (checkUserCredentials()) {
+                const res = dispatch(updateUser({password: newPassword}))
+                if (res.error) {
+                    setErrorMessage(res.error)
+                } else {
+                    setShowChangePasswordPanel(false)
+                }
+            }
         }
     }
 
@@ -112,7 +165,7 @@ function SettingPanel(props) {
                                         View my latest projects on Github.
                                     </div>
                                     <div className="setting-panel-connections-button">
-                                        Connect
+                                        <a target="_blank" href="https://github.com/ziqi23">Connect</a>
                                     </div>
                                 </div>
                                 <div className="setting-panel-connections-individual">
@@ -121,7 +174,7 @@ function SettingPanel(props) {
                                         Find my profile on Linkedin.
                                     </div>
                                     <div className="setting-panel-connections-button">
-                                        Connect
+                                        <a target="_blank" href="https://www.linkedin.com/in/ziqi-zou/">Connect</a>
                                     </div>
                                 </div>
                             </div>
@@ -139,10 +192,10 @@ function SettingPanel(props) {
                         Please enter your password.
                     </div>
                     <div className="change-email-panel-third-line">
-                        <input placeholder="Password" onChange={(e) => setUserInputPassword(e.target.value)}></input>
+                        <input type="password" placeholder="Password" onChange={(e) => setUserInputPassword(e.target.value)}></input>
                     </div>
                     {!userCredentialVerified && (
-                    <div className="change-email-panel-fourth-line" onClick={checkUserCredentials}>
+                    <div className="confirm-email-change" onClick={checkUserCredentials}>
                         Continue
                     </div>
                     )}
@@ -154,15 +207,37 @@ function SettingPanel(props) {
                         <div className="change-email-panel-third-line">
                             <input placeholder="Enter new email" onChange={(e) => setNewEmail(e.target.value)}></input>
                         </div>
-                        <div className="change-email-panel-fourth-line" onClick={handleSubmitChange}>
+                        <div className="confirm-email-change" onClick={handleSubmitChange}>
                             Change email
                         </div>
                         </>
                     )}
+                    {errorMessage && (
+                        <div>{errorMessage}</div>
+                    )}
                 </div>
             )}
             {showChangePasswordPanel && (
-                <div className="change-password-panel">2</div>
+                <div className="change-password-panel">
+                    <div className="change-password-panel-header">
+                        <div className="change-password-panel-first-line"><TfiPencilAlt /></div>
+                        <div className="change-password-panel-second-line">Change password</div>
+                        <div className="change-password-panel-third-line">Use a password at least 6 letters long.</div>
+                    </div>
+                    <div className="change-password-panel-title-line">Enter your current password</div>
+                    <div className="change-email-panel-third-line">
+                        <input type="password" placeholder="Current password" onChange={(e) => setUserInputPassword(e.target.value)}></input>
+                    </div>
+                    <div className="change-password-panel-title-line">Enter a new password</div>
+                    <div className="change-email-panel-third-line">
+                        <input placeholder="New password"  onChange={(e) => setNewPassword(e.target.value)}></input>
+                    </div>
+                    <div className="change-password-panel-title-line">Confirm your new password</div>
+                    <div className="change-email-panel-third-line">
+                        <input placeholder="Confirm password"  onChange={(e) => setNewPasswordConfirmation(e.target.value)}></input>
+                    </div>
+                    <div className="confirm-password-change" onClick={handleSubmitChange}>Change password</div>
+                </div>
             )}
         </div>
     )
