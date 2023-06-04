@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: {format: :json} do
     resources :users, only: [:create]
-    resource :session, only: [:show, :create, :destroy]
+    resource :session, only: [:show, :create, :update, :destroy]
     resources :pages, only: [:index, :show, :create, :destroy, :update]
     resources :teams, only: [:index, :show, :create, :destroy, :update]
     patch 'teams/:id/leave', to: 'teams#leave'

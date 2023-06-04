@@ -17,6 +17,18 @@ const removeSession = () => (
     }
 )
 
+export const updateUser = ({credential, password}) => async (dispatch) => {
+    const res = await csrfFetch("/api/session", {
+        method: "PATCH",
+        body: JSON.stringify({
+            email: credential,
+            password
+        })
+    })
+    const data = await res.json();
+    dispatch(setSession(data.user))
+}
+
 export const restoreSession = () => async (dispatch) => {
     const res = await csrfFetch("/api/session");
     storeCSRFToken(res)

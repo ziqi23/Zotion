@@ -11,6 +11,7 @@ import SidebarItem from "./SidebarItem";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Tooltip from "../Util/Tooltip";
 import AddTeamPanel from "./AddTeamPanel";
+import { restoreSession } from "../../../store/session";
 
 
 const Sidebar = () => {
@@ -28,6 +29,7 @@ const Sidebar = () => {
     const teams = useSelector(state => state.team)
 
     useEffect(() => {
+        dispatch(restoreSession())
         dispatch(teamActions.showAll())
     }, [])
 

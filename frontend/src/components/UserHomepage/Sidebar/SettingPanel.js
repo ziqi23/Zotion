@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { CgProfile } from 'react-icons/cg'
 import { BsArrowUpRightSquare } from 'react-icons/bs'
 import { FiGithub } from 'react-icons/fi'
 import { RiLinkedinLine } from 'react-icons/ri'
+import { login, updateUser } from "../../../store/session";
 
 function SettingPanel(props) {
     const navigate = useNavigate()
@@ -12,6 +13,25 @@ function SettingPanel(props) {
     const username = useSelector(state => state.session.user.username)
     const email = useSelector(state => state.session.user.email)
     const [currentTab, setCurrentTab] = useState("Account");
+    const [showChangeEmailPanel, setShowChangeEmailPanel] = useState(false);
+    const [showChangePasswordPanel, setShowChangePasswordPanel] = useState(false);
+    const [userInputPassword, setUserInputPassword] = useState('');
+    const [userCredentialVerified, setUserCredentialVerified] = useState(false);
+    const [newEmail, setNewEmail] = useState('');
+
+    async function checkUserCredentials(e) {
+        const res = await dispatch(login({credential: email, password: userInputPassword}))
+        if (res) {
+            setUserCredentialVerified(true);
+        }
+    }
+
+    function handleSubmitChange(e) {
+        e.preventDefault();
+        if (userCredentialVerified) {
+            dispatch(updateUser({credential: newEmail}))
+        }
+    }
 
     return (
         <div className="setting-panel">
@@ -64,7 +84,7 @@ function SettingPanel(props) {
                                         <div className="setting-panel-title">Email</div>
                                         <div className="setting-panel-text">{email}</div>
                                     </div>
-                                    <div className="setting-panel-account-email-right">
+                                    <div className="setting-panel-account-email-right" onClick={() => setShowChangeEmailPanel(true)}>
                                         Change email
                                     </div>
                                 </div>
@@ -73,7 +93,7 @@ function SettingPanel(props) {
                                         <div className="setting-panel-title">Password</div>
                                         <div className="setting-panel-text">Set a permanent password to login to your account.</div>
                                     </div>
-                                    <div className="setting-panel-account-password-right">
+                                    <div className="setting-panel-account-password-right" onClick={() => setShowChangePasswordPanel(true)}>
                                         Change password
                                     </div>
                                 </div>
@@ -109,8 +129,41 @@ function SettingPanel(props) {
                         )}
                     </div>
                 </div>
-
             </div>
+            {showChangeEmailPanel && (
+                <div className="change-email-panel">
+                    <div className="change-email-panel-first-line">
+                        Your current email is <b>{email}</b>
+                    </div>
+                    <div className="change-email-panel-second-line">
+                        Please enter your password.
+                    </div>
+                    <div className="change-email-panel-third-line">
+                        <input placeholder="Password" onChange={(e) => setUserInputPassword(e.target.value)}></input>
+                    </div>
+                    {!userCredentialVerified && (
+                    <div className="change-email-panel-fourth-line" onClick={checkUserCredentials}>
+                        Continue
+                    </div>
+                    )}
+                    {userCredentialVerified && (
+                        <>
+                        <div className="change-email-panel-second-line">
+                            Please enter your new email.
+                        </div>
+                        <div className="change-email-panel-third-line">
+                            <input placeholder="Enter new email" onChange={(e) => setNewEmail(e.target.value)}></input>
+                        </div>
+                        <div className="change-email-panel-fourth-line" onClick={handleSubmitChange}>
+                            Change email
+                        </div>
+                        </>
+                    )}
+                </div>
+            )}
+            {showChangePasswordPanel && (
+                <div className="change-password-panel">2</div>
+            )}
         </div>
     )
 }

@@ -116,13 +116,10 @@ const SidebarItem = ({props}) => {
     
                         function handleOverlayClick(e) {
                             const panel = document.getElementById('search-panel')
-                            console.log(panel)
                             const rect = panel?.getBoundingClientRect();
                             const mouseX = e.clientX;
                             const mouseY = e.clientY;
-                            console.log(rect, mouseX, mouseY)
                             if (mouseX < rect?.left || mouseX > rect?.right || mouseY < rect?.top || mouseY > rect?.bottom) {
-                                console.log(1)
                                 setTimeout(() => setSearchOpen(false), 0)
                                 document.querySelector('.overlay')?.removeEventListener('mouseup', handleOverlayClick)
                                 results.forEach(result => {
@@ -176,14 +173,16 @@ const SidebarItem = ({props}) => {
                 case "Settings & Members":
                     setSettingOpen(true)
                     function handleSettingPanelClick(e) {
-                        const panel = document.getElementById('setting-panel')
-                        panel.addEventListener("click", handleSettingPanelClick)
-                        const rect = panel.getBoundingClientRect();
-                        const mouseX = e.clientX;
-                        const mouseY = e.clientY;
-                        if ((mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom)) {
-                            setTimeout(() => setSettingOpen(false), 0)
-                            document.removeEventListener('click', handleSettingPanelClick)
+                        document.querySelector('.overlay')?.addEventListener('mouseup', handleSettingOverlayClick)
+                        function handleSettingOverlayClick(e) {
+                            const panel = document.getElementById('setting-panel')
+                            const rect = panel?.getBoundingClientRect();
+                            const mouseX = e.clientX;
+                            const mouseY = e.clientY;
+                            if (mouseX < rect?.left || mouseX > rect?.right || mouseY < rect?.top || mouseY > rect?.bottom) {
+                                setTimeout(() => setSettingOpen(false), 0)
+                                document.querySelector('.overlay')?.removeEventListener('mouseup', handleSettingOverlayClick)
+                            }
                         }
                     }
                     document.addEventListener("click", handleSettingPanelClick)
