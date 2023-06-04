@@ -1060,9 +1060,12 @@ i {
     height: 44px;
     padding-left: 12px;
     padding-right: 12px;
+    margin-top: 6px;
+    margin-bottom: 6px;
 }
 
 .setting-panel-left-profile-pic {
+    display: flex;
     width: 20px;
     height: 20px;
     margin-right: 8px;
@@ -1075,6 +1078,11 @@ i {
     overflow: hidden;
     text-overflow: ellipsis;
     font-weight: 500;
+    background-color: rgba(55, 53, 47, 0.09);
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    margin-right: 8px;
 }
 
 .setting-panel-left-profile-name {
@@ -1101,13 +1109,15 @@ i {
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding-left: 12px;
     padding-right: 12px;
     border-radius: 3px;
     margin-top: 1px;
     margin-bottom: 1px;
     min-height: 27px;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgb(55, 53, 47);
 }
 
 .setting-panel-left-my-connections {
@@ -1115,22 +1125,222 @@ i {
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding-left: 12px;
     padding-right: 12px;
     border-radius: 3px;
     margin-top: 1px;
     margin-bottom: 1px;
     min-height: 27px;
+    font-size: 14px;
+    line-height: 20px;
+    color: rgb(55, 53, 47);
+}
+
+.setting-panel svg {
+    margin-right: 12px;
 }
 
 .setting-panel-left-my-account:hover, .setting-panel-left-my-connections:hover {
     background: rgba(55, 53, 47, 0.08);
 }
 
+.setting-panel-account-header {
+    border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+    margin-bottom: 16px;
+    margin-top: 0px;
+    padding-bottom: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    width: auto;
+    color: rgb(55, 53, 47);
+}
+
+.setting-panel-profile-details {
+    display: flex;
+    height: 96px;
+}
+
+.setting-panel-account-icon {
+    font-size: 32px;
+    display: flex;
+    height: 60px;
+    width: 60px;
+    background-color: rgba(55, 53, 47, 0.09);
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    margin-right: 8px;
+}
+
+.setting-panel-account-profile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 20px;
+    height: 60px;
+    width: 250px;
+}
+
+.setting-panel-account-preferred-name {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    color: rgba(55, 53, 47, 0.65);
+}
+
+.setting-panel-account-name {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 4px 10px;
+    position: relative;
+    border-radius: 4px;
+    box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset;
+    background: rgba(242, 241, 238, 0.6);
+    cursor: text;
+}
+
+.setting-panel-account-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.setting-panel-account-email {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 18px;
+}
+
+.setting-panel-account-email-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-right: 10%;
+}
+
+.setting-panel-account-email-right {
+    user-select: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    border-radius: 3px;
+    height: 32px;
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 14px;
+    line-height: 1.2;
+    border: 1px solid rgba(55, 53, 47, 0.16);
+}
+
+.setting-panel-account-password-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-right: 10%;
+}
+
+.setting-panel-account-password-right {
+    user-select: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    border-radius: 3px;
+    height: 32px;
+    padding-left: 12px;
+    padding-right: 12px;
+    font-size: 14px;
+    line-height: 1.2;
+    border: 1px solid rgba(55, 53, 47, 0.16);
+}
+
+.setting-panel-account-email-right:hover, .setting-panel-account-password-right:hover {
+    background-color: rgb(225, 225, 225);
+}
+
+.setting-panel-title {
+    border-bottom: 0px;
+    margin-bottom: 2px;
+    margin-top: 0px;
+    padding-bottom: 0px;
+    font-size: 14px;
+    font-weight: 400;
+    width: auto;
+    color: rgb(55, 53, 47);
+}
+
+.setting-panel-text {
+    font-size: 12px;
+    line-height: 16px;
+    color: rgba(55, 53, 47, 0.65);
+}
+
+.setting-panel-account-password {
+    display: flex;
+    justify-content: space-between;
+}
+
+
 .setting-panel-right-details {
     height: 100%;
-    border: 1px solid beige;
+}
+
+.setting-panel-connections-header {
+    border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+    margin-bottom: 16px;
+    margin-top: 0px;
+    padding-bottom: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    width: auto;
+    color: rgb(55, 53, 47);
+}
+
+.setting-panel-connections-details {
+    display: flex;
+}
+
+.setting-panel-connections-individual {
+    display: flex;
+    flex-direction: column;
+    width: 160px;
+    margin-right: 60px;
+}
+
+.setting-panel-connections-individual svg {
+    width: 32px;
+    height: 32px;
+    margin-bottom: 12px;
+}
+
+.setting-panel-connections-description {
+    height: 32px;
+}
+
+.setting-panel-connections-button {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    user-select: none;
+    cursor: pointer;
+    align-items: center;
+    white-space: nowrap;
+    height: 28px;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.2;
+    padding-left: 8px;
+    padding-right: 8px;
+    color: rgb(35, 131, 226);
+}
+
+.setting-panel-connections-button:hover {
+    background: rgb(35, 131, 226, 0.07);
 }
 
 .clickable {
