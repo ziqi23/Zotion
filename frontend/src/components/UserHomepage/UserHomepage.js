@@ -11,16 +11,26 @@ import AllTeamspacesPanel from './Sidebar/AllTeamspacesPanel'
 const UserHomepage = (props) => {
     const user = useSelector((state) => state.session.user);
     const [sidebarWidth, setSidebarWidth] = useState(252);
-    // const [displayContent, setDisplayContent] = useState(false)
+    const [displayContent, setDisplayContent] = useState(false)
 
-    // useEffect(() => {
-    //     console.log(window.innerWidth)
-    //     if (window.innerWidth < 600) {
-    //         setDisplayContent(false)
-    //     } else {
-    //         setDisplayContent(true)
-    //     }
-    // }, [window.innerWidth])
+    useEffect(() => {
+        if (window.innerWidth < 600) {
+            setDisplayContent(false)
+        } else {
+            setDisplayContent(true)
+        }
+        window.addEventListener('resize', handleResize)
+        function handleResize(e) {
+            console.log(window.innerWidth)
+            if (window.innerWidth < 600) {
+                setDisplayContent(false)
+            } else {
+                setDisplayContent(true)
+            }
+        }
+    }, [])
+
+
 
     function handleDrag(e) {
         e.preventDefault()
@@ -30,7 +40,7 @@ const UserHomepage = (props) => {
             setSidebarWidth(sidebarWidth + Math.min(10, distance / 10))
         }
     }
-    if (user) {
+    if (user && displayContent) {
         return (
             <div className='user-homepage' >
                 {localStorage.getItem('teamspace') ? <AllTeamspacesPanel width={sidebarWidth}/> : 
@@ -54,7 +64,7 @@ const UserHomepage = (props) => {
         )
     } else {
         return (
-            null
+            <h1 className='mobile-pop-up'>This application is optimized for desktop users. For the best user experience, please use a desktop or laptop device.</h1>
         )
     }
 }

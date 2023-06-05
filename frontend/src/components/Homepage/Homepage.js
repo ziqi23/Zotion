@@ -16,9 +16,9 @@ const Homepage = (props) => {
                         <div className="homepage-desktop-actions">
                             <DesktopActions />
                         </div>
-                        <div className="homepage-mobile-actions">
+                        {/* <div className="homepage-mobile-actions">
 
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
