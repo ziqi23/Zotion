@@ -89,7 +89,7 @@ const HeaderItem = ({props}) => {
                 <Tooltip props={{"text": text, "relativePosition": [-100, 30]}}></Tooltip>
             )}
             {tooltipVisible && identifier === "favorite" && (
-                <Tooltip props={{"text": text, "relativePosition": [-125, 30]}}></Tooltip>
+                <Tooltip props={{"text": text, "relativePosition": [-135, 30]}}></Tooltip>
             )}
             {tooltipVisible && identifier === "more" && (
                 <Tooltip props={{"text": text, "relativePosition": [-150, 30]}}></Tooltip>

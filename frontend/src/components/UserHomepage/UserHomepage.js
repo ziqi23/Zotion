@@ -62,10 +62,12 @@ const UserHomepage = (props) => {
                 </div>
             </div>
         )
-    } else {
+    } else if (!displayContent) {
         return (
             <h1 className='mobile-pop-up'>This application is optimized for desktop users. For the best user experience, please use a desktop or laptop device.</h1>
         )
+    } else {
+        return null;
     }
 }
 
