@@ -68,7 +68,7 @@ const Sidebar = () => {
                     const rect = panel.getBoundingClientRect();
                     const mouseX = e.clientX;
                     const mouseY = e.clientY;
-                    if (e.target.className === "submit-add-team" || mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom) {
+                    if (mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom) {
                         setTimeout(() => setAddTeamPanelVisible(false), 0)
                         document.removeEventListener('click', handlePanelClick)
                     }
@@ -175,7 +175,7 @@ const Sidebar = () => {
                 </div>
                 )}
             {addTeamPanelVisible && (
-                <AddTeamPanel />
+                <AddTeamPanel setAddTeamPanelVisible={setAddTeamPanelVisible} />
             )}
         </div>
     )

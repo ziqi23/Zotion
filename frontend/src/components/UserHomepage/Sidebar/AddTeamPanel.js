@@ -3,16 +3,29 @@ import { addTeam } from "../../../store/team"
 import { useState } from "react"
 
 
-function AddTeamPanel(props) {
+function AddTeamPanel({setAddTeamPanelVisible}) {
     const dispatch = useDispatch()
     const [teamName, setTeamName] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
 
     function handleChange(e) {
         setTeamName(e.target.value)
     }
     function handleSubmit(e) {
         e.preventDefault()
+        let data;
         dispatch(addTeam({teamName}))
+            .then(() => {
+                setAddTeamPanelVisible(false)
+            })
+            .catch(async (res) => {
+                try {
+                    data = await res.clone().json()
+                } catch {
+                    data = await res.text()
+                }
+                if (data?.errors) setErrorMessage('Invalid team name')
+            })
     }
 
     return (
@@ -25,9 +38,12 @@ function AddTeamPanel(props) {
                     <span>Icon & name</span>
                     <input type="text" placeholder='Acme Labs' className="teamspace-name-input" onChange={handleChange}></input>
                 </label>
+                {errorMessage && (
+                    <div className="setting-panel-error-message">{errorMessage}</div>
+                )}
                 <label>
-                    <span>Description</span>
-                    <input type="textarea" placeholder="Details about your teamspace" className="teamspace-description-input"></input>
+                    <span>Description (optional)</span>
+                    <textarea rows={3} placeholder="Details about your teamspace" className="teamspace-description-input"></textarea>
                 </label>
                 <label>
                     <span>Who is this teamspace for?</span>
