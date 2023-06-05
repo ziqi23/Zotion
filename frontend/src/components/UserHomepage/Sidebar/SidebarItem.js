@@ -174,7 +174,7 @@ const SidebarItem = ({props}) => {
                     function handleSettingPanelClick(e) {
                         document.querySelector('.overlay')?.addEventListener('mouseup', handleSettingOverlayClick)
                         function handleSettingOverlayClick(e) {
-                            const panel = document.getElementById('setting-panel')
+                            const panel = document.querySelector('.setting-panel')
                             const rect = panel?.getBoundingClientRect();
                             const mouseX = e.clientX;
                             const mouseY = e.clientY;
@@ -184,7 +184,7 @@ const SidebarItem = ({props}) => {
                             }
                         }
                     }
-                    document.addEventListener("click", handleSettingPanelClick)
+                    document.addEventListener("mousedown", handleSettingPanelClick)
                 default:
                     break
             }

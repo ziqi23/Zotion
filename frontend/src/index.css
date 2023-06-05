@@ -1378,6 +1378,9 @@ i {
     padding: 32px;
     border-radius: 3px;
     font-size: 14px;
+    color: rgb(55, 53, 47);
+    font-weight: 400;
+    line-height: 1.5;
     background: white;
     box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 5px 10px, rgba(15, 15, 15, 0.2) 0px 15px 40px;
     border-radius: 6px;
@@ -1400,7 +1403,14 @@ i {
     border-radius: 4px;
     box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset;
     background: rgba(242, 241, 238, 0.6);
+    color: rgb(55, 53, 47);
     cursor: text;
+}
+
+.change-email-panel-third-line input::placeholder {
+    color: rgb(55, 53, 47);
+    opacity: 0.5;
+    font-weight: 400;
 }
 
 .confirm-email-change {
@@ -1492,7 +1502,14 @@ i {
     margin-top: 8px;
     margin-bottom: 4px;
     font-size: 12px;
-    color: rgba(55, 53, 47, 0.65);
+    color: rgba(55, 53, 47);
+}
+
+.setting-panel-error-message {
+    color: rgb(235, 87, 87);
+    font-size: 12px;
+    margin-top: 4px;
+    margin-left: 8px;
 }
 
 .confirm-password-change {

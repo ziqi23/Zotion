@@ -33,6 +33,8 @@ function SettingPanel(props) {
                 const rect = panel?.getBoundingClientRect()
                 if (e.clientX < rect?.left || e.clientX > rect?.right || e.clientY < rect?.top || e.clientY > rect?.bottom) {
                     setTimeout(setShowChangeEmailPanel(false), 0);
+                    setUserCredentialVerified(false)
+                    setErrorMessage('')
                     document.removeEventListener('mousedown', closeChangeEmailPanel)
                 }
             }
@@ -45,6 +47,8 @@ function SettingPanel(props) {
                 const rect = panel?.getBoundingClientRect()
                 if (e.clientX < rect?.left || e.clientX > rect?.right || e.clientY < rect?.top || e.clientY > rect?.bottom) {
                     setTimeout(setShowChangePasswordPanel(false), 0)
+                    setUserCredentialVerified(false)
+                    setErrorMessage('')
                     document.removeEventListener('mousedown', closeChangePasswordPanel)
                 }
             }
@@ -53,35 +57,69 @@ function SettingPanel(props) {
     }, [showChangeEmailPanel, showChangePasswordPanel])
 
     async function checkUserCredentials() {
-        const res = await dispatch(login({credential: email, password: userInputPassword}));
-        // const data = res.json()
-        console.log(res)
-        if (res) {
-            setUserCredentialVerified(true);
-            return true;
-        }
-        return false;
+        let data;
+        await dispatch(login({credential: email, password: userInputPassword}))
+            .then(() => {
+                setUserCredentialVerified(true)
+                setErrorMessage('')
+                return true;
+            })
+            .catch(async (res) => {
+                try {
+                    data = await res.clone().json()
+                } catch {
+                    data = await res.text()
+                }
+                if (data?.errors) setErrorMessage('Incorrect password')
+                return false;
+            })
     }
 
-    function handleSubmitChange(e) {
+    async function handleSubmitChange(e) {
         e.preventDefault();
         if (e.target.className === 'confirm-email-change' && userCredentialVerified) {
-            const res = dispatch(updateUser({credential: newEmail}))
-            if (res.error) {
-                setErrorMessage(res.error)
-            } else {
-                setShowChangeEmailPanel(false)
-            }
+            let data;
+            dispatch(updateUser({credential: newEmail}))
+                .then(() => {
+                    setShowChangeEmailPanel(false)
+                    setErrorMessage('')
+                    setUserCredentialVerified(false)
+                })
+                .catch(async (res) => {
+                    try {
+                        data = await res.clone().json()
+                    } catch {
+                        data = await res.text()
+                    }
+                    if (data?.errors) setErrorMessage('Invalid new email')
+                })
         }
 
-        if (e.target.className === 'confirm-password-change' && newPassword === newPasswordConfirmation) {
-            if (checkUserCredentials()) {
-                const res = dispatch(updateUser({password: newPassword}))
-                if (res.error) {
-                    setErrorMessage(res.error)
-                } else {
-                    setShowChangePasswordPanel(false)
-                }
+        if (e.target.className === 'confirm-password-change') {
+            await checkUserCredentials()
+            if (!userCredentialVerified) {
+                setErrorMessage('Incorrect password')
+            }
+            else if (newPassword !== newPasswordConfirmation) {
+                console.log(2)
+                setErrorMessage('Password must be same as confirmation')
+            } else {
+                console.log(3)
+                let data;
+                dispatch(updateUser({password: newPassword}))
+                    .then(() => {
+                        setShowChangePasswordPanel(false)
+                        setErrorMessage('')
+                        setUserCredentialVerified(false)
+                    })
+                    .catch(async (res) => {
+                        try {
+                            data = await res.clone().json()
+                        } catch {
+                            data = await res.text()
+                        }
+                        if (data?.errors) setErrorMessage('Invalid new password')
+                    })
             }
         }
     }
@@ -186,7 +224,7 @@ function SettingPanel(props) {
             {showChangeEmailPanel && (
                 <div className="change-email-panel">
                     <div className="change-email-panel-first-line">
-                        Your current email is <b>{email}</b>
+                        Your current email is <b>{email}</b>.
                     </div>
                     <div className="change-email-panel-second-line">
                         Please enter your password.
@@ -195,9 +233,14 @@ function SettingPanel(props) {
                         <input type="password" placeholder="Password" onChange={(e) => setUserInputPassword(e.target.value)}></input>
                     </div>
                     {!userCredentialVerified && (
-                    <div className="confirm-email-change" onClick={checkUserCredentials}>
-                        Continue
-                    </div>
+                    <>
+                        {errorMessage && (
+                            <div className="setting-panel-error-message">{errorMessage}</div>
+                        )}
+                        <div className="confirm-email-change" onClick={checkUserCredentials}>
+                            Continue
+                        </div>
+                    </>
                     )}
                     {userCredentialVerified && (
                         <>
@@ -207,13 +250,13 @@ function SettingPanel(props) {
                         <div className="change-email-panel-third-line">
                             <input placeholder="Enter new email" onChange={(e) => setNewEmail(e.target.value)}></input>
                         </div>
+                        {errorMessage && (
+                            <div className="setting-panel-error-message">{errorMessage}</div>
+                        )}
                         <div className="confirm-email-change" onClick={handleSubmitChange}>
                             Change email
                         </div>
                         </>
-                    )}
-                    {errorMessage && (
-                        <div>{errorMessage}</div>
                     )}
                 </div>
             )}
@@ -230,13 +273,16 @@ function SettingPanel(props) {
                     </div>
                     <div className="change-password-panel-title-line">Enter a new password</div>
                     <div className="change-email-panel-third-line">
-                        <input placeholder="New password"  onChange={(e) => setNewPassword(e.target.value)}></input>
+                        <input type="password" placeholder="New password"  onChange={(e) => setNewPassword(e.target.value)}></input>
                     </div>
                     <div className="change-password-panel-title-line">Confirm your new password</div>
                     <div className="change-email-panel-third-line">
-                        <input placeholder="Confirm password"  onChange={(e) => setNewPasswordConfirmation(e.target.value)}></input>
+                        <input type="password" placeholder="Confirm password"  onChange={(e) => setNewPasswordConfirmation(e.target.value)}></input>
                     </div>
                     <div className="confirm-password-change" onClick={handleSubmitChange}>Change password</div>
+                    {errorMessage && (
+                        <div className="setting-panel-error-message">{errorMessage}</div>
+                    )}
                 </div>
             )}
         </div>

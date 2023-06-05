@@ -25,7 +25,7 @@ class Api::SessionsController < ApplicationController
     if (current_user.update(strong_params))
       render "api/users/show"
     else
-      render json: {errors: ['The provided credentials were invalid.']}
+      render json: {errors: ['The provided credentials were invalid.']}, status: :unauthorized
     end
   end
 
