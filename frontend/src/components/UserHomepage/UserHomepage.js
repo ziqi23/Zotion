@@ -11,6 +11,16 @@ import AllTeamspacesPanel from './Sidebar/AllTeamspacesPanel'
 const UserHomepage = (props) => {
     const user = useSelector((state) => state.session.user);
     const [sidebarWidth, setSidebarWidth] = useState(252);
+    // const [displayContent, setDisplayContent] = useState(false)
+
+    // useEffect(() => {
+    //     console.log(window.innerWidth)
+    //     if (window.innerWidth < 600) {
+    //         setDisplayContent(false)
+    //     } else {
+    //         setDisplayContent(true)
+    //     }
+    // }, [window.innerWidth])
 
     function handleDrag(e) {
         e.preventDefault()
@@ -20,7 +30,6 @@ const UserHomepage = (props) => {
             setSidebarWidth(sidebarWidth + Math.min(10, distance / 10))
         }
     }
-
     if (user) {
         return (
             <div className='user-homepage' >
@@ -29,8 +38,7 @@ const UserHomepage = (props) => {
                         <Sidebar />
                     </div>
                 }
-                <div className='user-homepage-sidebar-overlay' style={{"width": sidebarWidth}}></div>
-                <div className='user-homepage-divider' draggable="true" onDrag={handleDrag}></div>
+                <div className='user-homepage-divider' style={{"marginLeft": sidebarWidth}} draggable="true" onDrag={handleDrag}></div>
                 <div className='user-homepage-right'>
                     <div className='user-homepage-headers'>
                         <Headers />

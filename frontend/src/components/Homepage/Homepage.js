@@ -2,6 +2,7 @@ import DesktopActions from "./DesktopActions"
 import Icon from "./Icon"
 import sketch from "../../assets/home-collab-sketch.avif"
 import demo1 from "../../assets/demo-img-one.webp"
+import { useEffect } from "react"
 
 const Homepage = (props) => {
     return (

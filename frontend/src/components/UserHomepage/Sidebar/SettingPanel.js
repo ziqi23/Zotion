@@ -24,6 +24,15 @@ function SettingPanel(props) {
     const [newPasswordConfirmation, setNewPasswordConfirmation] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
+    function resetState() {
+        setUserCredentialVerified(false)
+        setErrorMessage('')
+        setNewEmail('')
+        setNewPassword('')
+        setNewPasswordConfirmation('')
+        setUserInputPassword('')
+    }
+
     useEffect(() => {
         if (showChangeEmailPanel) {
             document.addEventListener('mousedown', closeChangeEmailPanel)
@@ -33,8 +42,7 @@ function SettingPanel(props) {
                 const rect = panel?.getBoundingClientRect()
                 if (e.clientX < rect?.left || e.clientX > rect?.right || e.clientY < rect?.top || e.clientY > rect?.bottom) {
                     setTimeout(setShowChangeEmailPanel(false), 0);
-                    setUserCredentialVerified(false)
-                    setErrorMessage('')
+                    resetState()
                     document.removeEventListener('mousedown', closeChangeEmailPanel)
                 }
             }
@@ -47,8 +55,7 @@ function SettingPanel(props) {
                 const rect = panel?.getBoundingClientRect()
                 if (e.clientX < rect?.left || e.clientX > rect?.right || e.clientY < rect?.top || e.clientY > rect?.bottom) {
                     setTimeout(setShowChangePasswordPanel(false), 0)
-                    setUserCredentialVerified(false)
-                    setErrorMessage('')
+                    resetState()
                     document.removeEventListener('mousedown', closeChangePasswordPanel)
                 }
             }
@@ -58,11 +65,12 @@ function SettingPanel(props) {
 
     async function checkUserCredentials() {
         let data;
+        let result;
         await dispatch(login({credential: email, password: userInputPassword}))
             .then(() => {
                 setUserCredentialVerified(true)
                 setErrorMessage('')
-                return true;
+                result = true;
             })
             .catch(async (res) => {
                 try {
@@ -71,8 +79,9 @@ function SettingPanel(props) {
                     data = await res.text()
                 }
                 if (data?.errors) setErrorMessage('Incorrect password')
-                return false;
+                result = false;
             })
+        return result;
     }
 
     async function handleSubmitChange(e) {
@@ -82,8 +91,7 @@ function SettingPanel(props) {
             dispatch(updateUser({credential: newEmail}))
                 .then(() => {
                     setShowChangeEmailPanel(false)
-                    setErrorMessage('')
-                    setUserCredentialVerified(false)
+                    resetState();
                 })
                 .catch(async (res) => {
                     try {
@@ -96,21 +104,17 @@ function SettingPanel(props) {
         }
 
         if (e.target.className === 'confirm-password-change') {
-            await checkUserCredentials()
-            if (!userCredentialVerified) {
+            if (!await checkUserCredentials()) {
                 setErrorMessage('Incorrect password')
             }
-            else if (newPassword !== newPasswordConfirmation) {
-                console.log(2)
+            else if (newPassword.length === 0 || newPasswordConfirmation.length === 0 || newPassword !== newPasswordConfirmation) {
                 setErrorMessage('Password must be same as confirmation')
             } else {
-                console.log(3)
                 let data;
                 dispatch(updateUser({password: newPassword}))
                     .then(() => {
                         setShowChangePasswordPanel(false)
-                        setErrorMessage('')
-                        setUserCredentialVerified(false)
+                        resetState();
                     })
                     .catch(async (res) => {
                         try {
