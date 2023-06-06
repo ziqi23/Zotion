@@ -65,10 +65,10 @@ const Sidebar = () => {
                 setAddTeamPanelVisible(true)
                 function handlePanelClick(e) {
                     const panel = document.getElementById('add-team-panel')
-                    const rect = panel.getBoundingClientRect();
+                    const rect = panel?.getBoundingClientRect();
                     const mouseX = e.clientX;
                     const mouseY = e.clientY;
-                    if (mouseX < rect.left || mouseX > rect.right || mouseY < rect.top || mouseY > rect.bottom) {
+                    if (mouseX < rect?.left || mouseX > rect?.right || mouseY < rect?.top || mouseY > rect?.bottom) {
                         setTimeout(() => setAddTeamPanelVisible(false), 0)
                         document.removeEventListener('click', handlePanelClick)
                     }
