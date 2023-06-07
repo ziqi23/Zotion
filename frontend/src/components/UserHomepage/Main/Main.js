@@ -56,10 +56,14 @@ const Main = (props) => {
             if (charIndex === 0) {
                 range.setStart(ele, charIndex);
             } else {
-                if (ele.firstChild.lastChild) {
+                if (ele.firstChild && ele.firstChild.lastChild) {
                     range.setStart(ele.firstChild.lastChild, charIndex);
-                } else {
+                } 
+                else if (ele.firstChild) {
                     range.setStart(ele.firstChild, charIndex);
+                } 
+                else {
+                    return;
                 }
             }
             range.collapse(true);
