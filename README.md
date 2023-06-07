@@ -9,9 +9,8 @@ In this application, a user can:
 - Create and edit pages with dynamic content.
 <img width="1306" src="https://giphy.com/embed/vIrxuw3xZlJKPtmRac">
 - Drag a page within another page to create journals. 
-
 - Join and leave teamspaces where content can be shared with other users.
-
+<img width="1306" src="https://giphy.com/embed/v7QIzPIlL51fb44hsk">
 - Search by title or content.
 
 
