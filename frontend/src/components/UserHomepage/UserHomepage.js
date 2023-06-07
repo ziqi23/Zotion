@@ -21,7 +21,6 @@ const UserHomepage = (props) => {
         }
         window.addEventListener('resize', handleResize)
         function handleResize(e) {
-            console.log(window.innerWidth)
             if (window.innerWidth < 600) {
                 setDisplayContent(false)
             } else {
