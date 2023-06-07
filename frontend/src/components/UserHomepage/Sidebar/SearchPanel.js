@@ -110,7 +110,7 @@ function SearchPanel({setSearchOpen}) {
 
     function getTeam(page) {
         let route = [];
-        if (page.teamId && teams[teamId]) {
+        if (page.teamId && teams[page.teamId]) {
             route.push(<div className="sidebar-icon-teamspace">{teams[page.teamId].teamName[0]}</div>);
             route.push(<h1>{teams[page.teamId].teamName}</h1>);
             route.push(<RxSlash />);
