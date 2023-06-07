@@ -7,8 +7,7 @@ Zotion is a full-stack clone of the productivity application Notion. Check out t
 
 In this application, a user can:
 - Create and edit pages with dynamic content.
-<img width="1306" alt="Screenshot 2023-01-06 at 9 41 25 AM" src="https://giphy.com/embed/vIrxuw3xZlJKPtmRac">
-<iframe src="https://giphy.com/embed/vIrxuw3xZlJKPtmRac" width="480" height="244" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/vIrxuw3xZlJKPtmRac">via GIPHY</a></p>
+<img width="1306" src="https://giphy.com/embed/vIrxuw3xZlJKPtmRac">
 - Drag a page within another page to create journals. 
 
 - Join and leave teamspaces where content can be shared with other users.
