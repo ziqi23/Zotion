@@ -29,7 +29,7 @@ Features I plan to implement to the rich text editor includes the ability to cre
 
 ## Wiki Links
 
-The following links offer more details for the database schema, features list, wireframes, and user stories.
+The following links offer more details on the database schema, sample frontend state and backend routes.
 >[Database Schema](https://github.com/ziqi23/FS-Project/wiki/database-schema)
 
 >[Sample Frontend State](https://github.com/ziqi23/FS-Project/wiki/sample-state)
