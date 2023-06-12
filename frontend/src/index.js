@@ -24,7 +24,6 @@ library.add(faMagnifyingGlass, faClock, faBuildingUser, faGear, faFileLines, faC
 
 const renderApp = () => {
   const domNode = document.getElementById('root')
-  // domNode.addEventListener('contextmenu', (e) => e.preventDefault())
   const root = createRoot(domNode)
   
   root.render(
