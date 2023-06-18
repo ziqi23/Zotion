@@ -18,7 +18,7 @@ const DesktopActions = (props) => {
                 break
             case "signup-button":
                 navigate('/signup')
-                break
+                break;
         }
     }
     return (
