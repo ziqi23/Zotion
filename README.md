@@ -3,7 +3,7 @@
 
 ## Overview
 
-Zotion is a full-stack clone of the productivity application Notion. Check out the <a href="https://www.notion-aa-clone.herokuapp.com">live site</a>!
+Zotion is a full-stack clone of the productivity application Notion. Check out the <a href="https://notion-aa-clone.herokuapp.com">live site</a>!
 
 In this application, a user can:
 - Create and edit pages with dynamic content.
