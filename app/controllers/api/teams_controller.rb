@@ -16,10 +16,10 @@ class Api::TeamsController < ApplicationController
     def create
         @team = Team.create(team_params)
         if (@team.save)
-            Page.create({team_id: @team.id, page_name: "Teamspace Home"})
-            Page.create({team_id: @team.id, page_name: "Wiki"})
-            Page.create({team_id: @team.id, page_name: "Tasks"})
-            Page.create({team_id: @team.id, page_name: "Projects"})
+            Page.create(team_id: @team.id, page_name: "Teamspace Home")
+            Page.create(team_id: @team.id, page_name: "Wiki")
+            Page.create(team_id: @team.id, page_name: "Tasks")
+            Page.create(team_id: @team.id, page_name: "Projects")
             TeamUser.create(user_id: current_user.id, team_id: @team.id)
             render :show
         else

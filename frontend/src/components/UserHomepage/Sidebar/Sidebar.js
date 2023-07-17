@@ -88,7 +88,7 @@ const Sidebar = () => {
                         {username[0]}
                     </div>
                     <div className="sidebar-profile-user-details">
-                        {username.length > 8 ? username.slice(0, 8) : username}'s Notion
+                        {username.length > 8 ? username.slice(0, 8) : username}'s Zotion
                     </div>
                 </div>
                 <div 

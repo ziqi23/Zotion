@@ -1,6 +1,7 @@
 class Page < ApplicationRecord
   belongs_to :user,
     foreign_key: :user_id,
+    optional: true,
     class_name: "User"
 
   belongs_to :journal,
@@ -12,8 +13,7 @@ class Page < ApplicationRecord
   validates :page_icon, length: { in: 1..30 }, allow_nil: true
   validates :page_name, length: { in: 1..30 }, allow_nil: true
   validates :favorite, inclusion: [true, false], allow_nil: true
-  validates :user_id, presence: true
-
+  
   def set_default_icon
     if (!self.page_icon)
       self.page_icon = "Placeholder"

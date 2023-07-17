@@ -314,8 +314,6 @@ table {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     display: flex;
     flex-direction: column;
-    max-width: 100vw;
-    height: 100vh;
     justify-content: center;
     text-align: center;
     align-items: center;
@@ -324,8 +322,8 @@ table {
 .login-field {
     display: flex;
     flex-direction: column;
-    width: 320px;
-    height: 100vh;
+    width: 350px;
+    height: 500px;
     text-align: center;
     align-items: center;
 }
@@ -345,14 +343,19 @@ table {
 }
 
 .login-main label {
-    color: rgb(55, 53, 47);
+    display: block;
+    color: rgba(55, 53, 47, 0.65);
+    padding-top: 10px;
+    padding-bottom: 10px;
     font-family: sans-serif;
     font-size: 12px;
 }
 
 .login-main input {
-    padding: 5px 10px;
+    border-radius: 5px;
+    padding: 8px 10px;
     width: inherit;
+    font-size: 14px;
     box-shadow: rgba(15, 15, 15, 0.1) 0px 0px 0px 1px inset;
     background: rgba(242, 241, 238, 0.6);
     cursor: text;
@@ -404,7 +407,7 @@ table {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, Helvetica, sans-serif;
     color: rgba(25, 23, 17, 0.6);
     font-weight: 500;
-    overflow-y: auto;
+    overflow-y: visible;
 }
 
 .user-homepage-sidebar-overlay {
@@ -414,7 +417,7 @@ table {
 }
 
 .user-homepage-divider {
-    z-index: 600;
+    z-index: 400;
     display: flex;
     cursor: col-resize;
     height: 100vh;
@@ -1004,7 +1007,7 @@ i {
     height: 100%;
     background-color: rgb(251, 251, 250);
     cursor: default;
-    overflow-x: hidden;
+    overflow: visible;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
@@ -1037,6 +1040,10 @@ i {
     box-sizing: border-box;
 }
 
+.teamspace-panel-header svg:hover {
+    cursor: pointer;
+}
+
 .leave-teamspace-panel {
     height: 16px;
     width: 16px;
@@ -1060,6 +1067,7 @@ i {
     display: flex;
     flex-direction: column;
     width: inherit;
+    overflow-y: visible;
 }
 
 .your-teamspaces-header, .more-teamspaces-header {
@@ -1070,6 +1078,10 @@ i {
     margin-bottom: 12px;
     padding-left: 15px;
     padding-right: 14px;
+}
+
+.your-teamspaces-container {
+    overflow: visible;
 }
 
 .your-teamspaces-container > div {
@@ -1100,6 +1112,10 @@ i {
     left: 30px;
     position: absolute;
     overflow: visible;
+}
+
+.more-teamspaces-item .clickable-dropdown:hover {
+    cursor: pointer;
 }
 
 .clickable-dropdown-container {
@@ -1500,7 +1516,7 @@ i {
     box-sizing: border-box;
     width: 100%;
     height: 27px;
-    padding: 2px 0px;
+    padding: 2px 0px 2px 5px;
     margin-top: 1px;
     margin-bottom: 1px;
     font-size: 14px;
@@ -2151,6 +2167,10 @@ b {
     border: 1px;
 }
 
+.teamspace-name-input {
+    cursor: text;
+}
+
 .teamspace-description-input {
     display: flex;
     justify-content: flex-start;
@@ -2176,6 +2196,7 @@ b {
 
 .submit-add-team:hover {
     opacity: 0.9;
+    cursor: pointer;
 }
 
 .tooltip {

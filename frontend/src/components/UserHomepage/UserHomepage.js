@@ -10,8 +10,9 @@ import AllTeamspacesPanel from './Sidebar/AllTeamspacesPanel'
 
 const UserHomepage = (props) => {
     const user = useSelector((state) => state.session.user);
+    const navigate = useNavigate();
     const [sidebarWidth, setSidebarWidth] = useState(252);
-    const [displayContent, setDisplayContent] = useState(false)
+    const [displayContent, setDisplayContent] = useState(false);
 
     useEffect(() => {
         if (window.innerWidth < 600) {
@@ -63,10 +64,10 @@ const UserHomepage = (props) => {
         )
     } else if (!displayContent) {
         return (
-            <h1 className='mobile-pop-up'>This application is optimized for desktop users. For the best user experience, please use a desktop or laptop device.</h1>
+            <h1 className='mobile-pop-up'>This application is optimized for desktop users. For the best user experience, please consider using a desktop or laptop device.</h1>
         )
     } else {
-        return null;
+        return;
     }
 }
 

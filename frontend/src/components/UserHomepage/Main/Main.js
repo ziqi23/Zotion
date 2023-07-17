@@ -343,7 +343,7 @@ const Main = (props) => {
             )}
         </>
         )
-    } else return <h1 className="main-default-text">&#128075;Welcome to Notion</h1>
+    } else return <h1 className="main-default-text">&#128075;Welcome to Zotion</h1>
 }
 
 export default Main;

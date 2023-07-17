@@ -32,7 +32,7 @@ const Login = (props) => {
             <div className="homepage-header">
                 <div className="homepage-header-inner">
                     <div className="homepage-nav-bar">
-                        <div className="homepage-icon">
+                        <div className="homepage-icon" style={{marginLeft: '15px'}}>
                             <Icon />
                         </div>
                     </div>
@@ -43,13 +43,9 @@ const Login = (props) => {
                     <h1>Log in</h1>
                     <form onSubmit={handleSubmit}>
                         <label>Username or Email</label>
-                        <br></br>
                         <input type="text" value={credential} onChange={(e) => setCredential(e.target.value)}></input>
-                        <br></br>
                         <label>Password</label>
-                        <br></br>
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
-                        <br></br>
                         <ul>
                             {errors.map((error, idx) => <div key={idx} className="error-message">{error}</div>)}
                         </ul>

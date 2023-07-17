@@ -14,10 +14,6 @@ const Signup = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // function isEmail(credential) {
-    //     return credential.match(/^\S+@\S+\.\S+$/)
-    // }
-
     async function handleSubmit(e) {
         e.preventDefault()
 
@@ -36,23 +32,6 @@ const Signup = (props) => {
                 else if (data) setSignUpErrors([data])
                 else setSignUpErrors([res.statusText])
         })            
-
-        // let username, email
-        // if (isEmail(credential)) {
-        //     email = credential
-        //     csrfFetch('/api/users', {
-        //         method: 'POST',
-        //         body: JSON.stringify({email, password}),
-        //         'Content-Type': 'application/json'
-        //     })
-        // } else {
-        //     username = credential
-        //     csrfFetch('/api/users', {
-        //         method: 'POST',
-        //         body: JSON.stringify({username, password}),
-        //         'Content-Type': 'application/json'
-        //     })
-        // }
     }
 
     return (
@@ -60,7 +39,7 @@ const Signup = (props) => {
             <div className="homepage-header">
                 <div className="homepage-header-inner">
                     <div className="homepage-nav-bar">
-                        <div className="homepage-icon">
+                        <div className="homepage-icon" style={{marginLeft: '15px'}}>
                             <Icon />
                         </div>
                     </div>
@@ -71,16 +50,11 @@ const Signup = (props) => {
                     <h1>Sign up</h1>
                     <form onSubmit={handleSubmit}>
                         <label>Username</label>
-                        <br></br>
                         <input type="text" value={username} onChange={(e) => setUsername(e.target.value)}></input>
-                        <br></br>
                         <label>Email</label>
-                        <br></br>
                         <input type="text" value={email} onChange={(e) => setEmail(e.target.value)}></input>
                         <label>Password</label>
-                        <br></br>
                         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}></input>
-                        <br></br>
                         <ul>
                             {signUpErrors.map((error, idx) => <div key={idx} className="error-message">{error}</div>)}
                         </ul>
