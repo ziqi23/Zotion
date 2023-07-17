@@ -16,6 +16,7 @@ import { useEffect } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const SidebarItem = ({props}) => {
+    const sidebarWidth = props.sidebarWidth
     const icon = props.icon || "file-lines"
     const text = props.text || ""
     const pageId = props.pageId
@@ -362,7 +363,7 @@ const SidebarItem = ({props}) => {
             )}
 
             {/* Logic for conditionally displaying tooltip on mouse hover*/}
-            {tooltipVisible && tooltipText && (
+            {tooltipVisible && tooltipText && !teamspaceOpen && (
             <Tooltip props={{"text": tooltipText, "relativePosition": relativePosition}} />
             )}
 
@@ -379,7 +380,7 @@ const SidebarItem = ({props}) => {
             )}
 
             {teamspaceOpen && (
-                <AllTeamspacesPanel />
+                <AllTeamspacesPanel sidebarWidth={sidebarWidth}/>
             )}
         </div>
         

@@ -87,6 +87,12 @@ const Main = (props) => {
         }
     },)
 
+    // Handle clicks and set caret position accordingly
+    function handleClick(e) {
+        let index = e.target.getAttribute('data-idx') || e.target.parentElement.getAttribute('data-idx')
+        localStorage.setItem('caretPos', `${index},${getSelection().anchorOffset}`)
+    }
+
     // Handle dragging lines of text to re-organize content in pages and journals
     let dragStartId;
     let dragEndId;
@@ -139,6 +145,7 @@ const Main = (props) => {
                 } else {
                     document = document.slice(0, dragStartId).concat(document.slice(dragStartId + 1))
                 }
+                localStorage.removeItem('caretPos')
                 dispatch(modifyPage({...pages[pageId], htmlContent: document}))
             }
         }
@@ -308,10 +315,13 @@ const Main = (props) => {
                     className="main-manual-text" 
                     onKeyDown={handleNewline}
                     onKeyUp={handleChange}
+                    onClick={handleClick}
                     onDrop={handleDrop}
                     draggable="false">
                         {(div.type === "ul" || div.type === "ol") && (
-                            <li>{div.text}</li>
+                            <li>
+                                {div.text ? div.text : " "}
+                            </li>
                         )}
                         {(div.type !== "ul" && div.type !== "ol") && (
                             <>{div.text}</>

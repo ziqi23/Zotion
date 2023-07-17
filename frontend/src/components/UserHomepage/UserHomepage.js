@@ -45,7 +45,7 @@ const UserHomepage = (props) => {
             <div className='user-homepage' >
                 {localStorage.getItem('teamspace') ? <AllTeamspacesPanel width={sidebarWidth}/> : 
                     <div className='user-homepage-sidebar' style={{"width": sidebarWidth}}>  
-                        <Sidebar />
+                        <Sidebar sidebarWidth={sidebarWidth}/>
                     </div>
                 }
                 <div className='user-homepage-divider' style={{"marginLeft": sidebarWidth}} draggable="true" onDrag={handleDrag}></div>

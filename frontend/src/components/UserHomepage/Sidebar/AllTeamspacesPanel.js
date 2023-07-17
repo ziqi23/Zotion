@@ -4,7 +4,7 @@ import { addUserToTeam, showAll } from "../../../store/team"
 import SidebarItem from "./SidebarItem"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
-function AllTeamspacesPanel() {
+function AllTeamspacesPanel({sidebarWidth}) {
     const teams = useSelector(state => state.team)
     const dispatch = useDispatch()
     const [data, setData] = useState({})
@@ -31,7 +31,7 @@ function AllTeamspacesPanel() {
     }
 
     return (
-        <div className="teamspace-panel" id="teamspace-panel">
+        <div className="teamspace-panel" id="teamspace-panel" style={{width: sidebarWidth, left: -sidebarWidth}}>
             <div className="teamspace-panel-header" >
                 <FontAwesomeIcon icon="arrow-left" className="leave-teamspace-panel" onClick={handleLeavePanel}/> 
                 <div>All teamspaces</div>

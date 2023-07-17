@@ -1087,7 +1087,7 @@ i {
 .your-teamspaces-container > div {
     padding-left: 15px;
     padding-right: 14px;
-    width: 223px;
+    width: 230px;
 }
 
 .more-teamspaces-container {
@@ -2346,6 +2346,7 @@ b {
     overflow-wrap: anywhere;
     padding-top: 5px;
     padding-bottom: 5px;
+    white-space: pre-wrap;
 }
 
 .main-manual-drag-block:focus {
@@ -2354,12 +2355,13 @@ b {
 }
 
 .main-manual-drag-block {
+    display: inline-block;
     position: relative;
     /* width: 120%; */
     padding-left: 25px;
     padding-right: 25px;
     height: auto;
-    overflow-wrap: break-word;
+    overflow-wrap: anywhere;
 }
 
 .main-manual-drag-icon {

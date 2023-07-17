@@ -14,7 +14,7 @@ import AddTeamPanel from "./AddTeamPanel";
 import { restoreSession } from "../../../store/session";
 
 
-const Sidebar = () => {
+const Sidebar = ({sidebarWidth}) => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [active, setActive] = useState('false');
@@ -103,10 +103,10 @@ const Sidebar = () => {
                 </div>
             </div>
             <div className="sidebar-default">
-                <SidebarItem props={{"text": "Search", "type":"default", "icon": "magnifying-glass"}}></SidebarItem>
-                <SidebarItem props={{"text": "Updates", "type":"default", "icon": "clock"}}></SidebarItem>
-                <SidebarItem props={{"text": "All Teamspaces", "type":"default", "icon": "building-user"}}></SidebarItem>
-                <SidebarItem props={{"text": "Settings & Members", "type":"default", "icon": "gear"}}></SidebarItem>
+                <SidebarItem props={{"text": "Search", "type":"default", "icon": "magnifying-glass", sidebarWidth}}></SidebarItem>
+                <SidebarItem props={{"text": "Updates", "type":"default", "icon": "clock", sidebarWidth}}></SidebarItem>
+                <SidebarItem props={{"text": "All Teamspaces", "type":"default", "icon": "building-user", sidebarWidth}}></SidebarItem>
+                <SidebarItem props={{"text": "Settings & Members", "type":"default", "icon": "gear", sidebarWidth}}></SidebarItem>
             </div>
             <div className="sidebar-personal">
                 <div className="favorites">
