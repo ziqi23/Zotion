@@ -82,17 +82,34 @@ table {
 /* Homepage related */
 
 .homepage-header {
+    position: -webkit-sticky;
+    position: sticky;
+    top: -1px;
+    background-color: white;
     display: flex;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     align-items: center;
     height: 62px;
 }
 
+.homepage-header-border {
+    display: flex;
+    margin-left: 15px;
+    margin-right: 15px;
+    width: 100%;
+}
+
 .homepage-header-inner {
     display: flex;
+    width: 100%;
     align-content: space-evenly;
-    width: 100vw;
-    height: 32px
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.is-pinned > div {
+    background-color: white;
+    border-bottom: 1px solid rgb(229, 229, 229);
 }
 
 .homepage-nav-bar {
@@ -105,32 +122,44 @@ table {
     background: none;
     border: none;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 1.5;
     font-weight: 300;
 }
 
 .homepage-nav-bar button:hover {
-    background: rgb(233, 232, 232);
-    border-radius: 5px;
+    cursor: pointer;
+    background: rgb(243, 243, 243);
+    border-radius: 7px;
 }
 
 #signup-button {
-    border-radius: 7px;
+    padding: 4px 10px;
+    margin-left: 10px;
+    border-radius: 5px;
     background-color: black;
     color: white;
 }
 
 #signup-button:hover {
+    cursor: pointer;
     background-color: rgb(46, 42, 42);
 }
 
 .homepage-icon {
     display: flex;
-    flex-direction: column;
     align-content: center;
-    width: 32px;
-    margin-left: 12px;
+}
+
+.homepage-icon div {
+    display: flex;
+}
+
+.homepage-icon h1 {
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    font-weight: 500;
 }
 
 .homepage-icon:hover {
@@ -161,37 +190,122 @@ table {
 }
 
 .homepage-nav-bar-right {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     display: flex;
     justify-content: space-evenly;
     white-space: nowrap;
-    width: 30vw;
-    min-width: 300px;
-    margin-right: 12px;
 }
 
+#demo-login-button {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#login-button {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.button-divider{
+    margin-right: 10px;
+    margin-left: 10px;
+    width: 1px;
+    background-color: rgb(229, 229, 229);
+}
 
 .homepage-main-content {
-    padding-left: 15vw;
-    padding-right: 15vw;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    padding-left: 125px;
+    padding-right: 125px;
+    margin: auto;
     width: 70vw;
     height: fit-content;
     display: flex;
     text-align: center;
     flex-direction: column;
 }
+
 #homepage-language {
-    font-family: sans-serif;
     font-weight: 700;
     font-size: 72px;
     padding: 10px;
-    padding-top: 40px;
+    padding-top: 80px;
 }
 
 #homepage-language-two {
-    font-family: sans-serif;
-    padding: 10px;
-    font-size: 15px;
+    font-size: 24px;
     font-weight: 400;
+}
+
+#homepage-language-three {
+    margin-top: 120px;
+    padding-bottom: 30px;
+    font-size: 45px;
+    font-weight: 600;
+}
+
+#homepage-pic {
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 10px;
+    box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
+}
+
+#homepage-illustration-one, #homepage-illustration-two, #homepage-illustration-three {
+    display: flex;
+    margin-bottom: 80px;
+}
+
+#homepage-illustration-language-one {
+    font-size: 30px;
+    font-weight: 700;
+    text-align: left;
+}
+
+#homepage-illustration-language-two {
+    font-size: 16px;
+    text-align: left;
+}
+
+#homepage-illustration-sketch {
+    margin-top: 150px;
+    height: 360px;
+    width: 220px;
+}
+
+#homepage-demo-pic {
+    width: 950px;
+    height: 600px;
+    margin-left: 50px;
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 10px;
+    box-shadow: rgba(15, 15, 15, 0.05) 0px 0px 0px 1px, rgba(15, 15, 15, 0.1) 0px 3px 6px, rgba(15, 15, 15, 0.2) 0px 9px 24px;
+}
+
+#homepage-footer-language-one {
+    font-weight: 600;
+    font-size: 61px;
+    padding-bottom: 16px;
+}
+
+#homepage-footer-language-two {
+    font-size: 16px;
+    padding-bottom: 20px;
+}
+
+#homepage-footer-sketch {
+    margin: auto;
+    height: 330px;
+    width: 670px;
+}
+
+.homepage-main-content #signup-button {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    width: 120px;
+    margin-bottom: 30px;
 }
 
 /* Login and signup page related */

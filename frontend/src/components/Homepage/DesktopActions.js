@@ -6,6 +6,7 @@ const DesktopActions = (props) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+
     async function handleButtonClick(e) {
         e.preventDefault()
         switch (e.target.id) {
@@ -32,8 +33,9 @@ const DesktopActions = (props) => {
             </div>
             <div className="homepage-nav-bar-right">
                 <button id="demo-login-button" onClick={handleButtonClick}>Demo login</button>
+                <div className="button-divider"></div>
                 <button id="login-button" onClick={handleButtonClick}>Log in</button>
-                <button id="signup-button" onClick={handleButtonClick}>Get Notion free</button>
+                <button id="signup-button" onClick={handleButtonClick}>Get Zotion free</button>
             </div>
         </>
     )

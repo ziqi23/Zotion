@@ -13,6 +13,9 @@ const Icon = (props) => {
         <>
             <div onClick={(handleClick)}>
                 <img src={logo}></img>
+                <h1>
+                    Zotion
+                </h1>
             </div>
         </>
     )
