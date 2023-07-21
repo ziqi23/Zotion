@@ -227,7 +227,7 @@ const Main = (props) => {
                         document[index - 1].text += e.target.textContent
                         document.splice(index, 1)
                         localStorage.setItem('caretPos', `${index - 1},${prevRowLength}`)
-                        debounce(updateDocument, 0)()
+                        debounce(updateDocument, 1000)()
                     } else {
                         document[index].text = e.target.textContent
                         localStorage.setItem('caretPos', `${index},${currentIdx}`)
