@@ -14,7 +14,7 @@ function HeaderShare(props) {
         <div className="header-share-panel">
             <div className="header-share-panel-header">Share</div>
             <div className="header-share-panel-container">
-                <div>https://notion-aa-clone.herokuapp.com/</div>
+                <div>zotion-2ffb3968ded2.herokuapp.com/</div>
                 <div onClick={handleClick}>{text}</div>
             </div>
             <div className="header-share-footer">

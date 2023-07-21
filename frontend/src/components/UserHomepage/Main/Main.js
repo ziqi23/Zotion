@@ -210,7 +210,7 @@ const Main = (props) => {
         switch (e.key) {
             case ("Backspace"):
                 // If no text but contains styling, backspace removes any styling
-                if (document[index].text.length === 0 && document[index].type !== 'div') {
+                if ((window.getSelection().anchorOffset === 0 || document[index].text.length === 0) && document[index].type !== 'div') {
                     document[index].type = 'div'
                     debounce(updateDocument, 0)()
                 // If no text or styling, backspace removes entire row
@@ -231,7 +231,7 @@ const Main = (props) => {
                     } else {
                         document[index].text = e.target.textContent
                         localStorage.setItem('caretPos', `${index},${currentIdx}`)
-                        debounce(updateDocument, 500)()
+                        debounce(updateDocument, 0)()
                     }
                 }
                 break;
@@ -256,7 +256,7 @@ const Main = (props) => {
                 const currentIdx = getSelection().anchorOffset
                 document[index].text = e.target.textContent;
                 localStorage.setItem('caretPos', `${index},${currentIdx}`)
-                debounce(updateDocument, 500)()
+                debounce(updateDocument, 1000)()
                 break;
         }
     }
