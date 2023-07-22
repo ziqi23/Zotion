@@ -227,11 +227,13 @@ const Main = (props) => {
                         document[index - 1].text += e.target.textContent
                         document.splice(index, 1)
                         localStorage.setItem('caretPos', `${index - 1},${prevRowLength}`)
-                        debounce(updateDocument, 1000)()
-                    } else {
-                        document[index].text = e.target.textContent
-                        localStorage.setItem('caretPos', `${index},${currentIdx}`)
                         debounce(updateDocument, 0)()
+                    } else {
+                        console.log(document[index].text)
+                        document[index].text = e.target.textContent.slice(0, -1)
+                        console.log(document[index].text)
+                        localStorage.setItem('caretPos', `${index},${currentIdx - 1}`)
+                        debounce(updateDocument, 1000)()
                     }
                 }
                 break;
@@ -254,8 +256,8 @@ const Main = (props) => {
                 break;
             default:
                 const currentIdx = getSelection().anchorOffset
-                document[index].text = e.target.textContent;
-                localStorage.setItem('caretPos', `${index},${currentIdx}`)
+                document[index].text = e.target.textContent + e.key;
+                localStorage.setItem('caretPos', `${index},${currentIdx + 1}`)
                 debounce(updateDocument, 1000)()
                 break;
         }
@@ -313,8 +315,10 @@ const Main = (props) => {
                     contentEditable="true" 
                     suppressContentEditableWarning={true}
                     className="main-manual-text" 
-                    onKeyDown={handleNewline}
-                    onKeyUp={handleChange}
+                    onKeyDown={(e) => {
+                        handleNewline(e);
+                        handleChange(e);
+                    }}
                     onClick={handleClick}
                     onDrop={handleDrop}
                     draggable="false">
