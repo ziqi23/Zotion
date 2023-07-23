@@ -5,7 +5,6 @@ import { modifyPage } from "../../../store/page";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextOptionsToolbar from "../../Overlay/TextOptionsToolbar";
 import BlockOptionsToolbar from "./BlockOptionsToolbar";
-import "@blocknote/core/style.css";
 import React from "react";
 
 const Main = (props) => {
@@ -18,7 +17,6 @@ const Main = (props) => {
     const pages = useSelector((state) => state.page);
     const htmlContent = useSelector((state) => state.page[pageId] && state.page[pageId].htmlContent ? 
     state.page[pageId].htmlContent : null);
-
     // Format journal content stored in the database (string) to array format
     let formattedHtmlContent;
     if (htmlContent) {
@@ -203,10 +201,41 @@ const Main = (props) => {
     }
     // Log user keypresses and persist to database
     function handleChange(e) {
-        if (!isRegularKey(parseInt(e.which))) {
+        const index = parseInt(e.target.getAttribute('data-idx'))
+        if (e.which === 40) { // arrow down
+            e.preventDefault();
+            let currentCaretPos = localStorage.getItem('caretPos').split(',').map((ele) => parseInt(ele));
+            if (document[index + 1]) {
+                let length = document[index + 1].text.length
+                localStorage.setItem('caretPos', `${currentCaretPos[0] + 1},${currentCaretPos[1] > length ? length : currentCaretPos[1]}`)
+                debounce(updateDocument, 0)()
+            }
+        }
+        if (e.which === 38) { // arrow up
+            e.preventDefault();
+            let currentCaretPos = localStorage.getItem('caretPos').split(',').map((ele) => parseInt(ele));
+            if (document[index - 1]) {
+                let length = document[index - 1].text.length
+                localStorage.setItem('caretPos', `${currentCaretPos[0] - 1},${currentCaretPos[1] > length ? length : currentCaretPos[1]}`)
+                debounce(updateDocument, 0)()
+            }
+        }
+        if (e.which === 37) { // arrow left
+            e.preventDefault();
+            let currentCaretPos = localStorage.getItem('caretPos').split(',').map((ele) => parseInt(ele));
+            localStorage.setItem('caretPos', `${currentCaretPos[0]},${currentCaretPos[1] > 0 ? currentCaretPos[1] - 1 : currentCaretPos[1]}`)
+            debounce(updateDocument, 0)()
+        }
+        if (e.which === 39) { // arrow right
+            e.preventDefault();
+            let currentCaretPos = localStorage.getItem('caretPos').split(',').map((ele) => parseInt(ele));
+            let length = document[index].text.length
+            localStorage.setItem('caretPos', `${currentCaretPos[0]},${currentCaretPos[1] < length ? currentCaretPos[1] + 1 : currentCaretPos[1]}`)
+            debounce(updateDocument, 0)()
+        }
+        if (!isRegularKey(parseInt(e.which)) || !document[index]) {
             return;
         }
-        const index = parseInt(e.target.getAttribute('data-idx'))
         switch (e.key) {
             case ("Backspace"):
                 // If no text but contains styling, backspace removes any styling
@@ -214,25 +243,32 @@ const Main = (props) => {
                     document[index].type = 'div'
                     debounce(updateDocument, 0)()
                 // If no text or styling, backspace removes entire row
-                } else if (document[index].text.length === 0 && index !== 0) {
+                } else if (document[index].text.length === 0 && index !== 0 && document[index].type === 'div') {
                     document.splice(index, 1)
-                    localStorage.setItem('caretPos', `${index - 1}, ${document[index - 1].text.length}`)
+                    localStorage.setItem('caretPos', `${index - 1},${document[index - 1].text.length}`)
                     debounce(updateDocument, 0)()
                 }
-                // If contains text, backspace removes one character
+                // If contains text, backspace removes text characters
                 else {
-                    const currentIdx = getSelection().anchorOffset
-                    if (currentIdx === 0 && index >= 1) {
+                    const anchor = getSelection().anchorOffset
+                    const focus = getSelection().focusOffset
+                    const selectionStart = anchor < focus ? anchor : focus
+                    const selectionEnd = anchor > focus ? anchor : focus
+                    if (selectionEnd === 0 && selectionStart === 0 && index >= 1 && document[index].type === 'div') {
                         const prevRowLength = document[index - 1].text.length
                         document[index - 1].text += e.target.textContent
                         document.splice(index, 1)
                         localStorage.setItem('caretPos', `${index - 1},${prevRowLength}`)
                         debounce(updateDocument, 0)()
                     } else {
-                        console.log(document[index].text)
-                        document[index].text = e.target.textContent.slice(0, -1)
-                        console.log(document[index].text)
-                        localStorage.setItem('caretPos', `${index},${currentIdx - 1}`)
+                        if (selectionStart === selectionEnd) {
+                            document[index].text = e.target.textContent.slice(0, selectionStart - 1) + e.target.textContent.slice(selectionEnd);
+                            localStorage.setItem('caretPos', `${index},${selectionStart - 1}`)
+                        }
+                        else {
+                            document[index].text = e.target.textContent.slice(0, selectionStart) + e.target.textContent.slice(selectionEnd);
+                            localStorage.setItem('caretPos', `${index},${selectionStart}`)
+                        }
                         debounce(updateDocument, 1000)()
                     }
                 }
@@ -256,7 +292,7 @@ const Main = (props) => {
                 break;
             default:
                 const currentIdx = getSelection().anchorOffset
-                document[index].text = e.target.textContent + e.key;
+                document[index].text = e.target.textContent.slice(0, currentIdx) + e.key + e.target.textContent.slice(currentIdx);
                 localStorage.setItem('caretPos', `${index},${currentIdx + 1}`)
                 debounce(updateDocument, 1000)()
                 break;

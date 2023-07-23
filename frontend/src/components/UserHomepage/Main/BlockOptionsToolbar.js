@@ -77,7 +77,7 @@ const BlockOptionsToolbar = ({blockOption}) => {
                     <div className="text-option-long-description">Create a simple bulleted list.</div>
                 </div>
             </div>
-            <div className="text-option-ol" onClick={handleClick}>
+            {/* <div className="text-option-ol" onClick={handleClick}>
                 <div className="text-option-img-block">
                     <img src={`${ol}`}></img>
                 </div>
@@ -85,7 +85,7 @@ const BlockOptionsToolbar = ({blockOption}) => {
                     <div className="text-option-short-description">Numbered list</div>
                     <div className="text-option-long-description">Create a list with numbering.</div>
                 </div>
-            </div>
+            </div> */}
         </>
     )
 }
